@@ -1,0 +1,145 @@
+1. a, aa, aaa, aaaa, aaaaa, aaaaa, …
+
+	a+
+
+
+2. abaaa, aaaaa, aaaaabaaaaaa, aaaaaaaaaba, aaaaaaab
+
+	a+b?a*
+
+
+3. pera@gmail.com chuckie@norri.rs bruce@lee.cn steva@gmail.com
+
+	(pera|chuckie|bruce|steva)@(gmail|norri|lee)\.(com|rs|cn)
+
+
+4. burrito@superrito.com
+   afefuzit-1673@yopmail.com
+   egadduddosa-3631@yopmail.com
+   roppuvazaq-0504@yopmail.com
+   emibemmidd-9721@yopmail.com
+   padyrefo-8444@yopmail.com
+   onnokudapp-8340@yopmail.com
+   appalleffaw-3882@yopmail.com
+   icodovytta-7570@yopmail.com
+   Hatioul80@teleworm.us
+   ondatas@cuvox.de
+   awd123asd@jourrapide.com
+
+	\w+\-?[0-9]*@[a-z]+\.(com|us|de)
+
+
+5. 0x123af
+   0X23F4abc9
+   0xgfhreltaey
+
+	0(x|X)[a-fA-F0-9]+
+
+
+6. regular expression
+   regular expressions
+   regex
+   regexes
+   regexp
+
+	reg(ular|exes|exp|ex)\s?(expression(s)?)?
+
+	
+7. 08.10.2015.
+   28.02.2010.
+   15.12.1989.
+   31.14.2000.
+   36.12.1824.
+   05.07.2019.
+   23/08/1324.
+   5-3-1988
+
+	(3[0-1]|[0-2][1-9]+)([\.\/\-])(0[1-9]|1[0-2])\2\d{4}\.
+
+
+8. mr12012
+   mi15235
+   ml10321
+   af09034
+   mv16086
+   mn13045
+   aa12450
+   mm10098
+   mr02012
+   mi18235
+   ml15000
+   af09399
+   mv16086
+   mn13045
+   aa12450
+   mm10098
+
+9. <title>Greatest hits</title>
+   <artist>Dolly Parton</artist>
+   <country>usa</country>
+   <company>RCA</company>
+   <price>9.90</price>
+   <year>1982</year>
+
+	<(\w+)>.*?<\/\1>
+
+
+10. <title>Greatest hits</title>
+
+    <artist>
+        Dolly Parton
+    </artist>
+     
+    <country>usa</country>
+    <company>RCA</company>
+    <price>9.90</price>
+     
+    <year>
+        1982
+    </year>
+     
+     
+    <year>
+    	hello
+    </year>
+
+
+		<(\w+)>(.|\s)*?<\/\1>
+
+
+11. viselinijski C-ovski komentari
+
+	\/\*(\s|.)*?\*\/
+
+
+12. Dozvoljeni karakteri su mala i velika slova, cifre, simboli @, $ i _.
+	Ime mora počinjati slovom.
+	Dužina imena mora biti barem 8, a najviše 16 simbola.
+
+		[a-zA-Z]([a-zA-Z\d\@\$\_]){7,15}
+
+
+13. Heksadekadne boje
+
+		\#([a-f0-9]){6}
+
+
+14.	<a href="www.google.com">klikni me</a>
+    <a   href = 'www.google.com'>klikni me</a>
+    <a   href = 'www.google.com' > klikni me</a>
+    
+    <a   href = 'www.google.com' >
+      klikni me</a>
+      
+      <a   href = 'www.google.com' >
+        klikni me
+      </a>
+    
+    <a href = 'www.google.com' target=_blank > klikni me < /a>
+
+		<a\s+href.*?>(.|\s)*?<\s*\/a>
+
+15. Binarne brojevi proizvoljne dužine koji imaju paran broj bitova koji su 1
+	i paran broj bitova koji su 0
+
+		((00|11)|(10|01)(00|11)*(01|10))*
