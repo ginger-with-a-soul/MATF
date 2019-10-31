@@ -51,14 +51,15 @@ bool walk(char* path, char* ext, unsigned* num){
 	if(lstat(path, &fInfo) == -1){
 		return false;
 	}
+	if(S_ISREG(fInfo.st_mode)){
+		char* tmpStr = malloc(strlen(path));
+		check_error(tmpStr == NULL, "malloc() failure");
+		tmpStr = strrchr(path, '.');
 
-	char* tmpStr = malloc(strlen(path));
-	check_error(tmpStr == NULL, "malloc() failure");
-	tmpStr = strrchr(path, '.');
-
-	if(tmpStr != NULL){
-		if(!strcmp(tmpStr, ext)){
-			*num += 1;
+		if(tmpStr != NULL){
+			if(!strcmp(tmpStr, ext)){
+				*num += 1;
+			}
 		}
 	}
 
