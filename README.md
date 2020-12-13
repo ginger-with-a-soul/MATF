@@ -1,5 +1,5 @@
 # MATF
-Kursevi Matematičkog fakulteta od 2. godine pa dalje
+Kursevi Matematičkog fakulteta od prve godine pa dalje
 
 
 Svi programerski predmeti Matematičkog fakulteta počev od 2018/19 godine.
@@ -8,7 +8,7 @@ Većina konfuznijih kodova biće iskomentarisana.
 
 
 
-Courses at the Faculty of Mathematics from 2nd year and later
+Courses at the Faculty of Mathematics from the 1st year and later
 
 
 All programming related courses starting from 2018/2019.
