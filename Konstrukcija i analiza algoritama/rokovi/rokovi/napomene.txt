@@ -1,0 +1,1 @@
+Septembar 1 - 1. zadatak. Indeksiranje niza krece od 1. Dakle ako za update stoji 2 3 a niz je bio 1 2 3 4, novodobijeni niz je 1 3 3 4.

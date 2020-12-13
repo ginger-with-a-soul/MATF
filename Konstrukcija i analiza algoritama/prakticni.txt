@@ -1,0 +1,8 @@
+Ukoliko zelimo da resimo problem medjusobne zavisnosti poslova, mozemo da koristimo
+Kahn-ov algoritam -> Prvo nadjemo cvorove takve da su im ulazni stepeni jednaki nula,
+zatim ih stavimo u red. Sve dok red nije prazan, skidamo jedan po jedan, smanjujemo stepen
+njihovih komsija i pitamo da li je sada neki od tih komsija ulaznog stepena 0. Ako jeste
+stavljamo ga na red. Kad god skinemo element sa reda, mozemo da ga pamtimo u vektoru i to
+je topolosko sortiranje. Ako postoji neki cvor na kraju da ga nismo posetili, mozemo da
+pokrenemo DFS iz njega i da pamtimo DFS obilazak. Tako ispisujemo ciklus u usmerenom grafu.
+
