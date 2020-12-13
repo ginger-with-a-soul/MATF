@@ -13,4 +13,4 @@ Courses at the Faculty of Mathematics from 2nd year and later
 
 All programming related courses starting from 2018/2019.
 Each and every one of this courses contains my version of codes from the exercise part of the classes. With some mid and final term exams aswell.
-Most of the confusing codes has been commented.
+Most of the confusing codes had been commented.
