@@ -1,0 +1,54 @@
+~Imperativna paradigma:~
+
+Imperativna paradigma je prva paradigma u programiranju. Nastala je zahvaljujuci Fon Nojmanovoj arhitekturi jer ona namece ovaj stil programiranja (prilagodjenija masini nego coveku). Kod imperativne paradigme podaci i algoritmi postoje nazivsno jedni od drugih a zajedno cine program:
+
+Podaci + Algoritmi = Program
+
+Imperativno programiranje se naziva i Algoritamski orijentisano programiranje jer se prednost daje algoritmima.
+
+Kao sto sam naziv kaze, imperativna paradigma zasnovana je na naredbama i kod nje je vazan redosled izvrsavanja tih naredbni. Drugim recima, prati se odredjena procedura pri izvrsavanju pa se I.P. jos naziva i Proceduralna paradigma. Naredbe menjaju stanje programa. Stanje programa u nekom trenutku vremena predstavljaju sve informacije kojima program moze da pristupi preko memorije. Izvrsavanjem programa, on prolazi kroz niz stanja, a u koje stanje ce doci zavisi od naredbe (ili skupa naradbi) koja se izvrsi.
+Svaki imperativni jezik sadrzi naredbe kojima se stanje memorije moze menjati. Osnovna naredba je naredba dodele kojom se vrsi upisivanje vrednosti na memorijsku adresu.
+Deklaracijom promenljive se vrsi povezivanje odredjene velicine memorijskog prostora i pocetka tog memorijskog prostora sa simbolickim imenom promenljive. Inicijalizacijom se upisuje vrednost u taj memorijski prostor.
+
+Imperativna paradigma se u svakoj fazi razvoja sve vise apstrakovala u odnosu na hardver i udaljavala od asemblera. Postoje 4 faze imperativne paradigme:
+
+1. Operaciona paradigma: 
+
+Prva faza programiranja. Koristi minimalan skup komandi i cesto je zasnovano na dosetkama i trikovima vezanim za samu masinu. Odlikuju ih GOTO naredbe koje mogu biti sa IF-om i bez IF-a. Zbog ove naredbe nastaje "Spageti programiranje", a ono je posledica prilagodjavanja jezika masini a ne coveku. 
+
+Kontrola toka se vrsi pomocu: dodele, sekvence, obelezavanja (labela), skoka i selekcije (if)
+
+Jezici koji se odlikuju operacionom paradigmom su: Algol, Cobol, Fortran, Basic... Zbog nedisciplinovanog i prekomernog koriscenja GOTO naredbe, 1970ih nastaje kriza softvera jer softver ne moze da dostigne mogucnosti hardvera. Programi postaju preteski za odrzavanje i izmene.
+
+2. Strukturna paradigma:
+
+Resava problem spageti programiranja tako sto se 1966. dokazuje (Bohm-Jacopini) da svaki program moze da se izrazi pomocu jedne "uslovne" strukture (if...), "ponavljacke" strukure (for, while...) i sekvence po kojoj se program izvrsava. Zahvaljujuci ovome, GOTO naredba biva izbacena.
+Strukturna paradigma nastoji da zavis programa bude pregledniji i razumljiviji. Redukovan je osnovni skup kontrole toka i sastoji se od: dodele, sekvence, selekcije i iteracije (prvo nastao WHILE). Prosireni skup obuhvata i druge strukture kojima se povecava preglednost: CASE, FOR, DO-WHILE...
+
+Kontrolne naredbe su sintaksicke strukture preko kojih se definise redosled u kom se vrsi dodeljivanje. To su iteracija, selekcija i sekvencijalna kompozicija.
+
+3. Proceduralna paradigma:
+Uvodi podrutine - potprograme, funkcije, metode, procedure. Na ovaj nacin se povecava deklarativnost. Nesto kasnije dolazi do spajanja proceduralne i strukturne paradigme i tada svaka podrutina moze da ima svoje lokalne podatke i algoritam, moze da ima odredjenu vidjivost i doseg za podatke, podrutine su medjusobno nezavisne, pocinje razvoj modularnog programiranja. U imperativnom programiranju podrutine su najcesce funkcije (imaju povratnu vrednost) i procedure (nemaju povratnu vrednost). Zajedno se zovu potprogram.
+
+Svaki potprogram moze da ima listu parametara. Parametar - formalni parametar, argument - aktuelni parametar. Parametri mogu biti vrednosni (in) i promenljivi (out). Vrednosni parametri unose podatke u potprogram i on sa njima radi i moze da ih menja ali se te promene ne vidi pri izlasku iz potprograma (najcesce su izrazi). Promenljivi parametri unose podatke sa kojima potprogram radi ali sve izmeni nad tim podacima ostaju i prilikom izlaska i potprograma (najcesce promenljive ili pokazivaci na promenljive). Prenos argumenata moze da bude po vrednosti (kopira se vrednost u podrutinu) i podrazumevan je u C, C++, Delphi, Ada, Pascal, Algol 60..., i po referenci (prenosi se referenca - najcesce adresa na taj argument). Postoje jos i:
+3. Prenos po rezultatu (Ada) gde se nakon izvrsavanja podrutine vrednost prenosi pozivajucoj rutini
+4. Prenos po vrednosti i rezultatu (Algol)
+5. Prenos po imenu - makroi
+6. Prenos po konstanti - kad pustimo konstantu kao parametar
+
+Zarad bolje organizacije memorije uveden je stek. Da nije bilo steka morala bi da se unapred rezervise potrebna memorija ali to bi onda onemogucilo rekurziju i bilo bi tesko predvideti koliko prostora je programu potrebno tako da sto manje bude neiskorisceno. Stek povecava cenu poziva potprograma. Prilikom izlaska iz potprograma vraca se u stek okvir pozivaoca potprograma a na kraju se izlazi iz svih stek okvira kada se dodje do kraja main-a. Korutine omogucavaju efikasno preskakanje stek okvira i vracanje u odredjeni. Na taj nacin se optimizuje izlazak iz duboke rekurzije.
+
+4. Modularna paradigma:
+Kod modularne paradigme program se razbija na manje celine koje su medjusobno nezavisne i koje preko svojih interfejsa mogu medjusobno da komuniciraju. Moduli se kod imperativne paradigme najcesce nazivaju biblioteke. Moduli se mogu nezavisno prevoditi i povezati u celinu koja gradi nas program. Moduli su pogodni jer mogu da se iskoriste u vise projekata.
+
+Resenja problema "Od opsteg ka posebnom": najopstija je postavka problema, zatim se uocavaju nacini kako problem razbiti na skup potproblema, zatim se svaki potproblem dekomponuje dok se ne dodje do sekvence naredbi.
+
+Propratni (bocni) efekat - kada se prilikom izracunavanja nekog izraza menja neka memorijska vrednost: x = x + 1
+Oni mogu da otezaju razumevanje imperativnih programa.
+I funkcija moze da ima propratni efekat a on nastaje kada se menja globalno stanje memorije nakon izvrsavanja funkcije. 
+
+Primer: x = f(sqrt(2), sqrt(2)) mozemo da transformisemo u: x = f(s, s) jer sqrt nema bocni ef.
+															s = sqrt(2)
+Medjutim: x = f(getchar(), getchar()) ne mozemo da transformisemo u: x = f(s, s)
+																	  s = getchar()
+jer getchar() ima bocni efekat.

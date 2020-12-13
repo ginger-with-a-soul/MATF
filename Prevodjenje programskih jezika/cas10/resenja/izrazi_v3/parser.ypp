@@ -1,0 +1,86 @@
+/* Ovaj parser gradimo koristeci viseznacnu gramatiku za aritmeticke izraze */
+
+%{
+
+#include <iostream>
+#include <cstdlib>
+#include <string>
+
+/*
+    Ukoliko zelimo da koristimo debagovanje i pratimo stanja parsera
+    neophodno je da definisemo YYDEBUG i u main() funkciji da 
+	izvrsimo dodelu yydebug =1
+*/
+#define YYDEBUG 1
+
+
+extern int yylex();
+void yyerror(std::string s);
+%}
+
+/* Tip atributa simbola ce biti tip nekog od polja ove unije. */
+%union{
+	float vrednost;
+}
+
+/*
+   Definisemo asocijativnost i prioritete operatora.
+   Prioritet tokena raste nanize,
+   odnosno + i - imaju nizi prioritet od * i / i slicno.
+*/
+%left '+' '-'
+%left '*' '/' 
+%left UMINUS
+
+%type <vrednost> E
+%token <vrednost> broj_token
+%start pocetak
+
+
+%%
+pocetak
+    : E {
+        std::cout << "Vrednost izraza je " << $1 << std::endl;
+    }
+	;
+
+E
+    : E '+' E {
+        $$ = $1 +$3;
+    } | E '*' E {
+        $$ = $1 * $3;
+    } | E '-' E {
+        $$ = $1 - $3;
+    } | E '/' E {
+        if ($3 == 0) {
+		    yyerror("Deljenje nulom!");	
+		} 
+	    $$ = $1 / $3;
+    }
+/* Dodeljujemo pravilu prioritet. Koristeci debagovanje proveriti redosled primenjivanja pravila kada nije zadat prioritet i kada je prioritet dodeljen. */
+	| '-' E %prec UMINUS {
+        $$ = -$2;
+    } | '(' E ')' {
+        $$ = $2;
+    } | broj_token {
+        $$ = $1;
+    }
+	; 
+%%
+
+int main()
+{
+    // Ukoliko zelimo da ukljucimo debagovanje potrebno je izvrsiti
+    // sledecu naredbu.
+    // yydebug = 1;
+	if (yyparse() == 0)
+		std::cout << "Uparen je aritmeticki izraz!" << std::endl;
+	return 0;
+}
+
+void yyerror(std::string s)
+{
+    std::cerr << s << std::endl;
+    exit(EXIT_FAILURE);
+}
+

@@ -1,0 +1,5 @@
+prog
+Prva linija sadrzi jednom rec prog.
+Druga linija je ne sadrzi uopste
+Treca linija ima progprog prog 3 puta.
+U cetvrtoj liniji se rec prog nalazi i unutar reci programiranje.

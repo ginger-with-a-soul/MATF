@@ -1,0 +1,97 @@
+%{
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include <map>
+
+std::map<std::string, int> tablica;
+
+extern int yylex();
+#define YYDEBUG 1
+void yyerror(std::string s){
+	std::cerr << s << std::endl;
+	exit(EXIT_FAILURE);
+}
+
+%}
+
+%union {
+	int vrednost;
+	std::string* id;
+}
+
+%left '+' '-'
+%left '*' '/'
+%left UMINUS
+
+%token print_token;
+%token <id> id_token;
+%token <vrednost> broj_token;
+%type <vrednost> E
+
+%%
+
+niz_naredbni
+	: niz_naredbni naredba '\n'
+	|
+	;
+
+naredba
+	: print_token '(' E ')' {
+		std::cout << "Vrednost izraza je: " << $3 << std::endl;
+	}
+	| id_token '=' E {
+		tablica[*$1] = $3;
+		delete $1;
+	}
+	;
+
+E 
+	: E '+' E {
+		$$ = $1 + $3;
+	}
+	| E '-' E {
+		$$ = $1 - $3;
+	}
+	| E '*' E {
+		$$ = $1 * $3;
+	}
+	| E '/' E {
+		if($3){
+			$$ = $1 / $3;
+		}
+		else{
+			yyerror("Deljenje nulom nije definisano!");
+		}
+	}
+	| '-' E %prec UMINUS {
+		$$ = -$2;
+	}
+	| '(' E ')' {
+		$$ = $2;
+	}
+	| broj_token {
+		$$ = $1;
+	}
+	| id_token {
+		auto it = tablica.find(*$1);
+		if(it != tablica.end()){
+			$$ = it->second;
+		}
+		else{
+			std::cout << "Promenljiva " << *$1 << " nije definisana!" << std::endl;
+			$$ = 0;
+		}
+		delete $1;
+	}
+	;
+
+%%
+
+int main(){
+	yydebug = 1;
+	if(yyparse() == 0){
+		std::cout << "Uspesno procitani svi tokeni!" << std::endl;
+	}
+	exit(EXIT_SUCCESS);
+}

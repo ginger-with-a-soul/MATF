@@ -1,0 +1,73 @@
+niznaredbi -> niznaredbi naredba '\n'
+	-> naredba '\n'
+naradba -> ID = E
+	| print E
+E -> E + T
+	| E - T
+	| T
+T -> T * F
+	| F
+F -> Integral G | BROJ
+	| G operacija
+G -> ( E ) 
+	| ID
+	| polinom
+	;
+operacija -> '
+	| eps
+polinom -> < lista >
+lista -> lista , broj
+	| broj
+	;
+
+Eliminacija leve rekurzije
+											Skupovi izbora
+niz naredbi -> naredba '\n' NP				ID, print	
+NP -> naredba '\n' NP						ID, print
+	| eps									EOI
+	;
+naredba -> ID = E							ID
+	| print E								Print
+	;
+E -> T EP									Integral, (, ID, <						
+	;
+EP -> + T EP								+
+	| - T EP								-
+	| eps									\n, )
+	;
+T -> F TP									Integral, (, ID, <								
+	;
+TP -> * F TP								*
+	| eps									+, -, \n, )
+	;
+F -> Integral G | BROJ						Integral
+	| G operacija							(, ID, <
+	;
+G -> ( E ) 									(
+	| ID									ID
+	| polinom								<
+	;
+operacija -> '								'
+	| eps									*, +, -, \n, )
+	;
+polinom -> < lista >						<
+	;	
+lista -> broj listaP						BROJ
+	;
+listaP -> , broj listaP						,
+	| eps									>
+	;
+				First					EPS		Follow
+nizNaradbi		ID, print				NE		EOI
+NP				ID, print				DA		EOI
+naredba			ID, print				NE		\n
+E				Integral, (, ID, <		NE		\n, )
+EP				+, -					DA		\n, )
+T				Integral, (, ID, <		NE		+, -, \n, )
+TP				*						DA		+, -, \n, )
+F				Integral, (, ID, <		NE		*, +, -, \n, )
+G				(, ID, <				NE		|, ', *, +, -, \n, )
+operacija		'						DA		*, +, -, \n, )
+polinom			<						NE		|, ', *, +, -, \n, )
+lista 			broj					NE		>
+listaP			,						DA		>

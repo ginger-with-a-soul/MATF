@@ -1,0 +1,6 @@
+int _a = 0xFF;
+print(_a, 8);
+print(_a);
+print(_a, 16);
+print(_a, 19);
+print(_nova1);

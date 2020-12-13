@@ -1,0 +1,568 @@
+Grammar
+
+    0 $accept: niz_naredbi $end
+
+    1 niz_naredbi: niz_naredbi naredba ';'
+    2            | naredba ';'
+
+    3 naredba: PRINT '(' e ')'
+    4        | ID '=' e
+    5        | e '<' e
+    6        | e '>' e
+    7        | e LEQ e
+    8        | e GEQ e
+    9        | e NEQ e
+   10        | e EQ e
+
+   11 e: e '+' e
+   12  | e '-' e
+   13  | e '*' e
+   14  | e '/' e
+   15  | '-' e
+   16  | '(' e ')'
+   17  | ID
+   18  | BROJ
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 3 16
+')' (41) 3 16
+'*' (42) 13
+'+' (43) 11
+'-' (45) 12 15
+'/' (47) 14
+';' (59) 1 2
+'<' (60) 5
+'=' (61) 4
+'>' (62) 6
+error (256)
+UMINUS (258)
+EQ (259) 10
+NEQ (260) 9
+GEQ (261) 8
+LEQ (262) 7
+PRINT (263) 3
+BROJ (264) 18
+ID (265) 4 17
+
+
+Nonterminals, with rules where they appear
+
+$accept (21)
+    on left: 0
+niz_naredbi (22)
+    on left: 1 2, on right: 0 1
+naredba (23)
+    on left: 3 4 5 6 7 8 9 10, on right: 1 2
+e (24)
+    on left: 11 12 13 14 15 16 17 18, on right: 3 4 5 6 7 8 9 10 11
+    12 13 14 15 16
+
+
+State 0
+
+    0 $accept: . niz_naredbi $end
+
+    '-'    shift, and go to state 1
+    PRINT  shift, and go to state 2
+    BROJ   shift, and go to state 3
+    ID     shift, and go to state 4
+    '('    shift, and go to state 5
+
+    niz_naredbi  go to state 6
+    naredba      go to state 7
+    e            go to state 8
+
+
+State 1
+
+   15 e: '-' . e
+
+    '-'   shift, and go to state 1
+    BROJ  shift, and go to state 3
+    ID    shift, and go to state 9
+    '('   shift, and go to state 5
+
+    e  go to state 10
+
+
+State 2
+
+    3 naredba: PRINT . '(' e ')'
+
+    '('  shift, and go to state 11
+
+
+State 3
+
+   18 e: BROJ .
+
+    $default  reduce using rule 18 (e)
+
+
+State 4
+
+    4 naredba: ID . '=' e
+   17 e: ID .
+
+    '='  shift, and go to state 12
+
+    $default  reduce using rule 17 (e)
+
+
+State 5
+
+   16 e: '(' . e ')'
+
+    '-'   shift, and go to state 1
+    BROJ  shift, and go to state 3
+    ID    shift, and go to state 9
+    '('   shift, and go to state 5
+
+    e  go to state 13
+
+
+State 6
+
+    0 $accept: niz_naredbi . $end
+    1 niz_naredbi: niz_naredbi . naredba ';'
+
+    $end   shift, and go to state 14
+    '-'    shift, and go to state 1
+    PRINT  shift, and go to state 2
+    BROJ   shift, and go to state 3
+    ID     shift, and go to state 4
+    '('    shift, and go to state 5
+
+    naredba  go to state 15
+    e        go to state 8
+
+
+State 7
+
+    2 niz_naredbi: naredba . ';'
+
+    ';'  shift, and go to state 16
+
+
+State 8
+
+    5 naredba: e . '<' e
+    6        | e . '>' e
+    7        | e . LEQ e
+    8        | e . GEQ e
+    9        | e . NEQ e
+   10        | e . EQ e
+   11 e: e . '+' e
+   12  | e . '-' e
+   13  | e . '*' e
+   14  | e . '/' e
+
+    '+'  shift, and go to state 17
+    '-'  shift, and go to state 18
+    '*'  shift, and go to state 19
+    '/'  shift, and go to state 20
+    EQ   shift, and go to state 21
+    NEQ  shift, and go to state 22
+    GEQ  shift, and go to state 23
+    LEQ  shift, and go to state 24
+    '<'  shift, and go to state 25
+    '>'  shift, and go to state 26
+
+
+State 9
+
+   17 e: ID .
+
+    $default  reduce using rule 17 (e)
+
+
+State 10
+
+   11 e: e . '+' e
+   12  | e . '-' e
+   13  | e . '*' e
+   14  | e . '/' e
+   15  | '-' e .
+
+    $default  reduce using rule 15 (e)
+
+
+State 11
+
+    3 naredba: PRINT '(' . e ')'
+
+    '-'   shift, and go to state 1
+    BROJ  shift, and go to state 3
+    ID    shift, and go to state 9
+    '('   shift, and go to state 5
+
+    e  go to state 27
+
+
+State 12
+
+    4 naredba: ID '=' . e
+
+    '-'   shift, and go to state 1
+    BROJ  shift, and go to state 3
+    ID    shift, and go to state 9
+    '('   shift, and go to state 5
+
+    e  go to state 28
+
+
+State 13
+
+   11 e: e . '+' e
+   12  | e . '-' e
+   13  | e . '*' e
+   14  | e . '/' e
+   16  | '(' e . ')'
+
+    '+'  shift, and go to state 17
+    '-'  shift, and go to state 18
+    '*'  shift, and go to state 19
+    '/'  shift, and go to state 20
+    ')'  shift, and go to state 29
+
+
+State 14
+
+    0 $accept: niz_naredbi $end .
+
+    $default  accept
+
+
+State 15
+
+    1 niz_naredbi: niz_naredbi naredba . ';'
+
+    ';'  shift, and go to state 30
+
+
+State 16
+
+    2 niz_naredbi: naredba ';' .
+
+    $default  reduce using rule 2 (niz_naredbi)
+
+
+State 17
+
+   11 e: e '+' . e
+
+    '-'   shift, and go to state 1
+    BROJ  shift, and go to state 3
+    ID    shift, and go to state 9
+    '('   shift, and go to state 5
+
+    e  go to state 31
+
+
+State 18
+
+   12 e: e '-' . e
+
+    '-'   shift, and go to state 1
+    BROJ  shift, and go to state 3
+    ID    shift, and go to state 9
+    '('   shift, and go to state 5
+
+    e  go to state 32
+
+
+State 19
+
+   13 e: e '*' . e
+
+    '-'   shift, and go to state 1
+    BROJ  shift, and go to state 3
+    ID    shift, and go to state 9
+    '('   shift, and go to state 5
+
+    e  go to state 33
+
+
+State 20
+
+   14 e: e '/' . e
+
+    '-'   shift, and go to state 1
+    BROJ  shift, and go to state 3
+    ID    shift, and go to state 9
+    '('   shift, and go to state 5
+
+    e  go to state 34
+
+
+State 21
+
+   10 naredba: e EQ . e
+
+    '-'   shift, and go to state 1
+    BROJ  shift, and go to state 3
+    ID    shift, and go to state 9
+    '('   shift, and go to state 5
+
+    e  go to state 35
+
+
+State 22
+
+    9 naredba: e NEQ . e
+
+    '-'   shift, and go to state 1
+    BROJ  shift, and go to state 3
+    ID    shift, and go to state 9
+    '('   shift, and go to state 5
+
+    e  go to state 36
+
+
+State 23
+
+    8 naredba: e GEQ . e
+
+    '-'   shift, and go to state 1
+    BROJ  shift, and go to state 3
+    ID    shift, and go to state 9
+    '('   shift, and go to state 5
+
+    e  go to state 37
+
+
+State 24
+
+    7 naredba: e LEQ . e
+
+    '-'   shift, and go to state 1
+    BROJ  shift, and go to state 3
+    ID    shift, and go to state 9
+    '('   shift, and go to state 5
+
+    e  go to state 38
+
+
+State 25
+
+    5 naredba: e '<' . e
+
+    '-'   shift, and go to state 1
+    BROJ  shift, and go to state 3
+    ID    shift, and go to state 9
+    '('   shift, and go to state 5
+
+    e  go to state 39
+
+
+State 26
+
+    6 naredba: e '>' . e
+
+    '-'   shift, and go to state 1
+    BROJ  shift, and go to state 3
+    ID    shift, and go to state 9
+    '('   shift, and go to state 5
+
+    e  go to state 40
+
+
+State 27
+
+    3 naredba: PRINT '(' e . ')'
+   11 e: e . '+' e
+   12  | e . '-' e
+   13  | e . '*' e
+   14  | e . '/' e
+
+    '+'  shift, and go to state 17
+    '-'  shift, and go to state 18
+    '*'  shift, and go to state 19
+    '/'  shift, and go to state 20
+    ')'  shift, and go to state 41
+
+
+State 28
+
+    4 naredba: ID '=' e .
+   11 e: e . '+' e
+   12  | e . '-' e
+   13  | e . '*' e
+   14  | e . '/' e
+
+    '+'  shift, and go to state 17
+    '-'  shift, and go to state 18
+    '*'  shift, and go to state 19
+    '/'  shift, and go to state 20
+
+    $default  reduce using rule 4 (naredba)
+
+
+State 29
+
+   16 e: '(' e ')' .
+
+    $default  reduce using rule 16 (e)
+
+
+State 30
+
+    1 niz_naredbi: niz_naredbi naredba ';' .
+
+    $default  reduce using rule 1 (niz_naredbi)
+
+
+State 31
+
+   11 e: e . '+' e
+   11  | e '+' e .
+   12  | e . '-' e
+   13  | e . '*' e
+   14  | e . '/' e
+
+    '*'  shift, and go to state 19
+    '/'  shift, and go to state 20
+
+    $default  reduce using rule 11 (e)
+
+
+State 32
+
+   11 e: e . '+' e
+   12  | e . '-' e
+   12  | e '-' e .
+   13  | e . '*' e
+   14  | e . '/' e
+
+    '*'  shift, and go to state 19
+    '/'  shift, and go to state 20
+
+    $default  reduce using rule 12 (e)
+
+
+State 33
+
+   11 e: e . '+' e
+   12  | e . '-' e
+   13  | e . '*' e
+   13  | e '*' e .
+   14  | e . '/' e
+
+    $default  reduce using rule 13 (e)
+
+
+State 34
+
+   11 e: e . '+' e
+   12  | e . '-' e
+   13  | e . '*' e
+   14  | e . '/' e
+   14  | e '/' e .
+
+    $default  reduce using rule 14 (e)
+
+
+State 35
+
+   10 naredba: e EQ e .
+   11 e: e . '+' e
+   12  | e . '-' e
+   13  | e . '*' e
+   14  | e . '/' e
+
+    '+'  shift, and go to state 17
+    '-'  shift, and go to state 18
+    '*'  shift, and go to state 19
+    '/'  shift, and go to state 20
+
+    $default  reduce using rule 10 (naredba)
+
+
+State 36
+
+    9 naredba: e NEQ e .
+   11 e: e . '+' e
+   12  | e . '-' e
+   13  | e . '*' e
+   14  | e . '/' e
+
+    '+'  shift, and go to state 17
+    '-'  shift, and go to state 18
+    '*'  shift, and go to state 19
+    '/'  shift, and go to state 20
+
+    $default  reduce using rule 9 (naredba)
+
+
+State 37
+
+    8 naredba: e GEQ e .
+   11 e: e . '+' e
+   12  | e . '-' e
+   13  | e . '*' e
+   14  | e . '/' e
+
+    '+'  shift, and go to state 17
+    '-'  shift, and go to state 18
+    '*'  shift, and go to state 19
+    '/'  shift, and go to state 20
+
+    $default  reduce using rule 8 (naredba)
+
+
+State 38
+
+    7 naredba: e LEQ e .
+   11 e: e . '+' e
+   12  | e . '-' e
+   13  | e . '*' e
+   14  | e . '/' e
+
+    '+'  shift, and go to state 17
+    '-'  shift, and go to state 18
+    '*'  shift, and go to state 19
+    '/'  shift, and go to state 20
+
+    $default  reduce using rule 7 (naredba)
+
+
+State 39
+
+    5 naredba: e '<' e .
+   11 e: e . '+' e
+   12  | e . '-' e
+   13  | e . '*' e
+   14  | e . '/' e
+
+    '+'  shift, and go to state 17
+    '-'  shift, and go to state 18
+    '*'  shift, and go to state 19
+    '/'  shift, and go to state 20
+
+    $default  reduce using rule 5 (naredba)
+
+
+State 40
+
+    6 naredba: e '>' e .
+   11 e: e . '+' e
+   12  | e . '-' e
+   13  | e . '*' e
+   14  | e . '/' e
+
+    '+'  shift, and go to state 17
+    '-'  shift, and go to state 18
+    '*'  shift, and go to state 19
+    '/'  shift, and go to state 20
+
+    $default  reduce using rule 6 (naredba)
+
+
+State 41
+
+    3 naredba: PRINT '(' e ')' .
+
+    $default  reduce using rule 3 (naredba)

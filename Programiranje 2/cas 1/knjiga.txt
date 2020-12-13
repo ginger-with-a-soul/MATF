@@ -1,0 +1,6 @@
+broj
+linija
+je
+jednak
+6
+ 

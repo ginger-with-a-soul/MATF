@@ -1,0 +1,10 @@
+04.10.14	mi12123	Marija Djuric Brankovic	13.23	23.12	30.00	3i
+04.10.14	mr10012	Ivan Dinic	28.06	10.25	20.15	4r
+14.04.15	mi10002	Dejana Savic	2.50	20.45	34.80	3i
+14.04.15	mn11065	Tea Tosic de Silva	27.55	19.12	33.33	4n
+21.07.15	ml14397	Darko Savkovic	12.12	27.50	0.00	1o3b
+21.07.15	mv14035	Marko Micic	10.12	17.50	10.00	1o4a
+11.09.16	mi08324	Vojin Pavic	30.00	35.00	34.50	3i
+14.11.16	mi10423	Sava Jovic	10.29	0.10	0.00	4i
+14.11.16	mi12268	Una Tasic	35.00	42.00	2.35	3i
+14.11.16	mr09123	Divna Stevic Hadzi Tosic	20.00	23.00	35.00	4r

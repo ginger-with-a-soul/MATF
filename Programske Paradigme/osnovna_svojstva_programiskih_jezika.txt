@@ -1,0 +1,229 @@
+-Leksika je podoblast sintakse koja se bavi opisivanjeg gradivnih elemenata jezika.
+U okviru leksike, postoje reci i kategorije reci. Sve reci iste kategorije cine tokene.
+a = 2 * b + 1
+Lekseme: a, =, *, b, +, 1
+Tokeni: identifikatori(a, b), operator =, operator +, operator *, celobrojne konstante (1, 2)
+
+Kljucne reci ne mogu biti identifikatori. Postoje contextual kljucne reci, koje imaju svojstva
+kljucni reci samo u odredjenim situacijama u kodu. Inace, mogu postojati kao identifikatori.
+Kontekstualne kljucne reci uvedene su prilikom razvoja standarda jezika. Postojala je potreba
+za novim kljucnim recima, ali, uvodjenjem istih, postojala je velika opasnost da se postojeci
+kod na tom jeziku pokvari jer se te reci, koji bi bile novouvedene kao kljucne, verovatno vec
+negde koriste. Zbog toga, te kljucne reci postaju kontekstualne i time je smanjena sansa da se
+prevodjenjem vec postojeceg koda novim standardom, nesto pokvari.
+
+Reci se definisu regex-ima a prepoznaju konacnim automatima. Leksicki analizator je deo prevodioca koji uzima reci sa ulaza i svrstava ih u odredjene kategorije.
+
+-Sintaksa je deo programskog jezika koja je odgovorna za nacine kombinovanja gradivnih elemenata
+jezika u ispravne jezicke konstrukcije. Parser je deo prevodioca odgovoran za pravilno prepoznavanje konstrukcija. Sintaksa se opisuje kontekstno slobodnim gramatikama.
+
+-Semantika daje znacenje ispavno napisanom kodu. Cesto ju je znacajno teze definisati nego sintaksu. Moze biti formalna i neformalna. Neformalna semantika daje okvirnu ideju programeru kako ce se program ponasati, i to pre pokretanja. Formalna semantika daje nacin da se formalno rezonuje o svojstvima programa, da se ispita korektnost.
+
+-Operaciona semantika opisuje kako se izracunavanje izvrsava. Moze biti strukturna operaciona semantika, koja opisuje korak po korak kako se izracunavanje izvrsava. Ili, prirodna operaciona semantika koja opisuje ukupan rezultat izracunavanja. Koristi se najceste kod imperativne paradigme jer se izracunavanjem stanje programa menja i operaciona semantika opisuje te promene.
+
+-Aksioma je pravilo sa praznim skupom premisa.
+
+(P1, s1) -> s' <=> (P2, s2) -> s' (naredbe semanticki ekvivalentne)
+P1, P2 - program
+s1, s2 - ulazno stanje
+s' - rezultujuce stanje
+Ova ekvivalencija se dokazuje posmatrajuci semanticka stabla izvodjenja.
+
+<S,s> -> Y (tranziciona relacija)
+korak s vodi program S do stanje Y
+Y = <S',s'> (izvrsavanje programa S sa ulaznim stanjem s nije zavrseno i S',s' je srednja konf.)
+Y = s' (izvrsavanje programa S sa ulaznim stanjem s se zavrsilo stanjem s')
+
+SOS omogucava pracenje "sitnih" detalja izracunavanja.
+
+-Denotaciona semantika definise znacenje prevodjenjem u jezik za koji je poznata semantika. Taj drugi jezik je najcesce neki matematicki formalizam. Tu se svaka sintaksna definicija se tretira kao objekat na koji moze da se primeni neka funkcija koja ce taj objekat da slika u matematicki objekat. Dodeljivanje znacenja delovima programa, dodeljuje se znacenje celom programu. To se naziva kompozitivnost.
+Denotaciona semantika koristi se kod definicije semantike funkcionalnih programskih jezika jer se izvrsavanje programa svodi na evaluaciju funkcija. Analiziranje programa svodi se na analiziranje matematickih objekata.
+
+Semanticki domeni su matematicki objekti koji predstavljaju semanticke vrednosti.
+Funkcije znacenja daju znacenje uvedenim sintaksnim definicijama.
+
+Primer: Pronaci znacenje izraza: 2 + 32 + 61
+
+semantika[[2+32+61]] = plus(semantika[[2+32]], semantika[[61]]) =
+= plus(plus(semantika[[2]], semantika[[32]]), semantika[[61]])
+
+semantika[[61]] = povezibn[[61]] = plus(pom(10, povezibn[[6]]), povezibn[[1]]) = 
+= plus(pom(10, povezicn[[6]]), povezicn[[1]]) = plus(pom(10, 6), 1) = 
+= plus(10 * 6, 1) = plus(60, 1) = 60 + 1 = 61
+
+semantika[[2]] = povezibn[[2]] = povezicn[[2]] = 2
+
+semantika[[32]] = povezibn[[32]] = plus(pom(10, povezibn[[3]]), povezibn[[2]]) = 
+= plus(pom(10, povezicn[[3]]), povezicn[[2]]) = plus(pom(10, 3), 2) = 
+= plus(10 * 3, 2) = plus(30, 2) = 30 + 2 = 32
+
+-Aksiomska semantika zasniva se na definisanju semantike preko matematicke logike (Horova je pogodna jer daje aksiome i pravila izvodjenja za sve manje slozene konstrukte imperativnog jezika). Horova trojka {P} C {Q} kaze: ako je ispunjen preduslov P, komanda C vodi do postuslova Q.
+
+-Prevodilac prevodi na masinski kod u zavisnosti od zadate semantike. Neke semanticke greske mogu se detektovati prilikom samog prevodjenja (da li je tip neke promenljive odgovarajuci, da li su sve promenljive definisane...), ali neke se mogu detektovati tek prilikom pokretanja programa (index out of bounds exception, deljenje nulom...).
+
+Detektovanje semanticke greske prilikom prevodjenja je staticko proveravanje. Ono cesto nije niti dovoljno niti pouzdano (moze se dogoditi da se neke greske ne pronadju, ili da se pronadju greske koje u stvari ne postoje..). Dinamicko detektovanje se vrsi prilikom rada programa.
+
+
+-Imena su stringovi koji se koriste za predstavljanje promenljivih, tipova, operatora, konstanti.. U pocetku je bilo dozvoljeno da ime bude velicine samo jednog karaktera (Fortran I to menja -> 6 karaktera. Kasnije verzije Fortrana to menjanju na 31).
+C99 daje znacaj za 63 karaktera u INTERNIM imenima, a 31 u EKSTERNIM. C++ nema ogranicenja na papiru ali implementacije ga obicno daju. JAVA, C# i Ada nemaju uopste ogranicenja, tj. stringovi ma koje duzine ce celi biti znacajni za ime.
+U nekim jezicima imena moraju da pocnu specijalnim karakterom. U vecini prog. jezika jesu case sensitive.
+
+Specijalne reci su posebne reci koje imenuju akcije ili odvajaju delove programa. Ne mogu da budu redefinisane od strane programera jer su rezervisane.
+Kljucne reci su najcesce rezervisane reci, ali ne moraju to da budu (contextual key words). Nije dobro da ih programski jezik ima previse.
+
+-Promenljive su apstrakcija memorijskih adresa. Karakterisu ih ime, tip, adresa, doseg, zivotni vek i vrednost. Nemaju sve promenljive imena, na primer promenljive na hipu kojima se pristupa pokazivacima nemaju ime. Adresa promenljive predstavlja adresu fizicke memorije koja je pridruzena promenljivoj. Moze se dogoditi da vise promenljvih pokazuje na istu adresu (to se naziva alias i pogorsava citljivost i verifikaciju programa). Promenljiva moze da ima razlicite fizicke adrese prilikom istog izvrsavanja programa. Adresa se cesto naziva i L-vrednost. Tip promenljive odredjuje opseg vrednosti koji ta promenljiva moze da ima, kao i operacije koje se mogu izvrsiti na toj promenljivoj. Neki tipovi su osnovni tipovi, niske, unije, enumi, nizovi, strukture, torke, pokazivaci, reference.. Vrednost promenljive je sadrzaj odg. memorijske celije i cesto se naziva i R-vrednost. Da bi se prispupilo R-vrednosti, mora najpre da se odredi L-vrednost. Doseg odredjuje deo programa do koga je vidljivo neko ime, ono nije nuznu zivotni vek objekta. Zivotni vek objekta odredjen je nekim od 3 sistema. Moze da bude staticki (objekat postoji u memoriji i moze mu se pristupiti tokom celog izvrsavanja programa -> globalne promenljive), na steku (objekat postoji sve dok je na steku, koji se alocira i dealocira po LIFO principu), na hipu (objekat postoji onoliko koliko programer implicitno ili eksplicitno odredi). Povezivanje vrsi uspostavljanje veze izmedju imena i onoga sta ime predstavlja. Moze biti rano - veca efikasnost, i kasno - veca fleksibilnost.
+
+
+-Kontrola toka definise redosled izracunavanja koji racunar mora da prati da bi dosao do cilja. Postoje razliciti mehanizmi kontrole toka:
+	1. sekvenca - program se izvrsava linearno po odredjenom redosledu
+	2. selekcija - program se izvrsava u zavisnosti od ispunjenosti uslova
+	3. iteracija - deo koda se izvrsava vise puta
+	4. podrutina - apstrakcija kontrole toka (dozvoljavaju da programer sakrije kompleksan kod iza jednostavnog interfejsa)
+	5. rekurzija - definisanje izraza preko samog izraza
+	6. konkurentnost - dozvoljava da se razliciti delovi koda u istom vremenskom intervalu izvrsavaju na istom ili razlicitom procesoru
+	7. podrska za rad sa izuzecima - slicna selekciji; deo koda se izvrsava pravolinijski i to se prekida samo u slucaju da neki uslov bude ispunjen, i tada se izvsava neki drugi deo koda koji inace ne bi
+	8. nedeterminizam - nedefinisan redosled izvrsavanja ali dovodi do trazenog rezultata
+	
+-Sistem tipova je mehanizam za upravljanje podacima. Sadrzi: skup predefinisanih tipova, mehanizam za definisanje korisnickih tipova, mehanizam za kontrolu tipova (koja dva tipa su ista, kada se jedan tip moze zameniti drugim, kako se dodeljuje tip kompleksnim izrazima), pravila za proveru tipova. Jezik je tipiziran ako za svaku operaciju navodi nad kojim tipovima moze da se izvrsi. Jezik moze biti strogo tipiziran (vrsenje operacije nad podacima pogresnog tipa baca gresku), slabo tipiziran (moguce su implicitne konverzije ako nema poklapanja tipova), eksplicitno kastovanje tipova (moguce kod nekih jezika). Vazan je trenutak provere tipova i postoji staticka provera (kada se tipovi proveravaju pri prevodjenju programa) i dinamicka provera (tipovi se kontrolisu za vreme izvrsavanja programa). Staticka provera je strozija i manje fleksibilna ali vrlo precizna i pouzdana dok je dinamicka provera sklonija greskama i teza za debagovanje ali je fleksibilnija.
+
+
+-Kompajliranje striktno odvaja fazu prevodjenja i izvrsavanja programa. Tada se program prevodi na masinski kod procesora na kom je kompajliran, i smesta se u datoteku koja se cuva. Prilikom ove faze izvorni kod se optimizuje i moze biti pokretan proizvoljan broj puta nakon kompajliranja. 
+
+-Interpretiranje kombinuje fazu prevodjenja i izvrsavanja. Kroz izvorni kod se ide liniju po liniju i ona se prvo prevede pa se izvrsi. Nakon interpretiranja, ne postoji izvrsna datoteka koja moze biti ponovno pokrenuta, vec je potrebno ponovo pokrenuti interpretiranje. 
+
+Kompajliranje je pogodno kada ne zelimo da vrsimo prevodjenje svaki put kada zelimo da pokrenemo nas program. Najcesce se koristi prilikom pravljenja finalne verzije programa. Interpretiranje je pogodno kada cesto vrsimo izmene u nasem kodu. Svaki jezik u teoriji moze da bude i jedan i drugi, i cesto se koristi hibridni pristup pri pravljenju naseg programa.
+
+
+-Runtime sistem predstavlja skup biblioteka od kojih program zavisi da bi mogao pravilno da se izvrsava na sistemu. Ove biblioteke imaju vrlo raznolike primene. Neke obezbedjuju funkcije za upravljanje memorijom, kontrolu ulaza i ispisa..
+C ima prilicno mali runtime sistem.
+Virtuelne masine u potpunosti sklanjaju sistem na kom se vrsi prevodjenje tako da nas program ne zavisi od arhitekture racunara, ali, potrebno je da na drugom racunaru ta VM postoji kako bi nas program radio (Java Virtuelna Masina, CLI za c#).
+
+~Pitanja:~
+
+1. Nabroj pet osobina po kojima razli?iti programski jezici mogu da budu sli?ni.
+	1. tipiziranost - razliciti programski jezici mogu da budu ili slabo ili strogo tipizirani
+	2. paradigma - razliciti programski jezici mogu da pripadaju istoj paradigmi
+	3. sintaksa - razliciti programski jezici mogu da imaju slicnu sintaksu
+	4. semantika - razliciti programski jezici mogu da imaju slicno definisanu semantiku
+	5. slozenost runtime sistema - razliciti jezici mogu da koriste neki vid VM-e a i ne moraju
+
+2. Nabroj pet bitnih karakteristika programskih jezika.
+	1. paradigma kojoj jezik pripada
+	2. tipiziranost programskog jezika
+	3. dominantan nacin prevodjenja/postojanje VM za taj jezik
+	4. fleksibilnost jezika
+	5. popularnost (postajanje razvijenih biblioteka/paketa)
+	
+3. Sta je leksika?
+Leksika je deo sintakse koja se bavi nedeljivim celinama (recima, leksemama) i grupisanjem istorodnih leksema u grupe - tokene. Ovo grupisanje odredjuje leksicki analizator.
+
+4. Sta su lekseme a sta tokeni?
+Lekseme su nedeljive simbolicke celine a tokeni grupe istorodnih leksema.
+
+5. Sta su kontekstno zavisne klucne reci i zasto se uvode?
+Kontekstno zavisne klucne reci je poseban tip klucnih reci koje imaju svojstva kljucnih reci samo u odredjenim situacijama/delovima koda. Inace, ponasaju se kao i obicne promenljive. Uvedene su sa razvojem standarda raznih jezika kao potencijalno resenje u problemu kada je neka od tih kljucnih reci vec koriscena u programu napisanom na starom standardu, onom bez novih kontekstualnih kljucnih reci. Na taj nacin programe je lakse prepisati i prevesti novim standardom.
+
+6. Posao leksickog analizatora je da..
+..prima lekseme sa ulaza i svrstava ih u srodne grupe - tokene.
+
+7. Regularni izrazi..
+..sluze za definisanje reci
+
+8. Konacni automati..
+..sluze za prepoznavanje reci
+
+9. Sta definise sintaksa programskog jezika?
+Sintaksa programskog jezika definise nacine na koji gradivni elementi jezika mogu biti kombinovani u ispravne jezicke konstrukcije.
+
+10. Sta nam govori neformalna semantika programskog jezika?
+Neformalna semantika programskog jezika daje programeru neformalno iskazanu informaciju o semantickoj ispravnosti njegovog programa, ondnosno kako ce se program ponasati i pre njegovog pokretanja.
+
+11. ?ta nam omogu?ava formalno zadavanje semantike programskih jezika?
+Formalno zadavanje semantike programskog jezika omogucava nam da formalno rezonujemo o osobinama naseg programa i njegovoj korektnosti.
+
+12. Koji su formalni okviri za definisanje semantike programskih jezika?
+Formalni okviri za definisanje semantike jezika su: operaciona semantika, denotaciona semantika i aksiomska semantika.
+
+13. Operaciona semantika se naj?e??e koristi kao semantika za jezike ... paradigme.
+Imperativnu paradigmu - jer opisuje nacin izracunavanja a ta izracunavanja nas program vode kroz razlicita stanja na kojima se i zasniva imperativna paradigma.
+
+14. Denotaciona semantika se naj?e??e koristi kao semantika za jezike ... pradigme.
+Funkcionalnu paradigmu jer se zasniva na analizi matematickih objekata a fun. paradigma sve radi preko funkcija.
+
+15. Primer stati?kih semanti?kih provera je:
+Staticka semanticka provera vrsi se prilikom prevodjenja programa (da li su sve koriscene promenljive prethodno definisane, da li je tip odgovarajuci..)
+
+16. Primer dinami?kih semanti?kih provera je:
+Dinamicka provera vrsi se za vreme rada programa (index out of bounds exception, deljenje nulom..)
+
+17. ?ta je ime? Koje su osnovne karakteristike imena?
+Ime je string koji se koristi za predstavljanje promenljivih, operatora, tipova, konstanti.. Osnovna karakteristika je duzina imena (koja moze a i ne mora da bude ogranicena), da li ime mora da pocinje odredjenim specijalnim karakterom, da li je case sensitive..
+
+18. ?ta je promenljiva i koje su njene osnovne karakteristike?
+Promenljiva predstavlja simbolicku reprezentaciju memorijske celije (to su apstrakcije memorijskih adresa). Karaterisu ih ime, tip, doseg, zivotni vek, adresa i vrednost.
+
+19. Da li svaka promenljiva ima svoje ime? Objasni.
+Nema svaka promenljiva svoje ime. Postoje promenljive na hipu koje nemaju svoje ima a kojima se moze pristupati preko pokazivaca.
+
+20. Koji je odnos adrese i promenljive?
+Jedna memorijska adresa moze da odgovara jednoj promenljivoj, ali i vise promenljivih mogu da imaju istu memorijsku adresu. Nikada jedna promenljiva ne moze u isto vreme da pokazuje na vise razlicitih memorijskih celija. Nekada ista promenljiva moze da menja memorijske adrese za vreme rada programa.
+
+21. ?ta su aliasi?
+Aliasi su pojava da vise promenljivih odgovara istoj memorijskoj adresi. Aliasi pogorsavaju citljivost i verifikaciju ispravnosti.
+
+22. ?ta je tip i koji su osnovni tipovi podatka?
+Tip promenljive predstavlja ospeg vrednosti koji ta promenljiva moze da ima. Tip definise i operacije koje mogu biti izvrsene na promenljivoj. Osnovno tipovi podataka su: int, float i char (negde i bool). Od osnovnih tipova se mogu graditi svi ostali.
+
+23. ?ta je vrednost promenljive?
+Vrednost promenljive predstavlja sadrzaj memorijske celije na koju promenljiva pokazuje. Naziva se jos i R-vrednost a da bi se njoj pristupilo, prethodno mora biti odredjena L-vrednost sto nekada ume da bude malo komplikovanije.
+
+24. ?ta je doseg?
+Doseg predstavlja oblast koda u kojem je promenljiva vidljiva, i to nije isto sto i zivotni vek.
+
+24. ?ta je ?ivotni vek i ?emu on obi?no odgovara?
+Zivotni vek promenljive govori o tome koliko dugo ce objekat postojati u memoriji. Odredjuje se pomocu 3 razlicita sistema. Staticki zivotni vek imaju, na primer, globalne promenljive i one u memoriji postoje za vreme celog izvrsavanja programa. Stek zivotni vek odredjuje sistem i on zavisi od duzine postojanja promenljive na steku. Hip zivotni vek moze eksplicitno da odredi programer, i u zavisnosti od toga promenljiva moze proizvoljno dugo postojati u memoriji.
+
+25. ?ta je povezivanje i koja su mogu?a vremena povezivanja?
+Povezivanje predstavlja mehanizam vezivanja imena i onoga sto ime predstavlja. Moze biti rano - efikasnije, ili kasno - fleksibilnije.
+
+26. ?ta je kontrola toka?
+Kontrola toka je mehanizam odredjivanja redosleda izracunavanja koje racunar prati da bi dosao do cilja.
+
+27. Koji su mehanizmi odredivanja kontrole toka?
+Postoje vise mehanizama odredjivanja kontrole toka, i to su:
+	1. sekvencijalni - program se izvrsava linearno
+	2. selektivni - izracunavanje se vrsi u zavisnosti od ispunjenosti nekog uslova
+	3. iterativni - ponaljva se neki deo programa
+	4. podrutine - apstrakcija koja sakriva tok programa iza, najcesce, jednostavnih interfejsa
+	5. rekurzivi - izraz je definisan preko samog sebe
+	6. konkurentni - vise razlicitih delova koda moze da se izvrsava u istom vremenskom intervalu na jednom ili vise procesora
+	7. podrska za rad sa izuzecima - neki delovi koda ce biti izrvseni samo u slucaju da neki uslov bude ispunjen za vreme rada nekog drugog, naznacenog, dela koda
+	8. nedeterministicki - kontrola toka nije definisana ali se dolazi do zadovoljavajuceg izlaza iz programa
+	
+28. ?ta je sistem tipova i ?ta on uklju?uje?
+Sistem tipova predstavlja mehanizam upravljanja podacima. Ukljucuje predefinisane osnovne tipove, mehanizam da definisanje korisnickih tipova, mehanizam za kontrolu tipova (da li se jedan tip moze zameniti drugim, koja dva tipa su ista, kako se dodeljuje tipo kompleksnim izrazima), pravila za proveru tipova.
+
+29. ?ta je tipiziranje i kakvo tipiziranje postoji?
+Tipiziranje predstavlja navodjenje, za sve operacije, nad kojim tipovima mogu da se izvrsavaju. Tipiziranje moze viti jako i slabo.
+
+30. Kada se radi provera tipova?
+Provera tipova moze da se radi prilikom prevodjenja (staticka) ili prilikom rada programa (dinamicka).
+
+31. Koja je razlika izme?u jako i slabo tipiziranih jezika?
+Jako tipizirani jezici bacaju gresku prilikom svakog pokusaja koriscenja operacija koje nisu striktno definisane za taj tip.
+Slabo tipizirani jezici pokusavaju implicitnu konverziju u tip nad kojim je koriscena operacije definisana.
+
+32. Koja je razlika izme?u stati?ki i dinami?ki tipiziranih jezika?
+Staticki tipizirani jezici proveravaju tip pri prevodjenju programa a dinamicki za vreme rada programa.
+
+33. Koja je razlika izme?u kompiliranja i interpretiranja?
+Kompajliranje pravi izvrsivu datoteku, interpretiranje ne. Kompajliranje prevodi ceo kod odjednom dok interpretiranja prevodi liniju po liniju i odmah izvsava.
+
+34. Koja je razlika izme?u jezika koji se kompajliraju i jezika koji se interpretiraju?
+Svi jezici u teoriji mogu da budu i interpretatorski i kompajlerski.
+
+35. ?ta je rantajm sistem?
+Runtime sistem predstavlja skup biblioteka koje sistem moze da koristi za pravilno izvrsavanje programa. Te biblioteke mogu da sadrze sirok spektar funkcija (za rad sa memorijom, kontolu bafera, ulaz/izlaz..)
+
+36. Kakav rantajm sistem mo?e biti? Navesti primere.
+Runtime sistem moze da bude minimalisticki (c), da bude u vidu virtuelne masine (JVM za Javu, cli za C#), ili nesto izmedju ova dva.

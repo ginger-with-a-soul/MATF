@@ -1,0 +1,69 @@
+%{
+#include <iostream>
+#include <cstdlib>
+#include <string>
+
+extern int yylex();
+#define YYDEBUG 1
+void yyerror(std::string s){
+	std::cerr << s << std::endl;
+	exit(EXIT_FAILURE);
+}
+%}
+
+%union {
+	float vrednost;
+}
+
+%left '+' '-'
+%left '*' '/'
+%left UMINUS
+
+%token <vrednost> broj_token
+%type <vrednost> E
+%start pocetak
+
+%%
+pocetak
+	: E {
+		std::cout << "Vrednost izraza je: " << $1 << std::endl;
+	}
+	;
+E
+	: E '+' E {
+		$$ = $1 + $3;
+	}
+	| E '*' E {
+		$$ = $1 * $3;
+	}
+	| E '-' E {
+		$$ = $1 - $3;
+	}
+	| E '/' E {
+		if($3){
+			$$ = $1 / $3;
+		}
+		else{
+			yyerror("Zabranjeno deljenje nulom!");
+		}
+	}
+	| '-' E %prec UMINUS {
+		$$ = -$2;
+	}
+	| '(' E ')' {
+		$$ = $2;
+	}
+	| broj_token {
+		$$ = $1;
+	}
+	;
+
+%%
+
+int main(){
+	yydebug = 1;
+	if(yyparse() == 0){
+		std::cout << "Uparen aritmeticki izraz!" << std::endl;
+	}
+	exit(EXIT_SUCCESS);
+}

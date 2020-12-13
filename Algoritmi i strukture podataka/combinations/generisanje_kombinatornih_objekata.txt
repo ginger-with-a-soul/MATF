@@ -1,0 +1,105 @@
+Svi algoritmi za generisanje kobinatornih objekata su eksponencijalni tako da su, sem za male ulaze,
+gotovo neupotrebljivi.
+
+Sve n-torke mogu da predstave ili logicki (0 | 1 oznacava postojanje), ili prema indeksu.
+
+Postupak generisanja kombinatornih objekata najlase se moze predstaviti drvetom, iako se ono u
+memoriji ne formira. Postoje dva tipa drveta: kod prvog podskup se nalazi u cvoru a elementi tog
+podskupa se citaju na potu od korena do cvora; kod drugog podskupovi se nalaze na krajnjim listovima
+i elementi tog podskupa se citaju preko grana od korena do lista.
+
+Kombinacije -- > broj nacina de se iz skupa od n elemenata izabere k elemenata. Redosled nije vazan.
+
+	(n)	= n!
+	(k) = k!(n-k)!
+
+77. Generisanje kombinatornih objekata - rekurzivna pretraga (podskupovi, varijacije):
+
+	Podskupovi skupa se rekurzivno grade tako sto se u prvom rekurzivnom pozivu element izbaci iz
+	skupa, zatim se ubaci u podskup i pozove rekurzivno za sledece elemente oba skupa.
+
+	Varijacije se mogu generisati slicno kao podskupovi. Sledeca varijacija duzine k moze se dobiti
+	tako sto se na varijaciju duzine k - 1 izredjaju na poslednjem mestu sve vrednosti. Kada se dodje
+	do duzine k == 0 onda se ispisuje.
+
+78. Generisanje kombinatornih objekata - kombinacije sa i bez ponavljanja
+
+	Kod kombinacija bez ponavaljanja, iz skupa od n elemenata biramo k elemenata. Da bismo sprecili
+	da se kombinacije ponavljaju, stavicemo uslov da je svaka kombinacija rastuci sortiran niz
+	brojeva takav da se na mestu [0, i) nalaze fiksirani elementi a od [i, k) biramo elemente koji su
+	takve da je niz veci od prethodne kombinacije, ako ona nepostoji onda moze da bude 1, i manji ili
+	jedna n. Kad je i == k onda vrsimo ispis.
+
+	Kod kombinacija sa ponavljanjem kombinacija mora da bude neopadajuca a ne strogo rastuca kao kod
+	kombinacija sa ponavljanjem. Jedina razlika je sto preskacemo uvecanje jednog od brojaca prilikom
+	rekurzivnih poziva.
+
+79. Generisanje kombinatornih objekata - rekurzivna pretraga (permutacije):
+
+	Permutacije predstavljaju varijacije kod kojih je duzina odredjena elementima skupa.
+	
+	Pn = n!
+
+	Kod permutacija, fiksiramo element na prvu poziciju i onda permutujemo ostatak. Ako je ostatak
+	duzine 1 onda smo dosli do kraja i treba da ispisemo permutaciju, inace setamo kroz sve n i 
+	menjamo ih sa n - 1 el, pozivamo opet za n - 1, i radimo isti swap
+
+80. Generisanje kombinatornih objekata - particije
+
+	Problem particija se moze resavati induktivno-rekurzivnom konstrukcijom. Naime, svakoj particiji
+	broja n ciji je prvi sabirak s (1 <= s <= n) odgovara particija broj n - s. Da ne bismo ponavljali
+	particije, nametnucemo uslov da su svi sabirci posle s manji ili jednaki od njega. Iz rekurzije se
+	izlazi kada je n == 0. Niz u kome cuvamo sve particije mora da bude duzine n (kada su sve
+	particije jednake 1). Na pozicijama u nizu [0, i) cuvamo trenutne particije a svi posle i - 1 
+	moraju da budu manji ili jednaki i - 1. Tako da se na poziciji i mogu javljati samo vrednosti 
+	jednake i - 1 ili vrednosti manje od i - 1. Prvi slucaj bice moguc samo kada je vrednost na i - 1
+	<= n a drugi slucaj bice uvek moguc. U zavisnosti od redosleda poziva ova dva rekurzivna poziva
+	dobicemo particije sortirane leksikografski rasuce ili opadajuce.
+
+	Izlaz iz rekurzije je kada je n == 0, tada ispisujemo sve do i. Inace, proveravamo da li je smax
+	jednako 0 i ako jeste izlazimo. Inace, pozivamo za smax - 1, pitamo jel n >= smax, ako jeste 
+	ubacijemo na i-to mesto smax i pozivamo za n-smax i i + 1.
+
+81. Generisanje sledeceg podskupa:
+	
+	Ukoliko je podskup prazan onda dodamo prvi element. Ukoliko je 
+	poslednji element podskupa manji od n onda dodamo za jedan veci od poslenjeg. Inace, skidamo
+	poslednji element iz podskupa, ako on ostane prazan onda nema sledeceg podskupa, a ako ne ostane 
+	prazan onda povecavamo poslednji element za 1.
+
+	Sledeca varijacija se moze naci tako sto se krene od kraja trenutne varijacije i ispituje se prvi
+	element manji od n. Svaki jednak n se postavi na 1 a prvi koji nije jednak n se uveca za 1. Ako
+	smo stigli do kraja varijacije a nismo ni jedan element povecali (svu su bili jednaki n) to znaci
+	da sledeca varijacija ne postoji.
+
+82. Generisanje sledece kombinacije sa i bez ponavljanja:
+
+	Kod genersianja sledece kombinacije bez ponavljanja trazimo prelomnu tacku od desna ka levo.
+	Max vrednost koju poslednja pozicija moze da ima je n, pretposlednja n - 1... Prelomna tacka je
+	prva pozicija na kojoj se ne nalazi maksimalni element. Ako ona ne postoji znaci da ne postoji
+	sledeca kombinacija. Ako postoji onda nju uvecavamo za jedan i sve elemente posle nje uvecavamo
+	za 1 vise od prethodnog. Postiji i mala optimizacija, naime ako nakon uvecanja prelomna tacka
+	dostize svoj maksimum onda su sve tacki iza nje vec na svom maksimumu pa ih ne treba uvecavati a
+	sledeca prelomna tacka je na poziciji ispred trenutne. Ako prelomna tacka nakon uvecanja ne
+	dostize maksimum znaci da ni jedan od elemenata posle nje nece dostici maksimum i tada je sledeca
+	prelomna tacka na poslednjoj poziciji. Ova optimizacija ne donosi bolju vremensku slozenost vec
+	samo malo smanjuje njen faktor.
+
+83. Generisanje kombinatornih objekata - generisanje sledece permutacije:
+
+	Sledeca permutacija se nalazi tako sto se u permutaciji nadji pozicija i takva da je taj element
+	prvi koji je manji od elementa posle njega. Ako je ta pozicija manja od 0 onda nema sledece
+	permutacije. Nakon toga od kraja nalazimo poziciju j takvu da je element na toj poziciji veci od
+	elementa na poziciji i. Uradimo swap ta dva a onda od pozicije posle i radimo swap sa elementima
+	koji krecu od kraja i oba kraja se priblizacaju jedan drugom.
+
+85. Potpuna pretraga - N dama
+
+	Problem se zasniva na tome kako postaviti N dama na sahovsku tablu N * N tako da se nikoje dve
+	dame ne napadaju. Da se dame ne bi napadale, moraju da budu rasporedjene u razlicite vrse i
+	kolone. Vrste i kolone mozemo da oznacimo brojevima od 0 do n - 1. Obilazimo po dve pozicije
+	istovremeno i to tako da druga pozicija krece od jedne vise u odnosu na prvu jer se sigurno
+	ne moze naci u istoj vrsti. Pozicija dama se moze predstaviti permutacijom gde pozicija u 
+	permutaciji oznacava kolonu a vrednost na toj poziciji vrstu. Dve dame se dijagonalno napadaju
+	ako i samo ako je apsolutna vrednost razlike indeksa permutacije jednaka apsolutnoj vrednosti
+	razlike vrednosti permutacije na tom indeksu.

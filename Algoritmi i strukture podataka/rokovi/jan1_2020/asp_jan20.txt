@@ -1,0 +1,47 @@
+1.  Prvo se unosi broj n a onda dve niske duzine n (samo mala slova ASCII). 
+    Niske predstavljaju spilove karata, na svakoj karti je po jedan karakter.
+    Cilj je ukloniti sve karte iz oba spila u najmanjem broju poteza.
+    Ako su karte na vrhu spila jednake, obe karte se mogu ukloniti u jednom potezu, 
+    inace se u jednom potezu moze ukloniti samo po jedna karta.
+    Kretajuci od vrha spila (od poslednjeg karaktera niski) ispisati najmanji
+    broj poteza koji se moze odigrati tako da se uklone sve karte.
+
+    Vremenska slozenost O(n^2), prostorna O(n)
+
+    Primer: 
+    5 
+    abcdd
+    becfd
+    
+    Resenje: 7
+    ( 1. - uklanjaju se obe karte 'd'
+      2. - uklanja se 'd' sa vrha prvog spila
+      3. - uklanja se 'f' sa vrha drugog
+      4. - uklanjaju se obe karte 'c'
+      5. - 'e' iz drugog spila
+      6. - obe karte 'b'
+      7. - poslednja karta 'a' iz prvog spila)
+
+2.  Unosi se broj n i n celih pozitivnih brojeva. Koliko ima parova brojeva
+    takvih da je jedan od brojeva tog para strogo veci od kvadrata drugog broja istog para?
+
+    Vremenska slozenost O(nlogn), prostorna O(n)
+
+    Npr za: n=4, 1 4 5 2
+    parovi bi bili (1,2),(1,4),(1,5),(2,5), resenje je 4 
+
+3.  Unosi se broj n koji predstavlja duzinu liste. Svaki element liste se "boji" 
+    jednim od brojeva 1,2 ili 3. Ispisati svaku listu kod koje susedni elementi nisu 
+    iste boje, uredjeno leksikografski.
+
+    Vremenska slozenost O(n2^n), prostorna O(n)
+
+    Npr:
+    n = 3
+
+    1 2 1
+    1 2 3
+    1 3 1
+    1 3 2
+    2 1 2
+    2 1 3 ...

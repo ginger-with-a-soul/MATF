@@ -1,0 +1,64 @@
+%{
+
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <string>
+#include <map>
+
+#include "set.hpp"
+
+extern int yylex();
+
+void yyerror(std::string errMsg){
+	std::cerr << "Parser error: " << errMsg << std::endl;
+	exit(EXIT_FAILURE);
+}
+
+std::map<std::string, Set*> table;
+
+void deinit(){
+	for(auto it = table.begin(); it != table.end(); it++){
+		delete it->second;
+	}
+}
+
+%}
+
+%union {
+	int num_type;
+	std::string* string_type;
+	Set* s;
+}
+
+%left UNIJA_T
+%left PRESEK_ RAZLIKA_T
+%right '~'
+
+%token UNIJA_T PRESEK_T RAZLIKA_T CARD_T PRINT_T CHECK_T UNI_T
+%token <num_type> NUM_T
+%token <string_type> ID_T
+
+%type 
+
+%start program
+
+%%
+
+program : naredba ';' program {}
+		| naredba ';'
+		;
+
+%%
+
+int main(int argc, char** argv){
+	if(yyparse() == 0){
+		std::out << "All good" << std::endl;
+	}
+	else{
+		std::out << "Smth's wrong" << std::endl;
+	}
+	deinit();
+
+	exit(EXIT_SUCCESS);
+}

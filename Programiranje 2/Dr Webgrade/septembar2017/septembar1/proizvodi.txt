@@ -1,0 +1,4 @@
+cokolada 99.99 5
+zvake 59 4
+sapun 20 10
+lizalica 12.5 6

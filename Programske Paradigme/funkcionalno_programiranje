@@ -1,0 +1,157 @@
+-Ukoliko se program izvrsava naredbu po naredbu onda se radi o imperativnom programiranju tj. imperativnoj paradigmi (zastnovana na UR i Tjuringovoj masini). Ukoliko se program svodi na evaluaciju izraza, u odnosu na vrstu tih izraza postoje logicka (zasnovana na logici prvog reda) i funkcionalna paradigma (zasnovana na lambda racunu):
+	*logicka programi sastoje se od izraza koji su relacije i koji se evaluiraju na True ili False
+	*funkcionalna paradigma sastoji se od izraza koji su funkcije i koji se evaluiraju na razlicite vrednosti
+	
+Ekpresivnost jezika:
+	funkcionalnog == lambda racunu == Tjuringovih masina == imperativnog --> svi programi napisani imperativnom paradigmom mogu biti napisani funkcionalnom
+	
+Lambda racun interesuje se samo za pravila transformacije izraza a ne intresuje ga arhitektura masine.
+
+Funkcionalno programiranje oponasa matematicke funkcije i zasnovano je na njima. Kod imperativnih jezika apstrakcija je kontrola toka izvrsavanja (podrutina), kod OO jezika to je objekata a kod funkcionalnih to je funkcija.
+
+Shema programa je:
+	1. definisanje funkcija (pridruzivanje imenu funkcije vrednosti izraza gde mogu da ucestvuju i druge funkcije)
+	2. pozivanje funkcija
+	3. kompozicija funkcija - navodjenje niza funkcija koje bi dalo rezultat koji se ocekuje
+	
+Izvrsavanje programa je evaluacija funkcija. Kod dobro formiranih funkcionalnih jezika broj implementiranih osnovnih funkcija je relativno mali. Osnovna karakteristika su funkcije viseg reda (funkcija moze da bude povratna vrednost kao i parametar neke druge funkcije). Nastala je 59. godine a najznacajniji predstavnik je LISt Programming jezik. Dzon Bakus 1977. godine dobija Tjuringovu nagradu za razvoj Fortrana -> "Programi koji se pisu funkcionalnom paradigmom su bolji od imerativnih jer su citljiviji, pouzdaniji i verovatnije ispravni" (razlog: vrednost izraza je nezavisna od konteksta u kojem se on nalazi pa su programi laksi za razumevanje i dalji razvoj). Nema propratnih (bocnih) efekata.
+
+1990. Haskell (Haskell 98, Haskell 2010)
+2003. Scala
+
+Danas se funkcionalni jezici koriste za obradu podataka u bazama, finansijsko modelovanje, bioinformatiku... Pogodni su za konkurentno programiranje i paralelizaciju
+
+
+*Haskell:
+	-cist funkcionalni jezik
+	-bez nepotrebnih izracunavanja (lenja evaluacija)
+	-staticki tipiziran i jako tipiziran ali tip ne mora da se navodi jer Haskell ima sistem za automatsko zakljucivanje
+	-podrska za konkurentno programiranje
+
+*Svojstva funkc. jezika:
+	-osnovna struktura podataka -> lista (skladistena kao povezana lista; elementi istog tipa)
+	-osnovni tipovi podataka: celobrojne vrednosti, realne, logicke i string (u Haskell-u: Int, Integer, Char, String, Float, Bool)
+	-torke koje mogu da sadrze elemente razlicitih tipova (cesto skladistene u memoriji kao nizovi)
+	
+-U funkcionalnim jezicima, funkcije su gradjani prvog reda (mogu da se cuvaju u promenljivoj, da se prosledjuju f-jama, da se kreiraju u f-jama, da budu povratna vrednost f-ja, u dinamicki tipiziranim jezicima tim im se proverava u fazi izvrsavanja)
+
+-Funkcije viseg reda su funkcije dobijene kompozicijom vise funkcija:
+	map -> uzima funkciju transformacije i premenjuje je na elemente
+	filter -> uzima f-ju koja se evaluira na True/False i u zavisnosti od parametra iz liste vraca 	transformisanu listu
+	reduce:
+		foldl (operacija) (akumulator) (lista_elemenata): akumulator operacija prvi_el operacija 		drugi_el...
+		foldr (operacija) (akumulator) (lista_elemenata): poslednji_el operacija akumulator (zatim se to skladisti u akumulator); pretposlednji_el operacija novi_akumulator
+		 (foldr (-) 0 [1, 2, 3]): 3 - 0 = 3 (novi_akumulator)
+								  2 - 3 = -1
+								  1 - (-1) = 2
+
+*Matematicke funkcije: domen, kodomen, preslikavanje izmedju dva. Ovo preslikavanje se definise rekurzijom i kondicionim izrazima a ne sekvencom i iteracijom kao kod imperativnih jezika. Glavna odlika funkcionalnih jezika je da ce se uvek jedan element iz domena slikati u bas odredjeni element iz kodomena (nema bocnih efekati i vrednost f-ja ne zavisi od trenutnog stanja programa).
+
+-Stanje programa -> sve vrednosti u memoriji kojima program ima pristup. U imperativnoj paradigmi stanje programa je implicitno jer se sve zasniva na promeni tih stanja kako se program izvrsava. U funkc. paradigmi, stanje programa nije implicitno i nema bocnih efekata. Zbog toga nije moguce pisati iterativni kod vec se svako ponavljanje koda realizuje pomocu rekurzije.
+
+-Transparentnost referenci -> vrednost izraza ce uvek biti ista, ma u kom delu programa bila pozvana na evaluaciju. Zbog toga redosled naredbi nije bitan. Transparentnost referenci je razlog zasto je paralelizam prirodno prikladan funkc. jezicima (izracunavanja se mogu podeliti na delove i vrsiti nezavisno a zatim sloziti u krajnji rezultat).
+
+-Cisti funkc. jezici su svi oni koji ne dozvaljavaju aps. nikakve propratne efekte. Umesto njih, koriste dodatne mehanizme koji ce simulirati stanja. Neki od cistih funkc. jezika su Haskell, Clean, Miranda.
+
+-Pattern matching -> uparivanje izraza sa obrascima. Rezultat je izraz koji odgovara prvom uparenom obrascu.
+-Comprehensions -> skracen nacin zapisa nekih konstrukata (prosirena sintaksa).
+
+-Striktna i nestriktna semantika:
+ 1. izraz je striktan ako nema vrednost kada bar jedan od njegovih operanada nema vrednost
+ 2. izraz je nestriktan ako ima vrednost cak i ako neki od njegovih operanada nema vrednost
+Semantika je striktna (Lisp, OCaml, Scala..) ako nema nestriktnih izraza a nestriktna (Haskell, Miranda..) ako ima bar jedan nestriktni izraz. Kod striktne semantike, prvo se racunaju vrednosti svih operanada koju ulaze u izraz a zatim sam izraz. Dok se kod nestriktne semantike odlaze racunanje svih operanada sve dok ne moze vise da se odlozi vec je zaista neophodno (lenjo izracunavanje). Zbog toga kod nestriktne semantike mogu da postoje beskonacni izrazi i strukture.
+	
+	a & b: (a = False)
+		Striktna semantika: ako vrednost b nije poznata onda se konj. ne moze izracunati
+		Nestriktna semantika: ne gleda se vrednost b vec se izraz odmah evaluira na False
+		
+-Svaki kod kada se prevede ide do asemblerskog pa masinskog nivoa. Asembler je po prirodi imerativni pa je onda tesko konstruisati dobar kompajler funkc. jezika. Zbog toga su dugo funkc. jezici bili interpretirani. Iako nemaju promenljive, funkc. jezici moraju da cuvaju neke podatke u memoriji i to rade na hipu. Brisanje podataka iz memorije se radi automatski putem sakupljaca otpadaka. U Haskell-u to je generacijski sakupljac otpadaka (obj. se dele po starosti a mladji ce pre biti iskorisceni i uklonjeni).
+
+*Prednosti i mani funkc. programiranja:
+ -nema propratnih efekata i promena stanja i izrazi se uvek evaluiraju na istu vrednost. Zato je lakse pratiti ceo program i desavanja u njemu. Ali, fiksirati stvari da uvek budu iste se koji sa prirodom gde se stvari stalno menjaju a programi modeluju bas tu prirodu.
+ -paralelno programiranje je lakse jer se podaci ne menjaju ali to moze da dovede do toga da se radi sa bajatim podacima (da li je vaznije da brze i lakse obradimo podatke ili da ti podaci budu svezi?)
+ -kod kraci i laksi za citanje (ali nisu cesti oni koji znaju da ga citaju)
+ -veca produktivnost (ali da li je dovoljno veca da opravda zaposljavanje programera koji zna da pise funkcionalan kod)
+ 
+Prednosti: laksa verifikacija softvera, testiranje i debagovanje usled kratkoce pojedinacnih f-ja. Jako kohezija i modularnost a slabo kopcanje. Lako pisati biblioteke f-ja.
+
+Mane: teze uci u vode funkc. programiranja, brzina je pre bila mana ali danas su neke stvari u Haskell brzi kao i u C-u. Debagovanje moze da bude problematicno kod nestriktne semantike. Pre je mana bila i nekompatibilnost sa drugim jezicima, manjak profajlera, debagera i generalno alata koji "olaksavaju zivot".
+
+*Lambda racun -> formalni model izracunljivosti f-ja (smatra se prvim funkc. jezikom). Ekspresivnost je ekvivalentna Tjuringovoj masini. Postoji lambda racun bez tipova, on je prvi nastao i kod njega domen f-je nije ugradjen u lambda racun. Nasuprot njemu, postoji i lambda racun sa tipovima, tj. f-je mogu da se primenjuju samo na odgovarajuci tip podataka.
+
+sum(x, y) = x + y <==> (x, y) = x + y -> f-je ne moraju da imaju imena, jedino bitno su parametri i u sta se slikaju. Lambda f-je su upravo to, bezimene f-je gde su samo parametri i preslikavanje definisani (zato se jos zovu i bezimene, anonimne f-je).
+
+	A == lambda 
+	Ax.x ==  x -> x (identitet)
+	Ax.x+1 == x -> x + 1
+	x - promenljiva
+	x + 1 - telo
+
+Lambda izraz moze da se primeni i na druge izraze (intuitivno, primena odgovara pozivu f-je).
+
+	(Ax.x+1)5
+
+-Validni lambda izraz se naziva lambda term. Promenljiva jeste lambda term. Ako je x promenljiva a t lambda term, onda je Ax.t takodje lambda term. Ako su t i s lambda termovi onda je (t s) lambda term. Lambda izraz je cist ako ne sadrzi konstante, ako sadrzi onda je primenjen.
+
+-Asocijativnost: 
+	primena f-je levo asocijativna: (e1e2)e3 == e1e2e3
+	apstrakcija desno asocijativna: Ax.(e1e2) == Ax.e1e2
+	sekvenca apstrakcija: Ax.Ay.Az.e == Axyz.e
+	
+U lambda racunu nema deklaracije promenljivih, na primer: Ax.x + y (x vezana a y slobodna promenljiva -> y nije vezana lambda apstrakcijom)
+
+-Alfa ekvivalentnost -> izbor imena vezane promeljive nije vazan:
+	Ax.x jeste alfa ekv. Ay.y (f-je identita)
+	Ax.x nije alfa ekv Ax.y (prva je f-ja identiteta a druga konstantna f-ja)
+	x nije alfa ekv y (nisu vezane promenljive za lambda apstrakciju)
+
+ZADATAK: Zaokruziti slovo ispred alfa ekvivalentnih termova:
+
+	1. x i y -> (nisu jer promenljive nisu vezane)
+	2. ?k.5 + k/2 i ?h.5 + h/2 (jesu)
+	3. ?k.5 + k/2 i ?h.5 + h/3 (nisu)
+	4. ?a.a ? y ? 1 i ?b.b ? z ? 1 (nisu)
+	5. ?z.z ? y ? 1 i ?x.x ? z ? 1 (nisu)
+	6. ?ij.i ? j ? 3 i ?mn.m ? n ? 3 (jesu)
+	7. ?ij.i ? j ? 3 i ?nm.m ? n ? 3 (nisu)
+	
+*Redukcije:
+
+-Najprostiji tip lambda izraza su konstante. One se ne mogu dalje transformisati.
+
+-Delta redukcije se odnose na izraze koji sadrze konstantu i ne mogu se dalje transformisati:
+	3 + 6 ->(_delta) 9
+
+-Alfa redukcije omogucavaju preimenovanje imena vezanih promenljivih:
+	Ax.x ->(_alfa) Ay.y
+	Ax.yx ->(_alfa) Az.yz (y ne sme da se menja jer nije vezana promenljiva)
+
+-Beta redukcije omogucavaju izracunavanje vrednosti f-je:
+	(LambdaPromenljiva.telo)izraz ->(_beta) [izraz/promenljiva]telo
+	
+	(Ax.x * x + 3)((Ax.x+1)5) ->(_beta) (Ax.x * x + 3)[5/x](x + 1) = (Ax.x * x + 3)5+1 ->(_delta) 
+	(Ax.x * x + 3)6 ->(_beta) [6/x](x * x + 3) = 6 * 6 + 3 ->(_delta) 39
+
+-Eta redukcije predsavljaju funkcijsko prosirenje:
+	Ax.f x i f oznacavaju istu f-ju ako se x ne javlja kao slobodna promenljiva u f:
+	Ax.f x ->(_eta) f
+	
+*Supstitucija [I/P]T je proces zamene svih slobodnih pojavljivanje promenljive P u telu lambda izraza T izrazom I na sledeci nacin:
+	1. [N/x]x = N; [N/x]y = y
+	2. [N/x](Ax.M) = Ax.M; [N/X](Ay.M) = Ay.([N/x]M) ako je x != y i y ne pripada skupu slobodnih promenljivih za N
+	3. [N/x][M1M2] = ([N/x])(M1)([N/X])(M2)
+	
+
+*Funkcije viseg reda:
+	-f-je koje kao argument ili povratnu vrednost imaju f-ju
+	
+
+-Normalan oblik lambda izraza dobija se visestrukom primenom beta redukcija sve dok se to moze.
+
+-Svojstvo konfluentnosti: ako se lambda izraz moze svesti na dva razliciti lambda izraza M i N, onda se oni mogu svesi na treci izraz Z => (posledica) ako normalan oblik lambda izraza postoji, onda je on jedinstven
+
+-Aplikativni poredak: prvo izracunamo vrednost argumenta a zatim ga saljemo telu f-je (call-by-value).
+
+-Normalni poredak: beta redukcijom redukujemo najlevlji izraz (call-by-name). Normalnim poretkom redukcija se dobija lenjo izracunavanje kojim se izbegavaju nepotrebna izracunavanja. Lenja evaluacija garantuje zavrsetak izracunavanja kada je to moguce. Ona odgovara nestriktnoj semantici i omogucava koriscenje beskonacnih struktura.
+
+-Teorema standardizacije: ako je Z normalan oblik izraza E, onda postoji niz redukcija u normalnom poretku koji vodi od E do Z

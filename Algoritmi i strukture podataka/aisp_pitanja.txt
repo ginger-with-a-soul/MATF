@@ -1,0 +1,844 @@
+Algoritmi i strukture podataka odgovori na pitanja
+
+1. Dokaz korektnosti rekurzivne funkcije - primer minimuma niza:
+
+    Korektno se izvodi klasicnom matemarickom indukcijom:
+    
+    Baza indukcije je kada je niz a jednoclan (n = 1) i tada ce min(a, 1) vratiti minimum od jednog elementa a to je a[0].
+    
+    Pretpostavimo da je 1 <= n - 1 < |a| i da m = min(a, n - 1) vraca najmanji od prvih n - 1 brojeva. Tada ce ce na osnovu definicije funkcije min poziv min(a, n) vratiti manji broj od m (on je minimum svih elemenata do poslednjeg) i poslednjeg.
+    
+2. Dokaz korektnosti rekurzivne funkcije - Euklidov algoritam:
+
+    Euklidov algoritam se koristi za odredjivanje najveceg zajednickog delioca za dva broja. Koreknost se moze dokazati matematickom indukcijom.
+    
+    Baza indukcije: b = 0 -> nzd(a, 0) = a Najveci zajednicki delilac a i 0 je a.
+    
+    Induktivni korak: nzd(a, b) = nzd(b, a % b)
+    
+    Pretpostavimo da je nzd(b, a % b) = n, tj. da n deli b i a % b. Treba da pokazemo da n deli i a.
+    Vazi da je a = b * q + a % b. Posto n deli b i a % b => n deli i a.
+    
+    Sad treba da dokazemo da je i najveci. Neka neko n' deli a i b. Posto je a = b * q + a % b tada je i a % b = a - b * q pa n' deli i a % b. Medjutim, znamo da je n najveci zajednicki delilac b, a % b tako da n' mora da deli n a posto ga deli mora da bude manji ili jednak n. Odatle sledi da je 
+    n najveci.
+    
+3. Invarijanta petlje - primer minimuma niza:
+
+    Invarijanta petlje za minimum niza je tvrdjenje da ce neposredno pre svakog ulaska u petlju, za vreme izvrsavanja petlje, i neposredno nakon izvrsavanja petlje indeks prilikom prolaza kroz niz biti izmedju 1 <= i <= n i  da ce m biti minimum prvih i elemenata niza.
+    
+    int m = a[0];
+    int i = 1;
+    while(i < n){
+        ..
+        i += 1;
+    }
+    
+4. Invarijanta petlje - primer Euklidovog algoritma:
+
+    Invarijanta petlje je nzd(a0, b0) = nzd(a, b) gde su a0 i b0 ulazni parametri. Pre inicijalizacije same petlje prema pretpostavci nzd(a0, b0) jeste jednako nzd(a, b). Nakon svake petlje vazi da su novi a' = b a b' = a % b ako je uslov za petlju (b != 0) ispunjen. Drugim recima nzd(a', b') = nzd(b, a % b). Na osnovu leme znamo da je nzd(a, b) = nzd(b, a % b).
+    
+    Iz: nzd(a', b') = nzd(b, a % b)
+        nzd(b, a % b) = nzd(a, b)
+        nzd(a0, b0) = nzd(a, b)
+        
+        nzd(a0, b0) = nzd(a', b') Tako da nakon izvrsavanja tela petlje invarijanta vazi.
+        
+5. Invarijanta petlje - odredjivanje cifara u binarnom zapisu broja:
+
+    Ako je broj nula onda je njegov binarni zapis 0.
+    Inace, s desna dopisujemo broj n div 2.
+    
+    Invarijanta petlje je: 2^i * n + b = n0;
+                           b -> trenutno kodiran broj
+                           i -> koliko puta smo do sad delili (brojac petlje)
+                           n0 -> pocetna vrednost broja koji zelimo da kodiramo
+                           n -> tekuca vrednost
+                           
+    Pre ulaska u prvu petlju vidi se da vazi: 2^0 * n + 0 = n0. Tekuca vrednost jednaka je pocetnoj vrednosti pa n = n0. Posle prolaska kroz petlju:
+    
+    i' = i + 1
+    n' = n div 2
+    b' = b + 2^i * n mod 2
+    
+    2^(i') * n' + b' = 2^(i + 1) * n div 2 + (b + 2^i * n mod 2) = n0
+    
+    Prilikom zavrsetka vazi da je n = 0 pa je b = n0 odnosno trenutno kodirani broj jeste onaj pocetni.
+    
+6. Invarijanta petlje - trobojka:
+
+    ----0000????++++
+    0   N   i   P
+    
+    Na pocetku svi brojevi su nepoznati pa je i = N = 0 a P = n.
+    Program ce se izvrsavati sve dok ima nepoznatih elemenata tj. dok je i < P.
+    Ako je a_i > 0 onda treba da ga stavimo u pozitivne tj. smanjimo P za 1 i razmenimo i-ti sa P koji je n - 1. Medjutim, i ne pomeramo jer je dovedeni element nepoznat.
+    Ako je a_i < 0 onda zamenimo i-ti i N-ti i pomerimo i i N za jedan unapred.
+    Ako je a_i == 0 onda samo pomerimo i za jedan unapred.
+    
+    Invarijanta petlje je da je multiskup elemenata niza u svakom koraju isti skup polaznih elemenata, kao i da su od [0, N) negativni brojevi, [N, i) nule, [i, P) nepoznati a od [P, n) pozitivni i		0 <= N <= i <= P <= n.
+    
+    Pre ulaska u petlju invarijanta vazi jer je P = n, i = N = 0.
+    
+    Pretpostavimo da vazi i pri ulasku u telo petlje i dokazimo da vazi i nakon izlaska iz tela petlje.
+    
+    Ako je a_i pozitivan onda su : 0 <= N' <= i' <= P' <= n tj 0 <= N <= i <= P - 1 <= n. Zbog uslova za ulazak u petlji (i < P) vazice i i <= P - 1.
+    
+    Ako je nula onda je i' = i + 1, odnosno vazice da je: 0 <= N <= i' <= P <= n.
+    
+    Ako je negativan onda je i' = i + 1 a N' = n + 1 tako da i dalje vazi:
+    0 <= N' <= i' <= P' <= n jer je 0 <= N + 1 <= i + 1 <= P <= 0. Postoje dva slucaja: kada je N = i i tada razmenom ova dva ne dobijamo nista jer su isti. Ali to znaci da je i interval [N, i) prazan, tj. da nema 0 elemenata. Posto povecavamo i N i i invarijanta ostaje zadovoljena.
+    
+7. Dokaz korektnosti binarne pretrage prelomne tacke:
+
+	Niz se sastoji prvo od neparnih pa od parnih brojeva. Algoritam nalazi prvo mesto na kom je parni broj. Ako takvog nema onda vraca duzinu niza.
+	
+	Moze se implementirati klasicnom binarnom pretragom kako bi slozenost bila O(logn) a ne O(n).
+	
+	Invarijanta petlje je uslov: 0 <= l <= d + 1 <= n. Ovo je tako zato sto algoritam vraca poziciju prvog parnog ili d + 1 ako takvog nema. Svi elementi [0, l) su neparni, svi od 	(d, n) su parni.
+	
+	Na pocetku programa l = 0, d = n - 1 n >= 0, pa je invarijanta: 0 <= l <= d + 1 <= n zadovoljena.
+	
+	Pretpostavimo da je uslov petlje zadovoljen i da se u nju uslo. Nako izvrsavanja petlje 		s = l + (d - l) / 2:
+	1) Ako je element na poziciji s paran onda je d' = s - 1 a l' = l. Odnosno, svi brojevi iza d' do kraja niza su parni: 0 <= l' <= d' + 1 <= n -> 0 <= l <= s <= n pa je invarijanta zadovoljena.
+	2) Ako je element na poziciji s neparan onda je l' = s + 1 a d' = d. Odnosno, svi brojevi ispred l' do nultog (sa sve njim) su neparni: 0 <= l' <= d' + 1 <= n -> 						0 <= s + 1 <= d + 1 <=n pa je invarijanta zadovoljena.
+	
+	Prilikom prekida petlje, uslov l <= d nije vise ispunjen, sto znaci da je l = d + 1. Ako je 	l < n onda je pronadjen prvi element koji je paran. Ako je l = n onda prema invarijanti znamo da su svi elementi od [0, n) neparni pa paran broj ne postoji, i funckija vraca l sto je korektna vrednost.
+	
+8. Vrste slozenosti i nacini njihove analize. Asimptotska notacija:
+
+	Postoje dve vrste slozenosti:
+	
+	1) Memorijska (prostorna) -> koliko ce prostora biti potrebno da bi se program pravilno (uopste) izvrsavao
+	2) Vremenska -> za koje vreme okvirno mozemo da ocekujemo da se algoritam zavrsi
+	
+	I vremenska i prostorna slozenost mogu se razmatrati u terminima kontretnog vremena/prostora kada je ulazna velicina poznata, ili u terminima asimptotoskog ponasanja kada velicina ulaza raste.
+	
+	Postoji vise nacina analize slozenosti algoritama:
+	
+	-Analiza najgoreg slucaja posmatra one slucajeve za ulaz kada ce algoritam imati najduze moguce vreme izvrsavanja / kada ce memorija koju koristi ovaj algoritam biti najpopunjenija. Ovo je dobro kada zelimo da poredimo slozenosti algoritama.
+	
+	-Analiza prosecnog slucaja odredjuje koje je prosecno vreme (prostor) izvrsavanja algoritma. Da bismo odredili prosecan slucaj moramo dobro da poznajemo koje sve ulazne vrednosti ce biti dopustene za nas algoritam, kao i verovatnocu da se odredjeni ulazi pojave. Moze da bude varljiva ako treba da garantujemo za vreme (prostor) izvrsavanja za pojedinacne slucajeve.
+	
+	-Amoritzovana analiza grupise srodne operacije koje se javljaju u algoritmu i za njih odredjuje ukupno vreme izvrsavanja (umesto da uzme u obzir samo vreme izvrsavanja najskuplje operacije). Nije nam bitno vreme izrvsavanja pojedinacnih operacija.
+	
+	Postoje dve notacije za opis vremenske slozenosti algoritama:
+	
+	O notacija nam daje gornje vremensko ogranicenje i definise se: 
+	f(n) <= c * g(n)
+	f, g - funkcije nad prirodnim brojevima
+	c - realan broj
+	f(n) = O(g(n))
+	
+	Ю notacija daje nam i gornje i donje vremensko ogranicenje slozesnoti algoritama:
+	c1 * g(n) <= f(n) <= c2 * g(n)
+	f, g - funkcije nad prirodnim brojevima
+	c1, c2 - realne konstante
+	f(n) = Ю(g(n))
+	
+9. Rekurentne jednacine (linearne rekurentne, sa kompletnom istorijom):
+
+	Rekurentne jednacije (jos se zovu i diferencne jednacine) koriste se za opis rekurzivnih funkcija. Resenje funkcije je T(n) i ono je nadjemo kada sa desne strane nema ponovnog referisanja na T(n). One daju gornje ogranicenje, medjutim ako su granice u jednacinama tacne onda ce najcesce dati i asimptotski tacno resenje.
+	
+	Trazenje minimuma niza: T(n) = T(n - 1) + O(1) -> O(n)
+	Formiranje balansiranog binarnog drveta: T(n) = T(n - 1) + O(logn) -> O(nlogn)
+	Sortiranje selekcijom: T(n) = T(n - 1) + O(n) -> O(n^2)
+	Kule Hanoja: T(n) = 2T(n - 1) + O(1) -> O(2^n)
+	Fibonacijevi brojevi: T(n) = T(n - 1) + T(n - 2) + O(1) -> O(2^n)
+	Binarna pretraga: T(n) = T(n / 2) + O(1) -> T(logn)
+	Pronalazenje medijane: T(n) = T(n / 2) + O(n) -> O(n)
+	MergeSort: T(n) = 2T(n / 2) + O(n) -> O(nlogn)
+	Obilazak potpunog binarnog drveta: T(n) = 2T(n / 2) + O(1) -> O(n)
+	
+10. Master teorema:
+
+	Jednacije koje opisuju probleme koje se resavaju dekompozicijom na manje potprobleme se resevaju Master teoremom koje su oblika:
+	
+	T(n) = aT(n / b) + O(n^c) -> T(n) = aT(n / b) + cn^k; a, b > 0, c, k pozitivne R konstante
+	
+			O(n^(log_b^a)), a > b^k
+	T(n):	O(n^klogn), a = b^k
+			O(n^k), a < b^k
+			
+	Treba primetiti da se u nekim problemima dobijaju jednacine koje nisu isti pri svakom odvijanju. Na primer, kod algoritma QuickSort jednacina moze da bude T(n) = 2T(n / 2) + O(n)
+	i tada je resenje O(nlogn) i dobija se kada se u svakom koraku pivot nadje na sredini niza. Medjutim, to se nece cesto desavati. Moze se dogoditi da se pivot stalno nadje na nekom od krajeva niza pa bi tada rekurentna jednacina bila T(n) = 2T(n - 1) + O(n) pa je slozenost O(n^2), sto je i jeste slozenost najgoreg slucaja.
+	
+11. Slozenost Euklidovog algoritma:
+	
+	Originalna implementacija Euklidovog algoritam za brojeve a i b podrazumevala je da se u svakom koraku ispita da li je neki od ova dva veci od drugog. Ako jeste onda se za vrednost manjeg smanji taj veci, ako nije onda se vraca neki od njih.
+	Slozenost ovog algoritma je linearna prema O(a + b) jer je toliko potrebno koraka u najgorem slucaju a to je kada je b = 1 a a dosta vece.
+	
+	Kod varijante Euklidov algoritma gde se koristi celobrojno deljenje slozenost je logaritamska u odnosu na veci od a i b -> O(log(a + b)). Prvi argument se posle svaka dva koraka smanji bar duplo. Do vrednosti 1 prvi argument stigne u log koraka u odnosu na veci od a i b i tada je sigurno drugi argument 0
+	
+12. Proseqna slozenost algoritma brzo sortiranje:
+
+	
+
+13. Amortizovana analiza slozenosti - primer dinamickog niza:
+
+	
+
+14. Zamena iteracije eksplicitnom formulom (zbir aritmetickog, geometrijskog niza, broj deljivih
+sa k u intervalu)
+	
+	Umesto iterativno, suma prvih n brojeva (aritmetickog niza) moze se izracunati:
+	sum = n * (n + 1) / 2. Suma geometrijskog niza: sum = a * (1 - q^n / 1 - q); q != 1
+	
+	Broj deljivih brojeva u intervalu [a, b] sa k: Da bi broj X u intervalu [a, b] bio deljiv sa k
+	on mora da bude deljiv i sa n -> X = n * k. Broj ovakih brojeva mozemo dobiti kao nl = ceil(a / k)
+	nd = floor(b / k). Ako je nd >= nl onda nema brojeva deljivih sa k, inace, taj broj je: nd - nl + 1
+
+15. Eliminisanje nepotrebnih izracunavanja (Morzeov niz):
+	
+	Morzeov niz sastoji se od elemenata koji mogu da budi 0 ili 1. Na pocetku, prvi element je
+	inicijalizovan na 1. Sledeci element je negirani prvi. Treci element je negirani prvi a cetvrti
+	je negirani drugi...
+	
+	Ako bismo raspisali rekurentno, dosli bismo do veze da je vrednost elementa na poziciji n:
+	Mn = !M(n - maxStepen2manjiOdn)
+	
+16. Inkrementalnost (zbir reda, zbirovi prefiksa, minimumi zbirova prefiksa):
+
+17. Odsecanje u pretrazi (ispitivanje da li je broj prost, Eratostenovo sito):
+
+	Ponekad nije neophodno proci sve kandidate prilikom nekog ispitivanja. Neki od njih se prema razlicitim
+	osobinama mogu grupisati i celokupne grupe se mogu eliminisati. Da bismo to uradili moramo da nadjemo
+	neki matematicki iskaz kojim se svi elementi te grupe mogu opisati i taj matematicki iskaz mora biti
+	dokazan. Na primer, ako broj N ima delioca D koji je veci ili jednak sqrt(N), onda ima i delioca koji
+	je manji ili jednak sqrt(N) -> to je broj N / D. Na ovaj nacim smanjujemo broj kandidata za delioce.
+	O(sqrt(N)).
+	
+	Eratostenovo sito: Ako zelimo da ispitamo da li je n brojeva prosto, prvo napravimo niz velicine n + 1.
+	Zatim sve stavimo da jesu prosti. Onda stavimo nulti i prvi da nisu, zatim krenemo od 2 i po umnoscima
+	samog sebe idemo do n. Ako je trenutni broj prost, onda se setamo od njega kvadriranog pa sve sa inkrementom
+	koji je jednak njemu do n i stavljamo da ti brojevi nisu prosti.
+
+18. Predobrada radi efikasnije pretrage (sortiranje):
+	
+	Ako bismo zeleli da ispitamo da li u nizu ima duplikata, morali bismo za svaki element da prodjemo
+	niz i tada bi slozenost bila kvadratna. Medjutim, ako bismo prethodno sortirali niz O(nlogn), onda
+	bismo morali samo da za svaki element proverimo njemu sisedni. Tada je slozenost O(n) ali posto je
+	sortiranje skuplje, slozenost ce biti O(nlogn). 
+	"ako ne znas odakle krenes, probaj da sortiras"
+
+19. Induktivno-rekurzivna konstrukcija - Grejovi kodovi:
+
+	Grejov kod duzina 2^n dobijamo tako sto za prvu polovinu izlistamo Grejov kod 2^(n - 1) i na pocetak
+	dodamu 0. Druga polovina se dobija tako sto se u obrnutom redosledu izlista Grejov kod 2^(n - 1) i 
+	na pocetak se dopise 1.
+	
+20. Induktivno-rekurzivna konstrukcija - prefiksni na osnovu infiksnog i postfiksnog obilaska
+	stabla
+	
+	Postfiksni obilazak: L - D - S
+	Infiksni obilazak: L - S - D
+	Prefiksni obilazak: S - L - D 
+	
+	Poslednji element postfiksnog obilaska je koren stabla. Kada njega nadjemo onda ce desno od njega
+	u infiksnom obilasku biti desno podstablo a levo od njega levo podstablo.
+
+21. Induktivno-rekurzivna konstrukcija - rotiranje niza za k mesta:
+	
+	Prvo podelimo niz na dva dela: L -> k i D -> n - k. Ako su oni iste velicine onda ih samo zamenimo.
+	Ako je L krace od D, onda D delimo na dva dela: D1 -> duzine k i ostatak. Elementi D1 treba da budu
+	pocetni pa ih zato menjamo sa elementima L. Onda dobijemo poredak: D1LD2. Sad treba da LD2 zarotiramo
+	za duzinu k a to je isti problem kao pocetni samo manjih dimenzija.
+	
+	Ako je L duzi onda ga delimo na: L1 -> n - k i L2 je ostatak. Time dobijemo L1L2D, zatim menjamo L1 
+	sa D i dobijamo DL2L1. Zatim zarotiramo L2 za njegovu duzinu u levo i time dobijemo DL1L2 sto i jeste
+	resenje.
+	
+	O(n).
+	
+22. 22. Induktivno-rekurzivna konstrukcija - odredjivanje zvezde
+
+	Osoba je zvezda ako ne poznaje ni jednu drugu osobu a sve druge osobe poznaju nju. Mnogo je lakse
+	ispitati da li osoba nije zvezda nego da li je zvezda. Krenemo sa dva pokazivaca, prvi proverava
+	da li osoba nije zvezda. Drugi, odmah pored, proverava da li potencijalna zvezda poznaje tu osobu.
+	Ako je poznaje onda potencijalna zvezda nije zvezda i pokazivac za potencijalnu zvezdu se pomera na
+	drugi pokazivac a drugi pokazivac ide na mesto pored. Ako potencijalna zvezda ne zna drugu osobu onda
+	ona sigurno ne moze da bude zvezda jer je neka osoba ne poznaje pa pokazivac na potencijalnu zvezdu
+	ostaje u mestu a pokazivac na drugu osobu ide napred.
+	
+23. Pojacavanje induktivne hipoteze - izracunavanje vrednosti polinoma:
+
+	Vrednost polinoma Pn(x) je suma ao + a1x + ... + anX^n
+	Ovu sumu mozemo da racunamo tako sto problem svedemo na manje dimenzije, umesto Pn(x) racunamo
+	Pn-1(x). Ovim nacinom dobijamo inkrementalni pristup resenju problema gde x^n ne moramo da racunamo
+	od pocetka vec ono zavisi samo od x^(n - 1). Time smanjujemo broj mnozenja do O(n) i ojacavamo 
+	induktivnu hipotezu tako da mozemo da izracunamo i Pn+1(x).
+	
+24. Pojacavanje induktivne hipoteze - faktori ravnoteze binarnog stabla:
+
+	Visina cvora je broj cvorova od njega do njemu najdaljeg lista. Faktor ravnoteze cvora je razlika
+	u visini njegovog levog i desnog poddrveta.
+	
+25. Pojacavanje induktivne hipoteze - dijametar binarnog stabla:
+
+	Dijametar binarnog drveta je broj grana od cvorova koji su najudaljeniji jedan drugom. Putanja
+	izmedju dva najudaljenija cvora moze a i ne mora da prolazi kroz koren. Ako ne prolazi problem je
+	lokalizovan na levo ili desno poddrvo. Ako prolazi onda moramo da izracunamo visinu levog i
+	desnog poddrveta. Visina se moze racunati u O(n), a dijametar se moze izracunati u O(nlogn) ili
+	O(n^2). Ako ojacamo induktivnu hipotezu i racunamo dijametar kad i visinu onda je slozeno uvek O(n).
+
+26. Pojacavanje induktivne hipoteze - maksimalni zbir segmenta, Kadanov algoritam:
+	
+	Kadanov algoritam je O(n) algoritam za izracunavanje maksimalnog zbira segmenta. On pretpostavlja
+	da znamo da izracunamo maksimalni segment tekuceg niza i maksimalni sufiks. Pretpostavimo da znamo max segment i sufiks za n elemenata. Ako niz prosirimo za 1 onda ce max segment ceo biti u n elemenata ili ce biti u sufiksu prosirenog niza.
+	
+27. Pojacavanje induktivne hipoteze - maksimalna suma nesusednih elemenata:
+
+	Niz za koji racunamo mozemo da podelimo na n - 1 i n. Max suma ce biti veca vrednost:
+	pretposlednji element nije ukljucen i tada je poslednji element dodat
+	pretposlednji element je ukljucen i tada posledni element ne moze biti dodat jer bi bio susedan
+	pretposlednjem
+	Baza indukcije je jednoclani prefiks niza. Max zbir tekuceg prefiksa sa tekucim elementom jednak
+	je max zbiru prethodnog prefiksa i tog elementa, dok je max zbir tekuceg prefiksa bez tekuceg elementa
+	jednak vecem od max zbira prethodnog prefiksa sa njegovim poslednjim i bez njegovog poslednjeg elementa.
+	O(n).
+
+28. Pojacavanje induktivne hipoteze - broj rastucih segmenata:
+	
+29. Nizovi: staticki, dinamicki, visedimenzionalni:
+
+	Staticko nizovo koriste se kada se prilikom pisanja i pre predproceseranja zna velicina niza koji
+	nam je potreban i kada se ta velicina ne njema u toku izrvstavanja program.
+	
+	Dinamicki nizovi koriste se kada nije poznata velicina niza koji ce nam biti potreban ili kada se
+	ta velicina menja za vreme izvrsavanja programa. Velicinu niza mozemo da promenimo sa resize, a ako
+	zelimo da garantujemo da ce prilikom nekog ubacivanja elemenata biti dovoljno prostora onda mozemo
+	da sa reserve to obezbedimo a da pritom ne promenimo samu velicinu niza.
+	
+	Visedimenzionalni nizovi mogu se simulirati i preko statickih i preko dimanickih nizova. Tada se u
+	glavnom nizu nalaze dodatni nizovi. Broj nizova u glavnom nizu je broj vrsta a broj elemenata u
+	pojedinacnim nizovima je broj kolona. Kod dinamickih nizova, broj kolona ne mora da budi isti za sve
+	nizove.
+	
+30. Stek - definicija, realizacija, upotreba prilikom eliminacija rekurzije (brzo sortiranje):
+
+	Stek predstavlja adapter kontejnera (u C++-u vektora) koji funkcionise po LIFO principu. Adapter
+	kontejnera zabranjuje odredjene operacije koje mogu da se izvedu nad samim kontejnerom (kod steka
+	ne mozemo da vidimo sta se nalazi ispod gornjeg elementa niti mozemo da mu pristupimo direktno).
+	
+	top - cita element sa vrha
+	pop - skida element sa vrha
+	push - dodaje element na vrh
+	size - vraca broj elemenata steka
+	empty - proverava da li je stek prazan
+	
+	Kod QuickSort-a umesto rekurzije, mozemo da koristimo stek da implementiramo ovaj algoritam
+	iterativno. Na stek stavljamo levu i desnu granicu kao par. Iteracije se vrse sve dok stek nije prazan.
+	Pre svakog koraka vracamo par sa steka i pamtimo levu i desnu granicu a onda ih skidamo sa steka. Nakon
+	svega, stavljamo novi levi i desni deo kao par na stek.
+	
+	
+31. Stek - izracunavanje vrednosti postfiksnog izraza:
+
+	Na pecetku stek je prazan. Kada naidjemo na operator, sa steka skidamo dva broja, vrsimo operaciju
+	i rezultat vracamo na stek. Greska nastaje kada se na steku nadje 0 ili 1 broj a operator je sledeci
+	na ulazu.
+	
+32. Stek - prevodjenje izraza u postfiksni oblik (Dajkstrin algoritam):
+
+	Kroz izraz prolazimo karakter po karakter. Ako naidjemo na broj - stampamo ga na izlaz, ako naidjemo
+	na operator - stavljamo ga na stek, ako naidemo na zatvorenu zagradu - stampamo operator sa vrha steka
+	i skidamo ga.
+	
+33. Stek - izracunavanje vrednosti infiksnog izraza:
+
+	Da bismo izracunali vrednost infiksnog izraza, moramo da imamo stek za brojeve i operatore. Kada
+	naidjemo na broj - stavljamo ga na stek, kada naidjemo na operator - stavljamo ga na stek, kada 
+	naidjemo na zatvoreno zagradu - primenjujemo operator sa vrha steka na dva broja sa vrha steka
+	brojeva, skidamo ih sa steka a stavljamo rezultat i skidamo primenjeni operator sa steka operatora.
+	
+34 . Stek - najblizi veci prethodnik, najblizi veci sledbenik:
+
+	Najblizi veci prethodnik moze da se pronadje koriscenjem steka. Na pocetku stek je prazan. Dodajemo
+	prvi element. Ako je sledeci element manji od prethodnog onda smo za njega nasli prvi prethodni
+	veci i njega dodajemo na stek. Ako je sledeci element veci ili jednak od onog na steku, skidamo 
+	sa steka sve elemente koji su manji ili jednaki. Ako smo dosli do kraja steka onda za trenutni 
+	element nema prethodnog veceg, pa nakon sto smo uklonili sve manje ili jednake stavljamo njega.
+	
+	Najblizi veci sledbenik: Na pocetku je stek prazan. Dodamo prvi element. Ako je sledeci element 
+	manji ili jednak od prethodnog onda ga dodajemo na stek. Ako je veci onda sve prethodne manje
+	skidamo sa steka i onda dodajemo taj.
+		
+35. Red - definicija, oblici, realizacija:
+
+	Red prestavlja adapter kontejntera koji predstavlja FIFO strukturu. Postoje red sa i bez prioriteta.
+	Red sa prioritetom u C++-u implementiran je preko vektora a red bez priorite preko Dequa.
+	U red je moguce dodati na kraj i skinuti sa pocetka. Podrzava interfejs:
+	
+	push - dodavanje na kraj reda
+	front - citanje vrednosti sa pocetka reda
+	back - citanje poslednjeg elementa
+	pop - skidanje sa pocetka reda
+	size - broj elemenata reda
+	empty - provera da li je red prazan
+	
+36. Red - maksimalni zbir segmenta duzine k:
+	
+	Zbir segmenta duzine k se moze inkrementalno racunati kada se setamo po nizu. Jedina razlika kada 
+	krenemo dalje po nizu je sto krajnji levi izbacimo a krajnji desni ubacimo. Za to mozemo da koristimo
+	queue. Prvo ucitamo k elemenata u red i zapamtimo im sumu. Zatim ucitavamo n - k elemenata, izbacujemo
+	prvi element a dodajemo poslednji i proveravamo da li je suma veca ili nije.
+	
+37. Red - maksimalna bijekcija (lista kandidata):
+
+	
+38. Red sa dva kraja - definicija, realizacija:
+
+	Red sa dva kraja predstavlja kombinaciju reda i steka. Kod njega je moguce i dodavanje i skidanje
+	sa pocetka i kraja. Implementiran je pomocu dequa koji predstavlja kontejner koji je vektor ciji
+	elementi su pokazivaci na vektore fiksne velicine. Ima isti interfejs kao i List ako kod reda sa dva
+	kraja pristup elementu na osnovu indeksa moguc je u konstantnom vremenu. Podrzava sledeci intefejs:
+	
+	front, back - cita element sa pocetka, kraja
+	push_front, back - dodaj na pocetak, kraj
+	size - broj elemenata u redu
+	empty - da li je red prazan
+	pop_front, back - skida sa pocetka, kraja
+	
+39. Red sa dva kraja - maksimumi segmenata duzine k:
+
+	Prvo u niz sa jednim krajem ucitamo k elemenata. Prilikom ucitavanja, u red sa dva kraja ubacujemo
+	maksimume. Ako je element koji treba ubaciti u red sa dva kraja veci od elemenata sa kraja u redu
+	maksimuma onda ih skidamo sve dok element koji treba ubaciti nije manji od elementa na kraju
+	maksimuma, i onda ga ubacujemo na kraj. Kada prolazimo kroz niz, ubacujemo novi element u niz 
+	maksimumam ako zadovoljava gornje uslove. Sa pocetka niza maksimuma izbacujemo element ako je on bio
+	jednak najlevljem pre pomeranja. Lokalni max za segment je uvek prvi u redu sa dva kraja.
+	
+40. Red sa prioritetom - definicija, realizacija:
+
+	Red sa prioritetom predstavlja adapter vektora u C++-u kod kojeg se elementi redjaju prema odredjenim
+	kriterijumima. Elementi su organizovani kao drvo i podrzan je sledeci interfejs:
+	
+	top - cita element sa najvecim prioritetom prema nekom kriterijumu
+	pop - skida element sa najvecim prioritetom
+	push - dodaje element u red
+	size - vraca broj elemenata u redu
+	empty - proverava da li ima elemenata u redu
+	
+	Posto je red organizovan kao drvu, push i pop su obicno slozenosti O(logn) gde je n broj elemenata
+	u redu. Ostale operacije su O(1).
+
+41. Red sa prioritetom - sortiranje pomocu reda sa prioritetom:
+
+	Ovakvo sortiranje drugacije se naziva HeapSort jer koristi heap strukturu podataka kod koje je 
+	po default-u najmanji element na samom pocetku. Heap je zasnovan na binarnom stablu pa je slozenost
+	heap sort-a O(nlogn) a memorijska slozenost je O(n).
+	
+42. Red sa prioritetom - k najmanjih elemenata:
+
+	Koristeci red sa prioritetom, k najmanjih elemenata od n elemenata nalazimo kada prvo ucitamo prvih
+	k elemenata, zatim pri svakom novom ucitavanju elemenata proverima da li je taj element manji od
+	prvog na hipu a to je ujedno najveci. Ako je manji onda izbacimo taj a ubacimo novi.
+	
+43. Red sa prioritetom - pronalazenje medijane:
+
+	Prvo nas niz podelimo na dve kolekcije: levu - u kojoj cuvamo sve elemente manje ili jednake medijani,
+	i desnu - u kojoj cuvamo sve elemente vece ili jednake medijani. Ako u nizu imamo paran broj elemenata
+	onda zelimo da u oba dela bude isti broj elemenata. Ako imamo neparan broj elemenata onda dozvoljavamo
+	da u desnom delu bude jedan vise nego u levom. Kod parnog broja elemenata medijana je jednaka
+	aritmetickoj sredini poslednjeg levog i prvog desnog elementa a kod neparnog broja elemenata medijana
+	je jednaka prvom elementu u desnom delu. Ukoliko je novi element manji ili jednak najmanjem elementu
+	desnog dela onda se ubacuje u levi deo. Ako se dogodi da je levi deo veci od desnog, najveci levi element se prebacuje u desni deo. Ako se dogodi da je desni deo za dva veci od levog dela onda se najmanji desni element prebacuje u levi deo. Zao ova dva dela najpogodnije je koristiti red sa prioritetom gde je levi deo uredjen tako da se uvek skida najveci element a desni tako da se uvek skida najmanji element.
+	
+44. Skup i mapa - definicija, realizacija:
+
+	Skup i mapa su asocijativni kontejneri i imaju dve verzije u C++-u: set, unordered_set i map,
+	unordered_map. Prvi su organizovani preko balansiranih binarnih drvera a drugi preko hesh tablica pa
+	su im i slozenosti operacija razlicite.
+	
+	Interfejs skupa je:
+	
+	find - pronalazi element u skopu, ako ne postoji vraca pokazivac na poziciji na kraj O(logn) i
+		   O(n) ili O(1)
+	insert - ubacuje u skup O(logn) i O(n) ili O(1)
+	erase - uklanja element is skupa O(logn) i O(n) ili  O(1)
+	
+	Mapa (recnik) je asocijativna struktura podataka ciji svaki element predstavlja kombinaciju Kljuc - Vrednost. Svakoj vrednosti se moze pristupiti preko njenog kljuca. Interfejs mape:
+	
+	mapa[x] - pristup vrednost na osnovu kljuca O(logn) i O(n) ili O(1)
+	find - vraca iterator koji pokazuje na K-V ili end ako ne postoji O(logn) i O(n) ili O(1)
+	erase - brise element O(logn) i O(n) ili O(1)
+
+45. Skup - eliminacija duplikata:
+
+	Prilikom unosa elementa X u skup svaki put proverimo metodom find da li element X vec postoji u skupu.
+	Ako je povratna vrednost prilikom provere end onda X ne postoji i mozemo ga dodati. U suprotnom X
+	vec postoji u skupu.
+	
+46. Mapa - brojanje pojavljivanja reci u datoteci:
+
+	Iteriramo rec po rec kroz datoteku i za svaku rec proverimo da li se vec nalazi u mapi. Kljuc nase  mape je string tj. rec a vrednost neoznaceni ceo broj koji broji broj pojavljivanja. Ako se rec vec nalazi u mapi onda indeksnim pristupum preko te reci uvecamo vrednost njenog brojaca a ako se ne nalazi u mapi onda dodamo novi kljuc koji je bas ta rec.
+	
+47. Dinamicki niz - realizacija:
+
+	Dinamicki niz realizovan je tako da mu se velicina moze dinamicki menjati. Kada napunimo prvobitnu velicinu naseg niza, on ce se sam reallocirati (u C++-u nema funkcije realloc). To radi tako sto na disku nalazi dovoljno veliki vezan prostor cija velicina je, u zavisnosti od strategije povecanja, za neki broj elemenata veca od prvobitne. Zatim iskopira sve elemente prvog niza na novo mesto i onda preusmeri pokazivac sa starog na novo mesto. Ukoliko koristimo strategiju da niz povecavamo po nekoj geomtrijskoj progresiji onda ce kopiranje iz starog u novi niz biti po amortizovanom konstantnom vremenu.
+	
+48. Liste - operacije, realizacija; 49. Dvostruko povezana lista - operacije, realizacija:
+
+	Liste su struktura podataka koja sadrzi dve informacije: vrednost koju cuva i 1 ili 2 pokazivaca. Ako su jednostruko povezane onda 1 a ako su dvostruko povezane onda dva pokazivaca. Prvi ide od prvog ka drugom a drugi od drugog ka prvom. Ako znamo pokazivac na pocetak i kraj onda u O(1) mozemo da dadamo element na pocetak/kraj a u O(1) mozemo da ga sklonimo sa pocetka. Ako zelimo da sklonimo poslednji element onda moramo da prodjemo kroz celu listu. Isto vazi i za indeksni pristup ako nemamo pokazivac na tu poziciju.
+	
+	Kod dvostruko povezane liste ako znamo pokazivac na pocetak i kraj, i dodavanje na pocetak i kraj i skidanje sa pocetka i kraja je u O(1). Mana dvostuko povezanih lista je sto pored same vrednosti moraju da cuvaju i dva pokazivaca pa su onda memorijski neefikasna struktura podataka. Liste lako prouzrokuju fragmentaciju memorije a i kes tehnologija je sve znacajnija pa nizovi imaju veliku prednost. Prednost liste je sto kod velike kolicine podataka nema realokacije.
+	
+50. Dek - realizacija:
+
+	Deque implementira red sa dva kraja. Predstavlja kontejner koji je vektor i koji sadrzi pokazivace na nizove, bilo staticke ili dinamicke koju su svi iste velicine. Prednost deka u odnosu na liste je O(1) pristup elementu ali brisanje elementa u sredini O(n). Dodavanje na pocetak i kraj je takodje moguce u O(1) amortizovanom vremenu. Za dek je glavno da pamti levi i desni segment. Ni jedan od ova dve ne mogu biti popunjeni do kraja. Ako se to dogori onda se sledeci (kod desnog) proglasava desnim segmentom, odnosno prethodni kod levog. Kada ponestane segmenata, tj. kada se ceo dek popuni onda se prvobitni vektor prosiruje pokazivacima na nove nizove. Ako se prosirivanje radi u geomtrijskoj progresiji onda se dobija amortizovano vreme.
+
+51. Binarno stablo - nacini predstavljanja, operacije:
+
+	Binrno stablo predstavlja nacin organizacije podataka unutar kontejnera. Binarna slabla mogu biti uredjena (stabla pretrage) ili hip stabla. Stablo je uredjeno ako je prazno ili ako su vrednosti u svakom cvoru vece od maksimalne vrednosti u levom poddrvetu i manja od najmanje vrednosti u desnom poddrvetu. Uredjena drveta sluze za predstavljanje seta, multiseta, mape i multimape a hip drveta za implementaciju reda sa prioritetom. Vazno je da drvo bude balansirano jer ce tada operacije teziti logaritimskim umesto linearnim sto je slucaj kada je drvo skroz degenerisano. 
+	
+	Dve najcesce strukture koje se zasnivaju na balansiranim drvetima su:
+	
+	AVL drveta i Crveno - Crna drveta.
+	
+52. Binarno stablo pretrage - operacije:
+
+	U binarno stablo pretrage mozemo da:
+		umecemo elemente - ako je drvo balansirano O(logn) a ako nije priblizno O(n)
+			Vrednost novog elementa poredimo sa korenom, ako je manje onda ide levo ako je veca onda ide desno i tako rekurzivno dok ne dodjne na mesto lista.
+		brisemo elemente - ista slozenost
+		brisemo celo drvo
+
+53. Binarno stablo pretrage - sledbenik, prethodnik:
+	
+	Sledbenik i prethodnik se kod binarnih stabla pretrage odredjuju na osnovu dece, levo dete je prethodnik a desno sledbenik.
+
+54. Hip - definicija, operacije, realizacija:
+
+	Hip je binarno drvo kod kojeg je svaki nivo, sem eventualno, poslednjeg potpuno popunjen. Postoje max i min heap. Kod min hipa vazi da je vrednost u svakom cvoru manja ili jednaka vrednosti oba deteta, kod max hipa vazi da je vrednostu svakom cvoru veca ili jednaka vrednosti oba deteta. Na taj nacin se garantuje da ce u korenu uvek biti najmanji/najveci element. Zbog toga je hip pogodan za implementiranje reda sa prioritetom. Ako zelimo da izvucemo najveci element iz hipa, onda skidamo koren i na njegovo mesto dovlacimo poslednje najdesnje dete. Ono skoro nikad nece biti trenutni max ali tako se garantuje da samo poslednji nivo mozda nece biti skroz popunjen. Nakon toga se koreni element menja sa desnim sinom i sve tako dok je potrebno. Najvise razmena moze da bude kolika je i visina drveta. U drvo visine H moz da stane najvise 2^(H + 1) - 1 elemenata. Zbog toga je izbacivanje/ubacivanje u hip O(logn). Ubacivanje je slicno, element se ubaci na poslednji nivo i pita se da li je veci od roditelja, ako jeste njih dvojica se menjaju.
+	
+	Postoje dva nacina formiranja hipa:
+	
+	Vilijamsov metod:
+	Flojdov metod:
+	
+55. Sortiranje uz pomoc hipa - realizacija, slozenost:
+
+	HeapSort je algoritam za sortiranje kod kojeg vektor sortiramo tako sto njegove elemente ubacimo u heap a posle ih vadimo i vracamo u vektor. Slozenost je O(nlogn). Moguce je koristiti pocetni vektor i na jednom kraju napraviti heap a na drugom kraju smestati izvadjene elementa i taj deo bi bio sortiran. Za to je neophodno da nasim funkcijama prosledimo i trenutnu velicinu naseh hipa kako ne bi doslo do gazenja vec sortiranog dela.
+	
+56. 57. Hes tabela - hex funkcija, osobine hes funkcija, operacije, slozenost:
+
+    Hesiranje predstavlja nacin cuvanja podataka za koje nije bitan redosled. Zasniva se na postojanju odredjene hash tabele cija vecilina nije fiksna i hes funkcije hesiranja koja podatke slika u odredjena polja u toj tabeli. Dobra stvar hesiranja je skoro garantovano konstanto vreme pristupa podacima i najcesce se koristi kada ima mnogo podataka. Losa stvar je sto vreme pristupa moze biti i O(n) kada se tabela prepuni i kada je potrebno sve podatke rehasirati, ili kada se previse podataka slika u isto polje i tada dolazi do kolizije. Kolizija se moze izbeci biranjem dobre hash funckije ili periodicnim prosirivanjem tabele pri cemu dolazi do normalizacije raspodele hash kljuceva u tabeli. Kada podatak hesiramo, ne postoji inverzna funckija hesiranju, tj. od kljuca ne mozemo da rekonstruisemo podatak.
+    
+58. Sortiranje - donja granica slozenosti:
+
+    Algoritmi sortiranja koji rade prema poredjenju vrednosti elemenata uvek imaju donju granicu O(nlogn)
+    
+    Insertion sort i Bubble sort: O(n) O(n^2) O(n^2)
+    Merge sort i Heap sort: O(nlogn)
+    QuickSort: O(nlogn) O(nlogn) O(n^2)
+    
+59. Sortiranje prebrojavanjem:
+
+    Counting sort se ne zasniva na medjusobnom poredjenju elemenata vec na njihovom prebrojvanju, najcesce pomocu mape. Korisno je kada imamo veliki broj elemenata koje treba da sortiramo a mali broj kljuceva. Tada prvo moramo da prodjemo kroz sve elemente a posle kroz sve kljuceve pa je slozenost
+    O(broj elemenata + broj kljuceva)
+    
+60. Sortiranje - sortiranje visestrukim razvrstavanjem:
+
+    Sortiranje razvrstavanjem ili Radix sort je stabilno sortiranje koje prolazi kroz ulaz i prebraja pa sortira pojedinacne elemente (za broj 123 prvo bi sortirao po jedinicama, pa deseticama i na kraju stotinama). Kao subrutinu Radix sort koristi Counting sort a posto nije zasnovan na poredjenju elemenata, nije ogranicen sa O(nlogn) vec moze da bude i linearan.
+    
+    Korisno je i kada zelimo da stabilno sortiramo ulaz prema vise kriterijuma (leksikografski po imenu pa onda po prezimenu).
+    
+61. Sortiranje - sortiranje razvrstavanjem:
+    
+    Sortiranje razvrstavanjem je korisno kada vec znamo mesta u nizu gde treba da smestimo elemente. Tada samo prodjemo kroz niz i smestimo ih. Na primer, znamo sve adrese na koje pisma mogu da odu, onda samo napravimo sanduce za svaku adresu i prodjemo kroz skup pisama i stavimo ih u odgovarajuce sanduce.
+    
+62. Binarna pretraga - realizacija, primena (niz nepoznate duzine, ciklicki uredjeni niz,
+					   interpolaciona pretraga):
+    
+    Binarna pretraga predstavlja nacin kojim u sortiranom nizu u vremenu O(logn) mozemo da pronadjemo odredjeni element. Postoji biblioticka funckija binary_search koja prima donju i gornju granicu pretrazivanja u nizu, element koji se trazi i funkciju poredjenja ako je potrebno. Pored nje postoje i lower i upper bound. Imaju iste parametra a prva vraca iterator na prvi element veci ili jednak trazenom a druga na prvi element strogo veci od trazenog.
+    
+63. Optimizacija koriscenjem binarne pretrage (mucajuci podniz):
+
+	Prvo moramo da napravimo funckiju koja ispituje da li je neka niska hiccuping string. Posle toga
+	radimo klasicnu binarnu pretragu (videti kod).
+	
+64. Dva pokazivaca - objedinjavanje dva sortirana niza:
+
+    Pokazivace stavimo na pocetak nizova. Algoritam se zavrsava kada su oba niza prazna. Ako je tekuci element prvog niza veci ili jednak od tekuceg elementa drugog niza onda njega ubacimo u novi niz i pomerimo pokazivac dalje. Ako je neki od nizova isteran do kraja onda isteramo i drugi do kraja.
+    
+65. Dva pokazivaca - par brojeva datog zbira, date razlike, trojka datog zbira:
+
+    Niz je rastuci bez elemenata koji se ponavljaju. Prvi pokazivac je na nultom elementu a drugi do njega. Ako trazimo vrednost X a prvi pokazivac ima vrednost M onda drugi pokazivac treba da bude na: D = X - M. Desni pokazivac setamo sve dok je vrednost na njemu manja od D.
+    
+    Za trojku datog zbira je analogno. Prvo fiksiramo nulti element pa trazimo par elemata posle njega koji imaju sumu koja je za vrednost prvog elementa manja od trazene.
+    
+66. Dva pokazivaca - pretraga dvostruko sortirane matrice:
+
+    Krecemo od donjeg levog ugla matrice. Ako je na poziciji na kojoj smo vrednost manja od trazene onda idemo desno, ako je veca onda idemo gore. Posle najvise n + m koraka cemo zavrsiti algoritam pa je slozenost O(n + m).
+    
+67. Dva pokazivaca - segmenti niza prirodnih brojeva koji imaju dati zbir:
+    
+    Napravimo novi niz koji je za jedan veci od polaznog. Na nulto mesto stavimo nulu a onda stavljamo parcijalne sume do kraja. Na taj nacin smo dobili rastuci niz. Prvi pokazivac na nulto mesto a drugi na prvo. Iteriramo do kraja ili dok ne nadjemo segment. Ako je razlika vrednosti na drugom pokazivacu i vrednosti na prvom pokazivacu veca od trazenog zbira onda pomeramo prvi pokazivac, ako je manja onda pomeramo drugi pokazivac a inace smo nasli nas broj. Desna pozicija treba da bude za 1 manja od one na kojoj smo a leva je tu gde jeste.
+
+68. Dva pokazivaca - najkraca podniska koja sadrzi sva data slova:
+
+    Slozenost algoritma je O(n) gde je n broj karaktera. Prvo napravimo vektor u kom cuvamo pozicije u tekstu samo onih slova iz skupa. Onda napravimo mapu gde je kljuc char a vrednost trenutni broj pojavljivanja tog slova iz skupa. Krenemo sa dva pokazivaca od pocetka teksta i guramo drugi sve se sva slova iz skupa ne pojave u mapi. Onda pitamo da li se najlevlje slovo javlja vise puta, ako se javlja onda levi deo pomeramo i smanjujemo broj pojavljivanja tog slova iz mape. To radimo sve dok levi deo ima vise od 1 pojavljivanja. Kada nema onda opet pomeramo desni deo i sve tako do kraja.
+    
+69. Razlaganje - sortiranje objedinjavanjem:
+
+    MergeSort - rekurzivno deli niz na dva dela, sortira i objedinjuje. Prvo pravimo pomocni niz iste dimenzije kao pocetni. U njemu ce biti smesteni rezultati sortiranja pre prepisivanja. Onda dobijeni niz podelimo po sredini, pozovemo opet za obe polovine, uradimo merge u pomocni niz a onda prepisemo u originalni.
+    
+70. Razlaganje - brojanje inverzija:
+
+    Inverzija prestavlja slucaj kada je za neki par brojeva prvi element veci od drugog. Prvo uradimo MergeSort (ovaj vraca ceo broj - broj inverzija). Prvo nadjemo sredinu, onda pozovemo MergeSort za obe polovine. Sada su prvi clanovi para od levo do sredine a drugi od sredine do desno i poredjani su rastuce. Ako je trenutni levi veci od trenutnog desnog onda ce i svi levi biti veci od njega pa za to treba uvecati brojac inverzija. Ako nije onda pomeramo levi. Ovo ispitivanje se zavrsava kada neki od pokazivaca stigne do kraja i tada izvrtimo oba do kraja.
+    
+71. Razlaganje - QuickSort:
+
+    QuickSort je Divide-and-Conquer sorting algoritam koji se zasniva na dobrom izboru pivota. Ukoliko se u svakoj podeli pivot nadje na sredini onda je slozenost O(nlogn) a ako se nadje pred sam kraj (levi ili desni) onda je slozenost O(n^2). Prosecna slozenost je O(nlogn).
+    
+    Prvo zamenimo levi element sa random izabranim pivotom od niza elemenata. Zatim zapamtimo levo u novoj promenljivoj (k) i vrtimo od levo + 1 dok nije jednako desno. Ako je trenutni element manji ili jednak od pivota onda menjamo taj element sa onim gde smo pamtili levo ali pre menjanja njega pomerimo za 1. Na kraju zamenimo pivota i taj gde smo pamtili levo i onda pozovemo QuickSort za od levo do k - 1 i k + 1 do desno.
+    
+72. Razlaganje - k-ti najmanji element (Quick Select):
+
+    QuickSort je modifikacija QuickSelect algoritma i njom se moze naci k-ti najmanji element niza. Razlika u odnosu na QuickSort je sto se umesto dva rekurzivna poziva vrsi samo 1 pa je slozenost O(n).
+    
+73. Razlaganje - maksimalni zbir segmenta:
+
+    Razlozimo niz na dva dela - levi i desni. Kada se l i r spoje onda sve sume idu na tu vrednost sa indeksa. Pozovemo prvo levi pa desni deo za levu sumu, max levu sumu, max levi prefiks i maks levi sufiks (za desno analogno). Suma je leva + desna, max prefiks je veci od max levi prefiks ili leva suma + max desni prefiks (analogno za sufiks). Max je veci od max leve sume, max desne sume ili max levi sufiks + max desni prefiks.
+    
+74. Razlaganje - silueta zgrada:
+
+    Los pristup bio induktivno-rekurzivni kada zgradu po zgradu ubacujemo u siluetu. Tada bi bazni slucaj bila jedna zgrada. Najgori slucaj bio bi kada zelimo da umetnemo zgradu u siluetu a ona zavisi od duzine siluete koja je jednaka broju zgrada -> O(n^2).
+    
+    Kljucno poboljsanje je shvatanje da dve siluete mozemo objedini za isto vreme za koje jednu zgradu mozemo da ubacimo u siluetu. Siluete su sortirane pa ih mozemo objedinavati kao dva niza brojeva.
+    
+75. Razlaganje - Karacubin algoritam:
+
+    Karacubin algoritam sluzi za mnozenje dva polinoma koja se mogu izraziti vektorima. Smatralno se da je donja granica slozenost O(n^2) jer svaki element prvog polinoma mora da se pomnozi sa svakim elementom drugog polinoma. Karacuba je uvideo da je ako imamo: a + bx i c + dx ->
+    ac + (ad + bc)x + bdx^2, nije potrebno 4 mnozenja kao ovde vec 3 i dodatna sabiranja/oduzimanja, ali ona su mnogo jeftinija od mnozenja pa se slozenost smanjuje. To se dobija preko:
+    
+    ad + bc = (a + b)(c + d) - ac - bd -> potrebno je izracunati samo proizvode ac, bd i (a + b)(c+d)
+    
+    Losa stvar kod dekompozicije je sto se u svakom koraku vrsi alociranje i dealociranje pomocnih vektora u kojima se cuva rezultat mnozenja. To se moze optimizovati tako sto se pamti samo jedan vektor duzine 4n (2n  za dva polazna vektora i 2n za njihove proizvod). Klasican algoritam je bolje za sve n <= 4.
+
+    
+76. Razlaganje - Strasenov algoritam:
+
+    Strasenov algoritam se koristi za mnozenje matrica koje je inace O(n^3). Ako na primer imamo dve matrice 2x2 onda svako polje u dobijenoj racunamo preko dva mnozenja i jedno sabiranje. To je ukupno 8 mnozenj. Strase je primetio da nije neophodno imati 8 vec 7 mnozenja ali je potrebno imati 7 pomocnih matrica. Tada dobijamo algoritam T(n) = 7 * T(n / 2) + O(n^2) -> O(n^(log_2^7)) sto je malo manje o O(n^3).
+    
+    Kao i kod Karacube, da bi tehnika razlaganja bila korisna ulaz mora da bude veliki (preko 100 kod Strasea). Ovaj algoritam je tezi za implementaciju i paralelizaciju. Matrice moraju da budu stepeni 2. Koristi vise memorije jer je potrebno praviti pomocne matrice.
+    
+77. Generisanje kombinatornih objekata - rekurzivna pretraga (podskupovi, varijacije):
+
+    Podskupovi - sastoje se iz dva rekurzivna poziva -> levi uklanja poslednji element iz skupa a desni ubacuje poslednji element iz skupa u podskup. Svi podskupovi su listovi.
+    
+    Varijacije - krene se od kraja koji je jednak duzini varijacije i na svakom mesto do nultog se izredjaju sve vrednosti koje mogu da budu.
+
+78. Generisanje kombinatornih objekata - kombinacije sa i bez ponavljanja:
+    
+    Kombinacije bez ponavljanja: od n elemenata biramo k. Da se kombinacije ne bi ponavljale onda zelimo da nam niz bude rastuci. Prvo sve stavimo od najmanje do najvece vrednosti. Onda idemo od kraja i pitamo da li je trenutni jednak n, sve dok jeste idemo ka pocetku. Kada nije onda taj povecavamo za 1
+    a sve posle njega povecavamo za jedan u odnosu na prethodnu vrednost.
+    
+    Kombinacije sa ponavljanjem - jedina razlika je sto niz mora da bude ne opadajuci a ne strogo rastuci kao kod kombinacija bez ponavljanja.
+    
+79. Generisanje kombinatornih objekata - rekurzivna pretraga (permutacije):
+
+    Permutacije su varijacije kod kojih je duzina odredjena najvecim elementom.
+    
+    Pn = n!
+    
+    Prvo stavimo pokazivac na preposlednje mesto i vrtimo sve dok je trenutno pretposlednje vece od trenutnog poslednjeg. Onda napravimo novi pokazivac na pretposledne i smanjujemo ga sve dok je ono vece od i-tog. Onda zamenimo i-to i j-to. Onda opet postavimo j na pretposlednje a pre petlje i uvecamo za 1. Sve dok je i < j vrtimo i menjamo i i j.
+    
+80. Generisanje kombinatornih objekata - rekurzivna pretraga (particije):
+
+    Particije predstavljaju problem kako prikazati neki broj preko njegovih sabiraka. Mozemo to da resavamo induktivno-rekurzivno. Svakom broju cija je poslednja particija S mogu da odgovaraju particije broja N - S gde je N trenutna suma koja treba razbiti. Da ne bismo ponavljali particije nametnucemo uslov da je svaka sledeca particija manja ili jednaka trenutnoj. Izlazimo kada je trenutna suma 0. Particije cuvamo u nizu koji je duzine n (kada su sve particije broja n jednake 1). Od [0, i) se nalaze trenutne particije a sve posle i - 1 mogu da budu manje ili jednake vrednosti na i - 1. Prvi slucaj kada su jednake moguc je samo kada je [i - 1] <= n a drugi slucaj uvek je moguc. U zavisnosti od redosleda rekurzivnih poziva dobijamo particije sortirane rastuce ili opadajuce.
+    
+81. Generisanje sledeceg podskupa i varijacije:
+
+    Ukoliko je podskup prazan onda dodamo prvi element. Inace dodamo prvi element vece od trenutnog u podskupu. Ako je trenutni jednak n onda ga skinemo, ako je podskup prazan onda nema sledeceg podskupa a ako nije prazan onda povecamo poslednji element za 1.
+    
+    Sledeca varijacija se dobija tako sto krenemo od kraja varijacije i trazimo prvi koji nije jednak n. Njega povecamo za 1 a sve pre njega koji su n stavimo na 1.
+    
+82. Generisanje sledece kombinacije sa i bez ponavljanja:
+
+    Sledeca kominacija se nalazi tako sto krenemo od kraja kombinacije i trazimo prvo mesto na kome se ne nalazi maksimalna vrednost. Ako te vrednosti nema onda nema ni sledece kombinacije. Ako nadjemo to mesto, to se zove prelomna tacka, onda uvecamo vrednost za 1 i sve elemente posle nje uvecamo za 1. Ako pri uvecanju prelomna tacka dostize max onda ce sve vrednosti posle nje vec biti na max a prva sledeca prelomna tacka je na poziciji pre trenutne prelomne. A ako ne dostize max onda je sledeca prelomna tacka na poslednjem mestu.
+
+83. Generisanje kombinatornih objekata - generisanje sledece permutacije:
+
+    Krenemo od pretoslednjeg elementa i idemo nazad sve dok je trenutni pretposlednji veci od trenutnog poslednjeg. Kada se to zavrsi, ako smo otisli ispod nule onda nema sledece permutacije. Onda od kraja permutacije nalazimo poziciju j takvu da je element na toj poziciji veci od elementa na poziciji i. Uradimo swap i i j. Zatim od pozicije posle i uradimo swap za pokazivacem koji krece od kraja i i a oba pokazivaca idu jedan ka drugom.
+    
+85. Potpuna pretraga - N dama:
+
+    Problem je kako postaviti N dama na sahovsku tablu dimenzije N * N tako da se nikoje dve dame ne napadaju. Intuitivno je da se dve dame ne smeju naci u istoj vrsi i koloni. Sad je pitanje kada ce se dame napadati dijagonalno. Pozicije na sahovskoj tabli mozemo da predstavimo kao permutaciju gde je pozicija elementa u permutaciji kolona na tabli a vrednost u permutaciji vrsta na tabli. Dve dame se dijagonalno napadaku ako i samo ako je apsolutna vrednost razlike indeksa permutacije jednaka apsolutnoj razlici vrednosti na tim indeksima.
+    
+86. Potpuna pretraga - provera tautologije istinitosnom tablicom:
+
+    U istinitosnoj tablici, svaka vrsta prestavlja neku valuaciji koju treba izracunati. Valuacija je nista drugo do varijacija gde je n broj promenljivih a skup izbora je tacno ili netacno. Funkcija koja proverava da li je valuacija tautologija krece od valuacije u kojoj su sve promenljive netacne i proverava valuacije sve dok ne stigne do prve netacne, tada tablica nije tautologija, ili dok ne prodje kroz sve valuacije.
+    
+87. Pretraga sa vracanjem n dama:
+
+    Umesto generisanja cele permutacije i nakon toga provere da li se dama dijagonalno napadaju, provera ce biti vrsina pri svakom koraku generisanja permutacije. Na taj nacin ce cesto mnogo pre generisanja cele permutacije ona biti odbacena ako se dame napadaju. Drvo prostora pretrage se obilazi u dubinu i seku sve grane koje ne vode do resenja. Idemo kolonu po kolonu poceci od donjeg levog ugla i postavljamo dame po svim vrstama. Kad god postavimo damu mi pitamo da li ona napada ovu pre, ako ne napada inda idemo dalje tom granom a ako napada onda secemo celu tu granu u dubinu i idemo nazad.
+    Videti drvo u skripti.
+    
+88. Pretraga sa vracanjem - latinski kvadrat, sudoku, magicni kvadrat:
+
+    Sudoku - popunjavamo n * n kvadrat sa vrednostima od [1, n]. Moramo da pazimo da u istoj koloni i vrsti nema istih vrednosti. Invarijanta petlja je da kada dodjemo do nekog polja (i, j) sve pre njega bude popunjeno vrednostima takvih da mena konflikata. Popunjavanje se vrsi vrstu po vrstu, kolonu po kolonu. Vrednosti u matrici koje nisu popunjene oznacavaju se sa 0. Ako popunimo polje (i, j) i ono je poslednje onda mozemo da izadjemo iz rekurzije i kvadrat je uspesno popunjen jer invarijanta podrazumeva da su sva polja pre njega bez konflikata. Kada postavimo vrednost onda samo proveravamo za nju da li dolazi do konfilkata u i-toj vrsti i j-oj koloni jer se podrazumeva da za sve ostale vrednosti pre nje ne dolazi do konfilkta.
+    
+89. Pretraga sa vracanjem - izlazak iz lavirinta (BFS, DFS):
+
+    Dat nam je lavirint takav da je ogranicen sa sve 4 strane, startno polje S i cilj C. U lavirintu se nalaze i dodatni zidovi. Sa polja S mozemo da se krecemo u sve 4 strane. Kod DFS pretrage rekurzivno idemo u sve cetiri strane s tim da kada dodjemo na neko polje ono je S. Kada su S i C ista polja onda smo dosli do resenja. Kako se ne bismo rekurzivnim pozivima vracali na polje koje smo vec posetili, napravicemo matricu koja pamti posecena polja i svaki put kada zalimo da skocimo na neko polje, pre skoka proverimo da li je polje vec poseceno. Ake jeste rekurzivni poziv za to polje se preskace.
+    
+    Kod BFS obilaska pravimo red sa jednim krajem i na njega stavljamo trenutna polja koja treba obraditi. Na pocetku je to S. Za svako polje koje skinemo sa reda pitamo da li je ono C a ako jeste prekidamo dalju obradu. Kada obradimo jedno polje onda na red stavljamo sve njegove susede. Znaci ako smo stavili neko polje onda se sledeca najvise 4 poziva biti za njegove susede. Kao i kod DFS-a i ovde nam je potrebno da imamo matricu u kojoj pamtimo vec posecena polja. Mozemo da i napravimo matricu koja je inicijalizovana na -1 i u njoj da pamtimo rastojanja od starta. Kada skinemo element sa reda onda iz te matrice mozemo da procitamo rastojanje od starta i da sve njegove susede u matricu upisemo rastojanje koje je za 1 vece od rastojanja tog polja.
+    
+90. Pretraga sa vracanjem - podskup elemenata datog zbira (varijanta 0 бТТ 1 problema ranca):
+
+    Treba da odredimo koliko elemenata datog skupa ima trazeni zbir. Najjednostavniji algoritam bio bio da odredimo sve podskupove datog skupa. Mozemo kao argument rekurzivnog poziva da saljemo razliku trazenog zbira i zbira elemenata u podskupu. Kada ta razlika dostigne 0 onda smo nasli trazeni podskup. Inace, zbir elemenata u podskupu nije dovoljno veliki pa uzimamo prvi element iz skupa i ukljucujemo ga i gledamo opet tu razliku.
+    
+    Treba primetiti da je najmanja moguca vrednost podskupa 0 (prazan skup) a najveca suma svih elemenata skupa. Ako je ciljni zbir manji od 0 ili veci od najvece sume onda takav podskup ne postoji. Trenutni skup se moze menjati izbacivanjem jednog njegovog elementa. Tada traznu sumu nije potrebno racunati novim prolaskom kroz ceo skup (on je podskup sada jer smo mozda izbacili neki element ili je pravi podskup ako nismo) vec se ona moze inkrementalno naci tako sto samo oduzmemo od cele trenutne sume vrednost elementa koji smo izbacili. Skup mozemo da sortiramo rastuce i pri svakom izbacivanju, pitamo da li je ciljni zbir manji od prvog elementa skupa. Ako jeste onda se podskup ne moze formirati.
+
+91. Pretraga sa vracanjem - 3-bojenje grafa:
+
+    Prvo se svi pocetni nesusedni cvorovi boje u jednu istu boju. Zatim se prva dva povezana boje u prvi i drugu boju i poziva se algoritam. Kada je broj obojenih cvorova >= broju cvorova onda smo uspesno obojili graf. Zatim za svaku boju prolazimo kroz sve susede tog cvora i proveravamo da li cvor moze da se oboji tom bojom. Ako je boja ista kao boja nekog njegovog suseda onda ne moze i ide se na sledecu boju. Ako cvor ne moze da se oboji ni jednom bojom onda bojenje nije moguce. Ako cvor moze da se oboji nekom bojom onda se ova f-ja rekurzivno poziva za sledeci cvor.
+    
+92. Dinamicko programiranje - Paskalov trougao binomnih koeficijenata:
+
+	Ukoliko zelimo da odredimo broj kombinacija a ne zelimo da ispisemo koje su to kombinacije, onda mozemo da koristimo osobine binomnih koeficijenata. Ako zelimo da iz skupa od n elementa izaberemo k elementa, to mozemo da zapisemo kao (n kroz k). Ako znamo da je (n kroz n) == 1 i da je (n kroz 0) == 1 i (n kroz k) == n! / k!(n - k)!.
+	
+	Broj kombinacija se moze odrediti preko paskalovog trougla. Mozemo da popunjavamo matricu koja ima n + 1 vrsta. Posto k mora da bude <= n, prilikom popunjavanja vrsta mozemo da ne popunjavamo sve kolone posle k. Matricu ne moramo celu da popunjavamo jer se mesto (n, k) u matrici dobija kao zbir vrednosti (n - 1, k - 1) i (n - 1, k). To znaci da mozemo da pamtimo samo dve vrste, tekucu i proslu. Ili, mozemo da pamtimo samo jednu vektor vrstu ako je pazljivo popunjavamo.
+	
+	Vektor vrstu popunjavamo s desna na levo. Invarijanta je da se na pozicijama strogo vecim od k nalaze elementi n vrste a na pozicijama manjim ili jednakim k elementi n - 1 vrste. Krecemo tako sto na poslednje mesto stavimo 1 (sem kad vrsimo desno odsecanje trougla). Na poziciji k se nalazi vrednost (n - 1, k) pa to uvecamo za vrednost na poziciji k - 1. Time se na poziciji k sada nalazi vrednost (n - 1, k) + (n - 1, k - 1). Zatim smanjimo vrednost k i to sve dok ono ne dodje do 1 jer se na poziciji 0 uvek nalazi vrednost 1.
+	
+	Memorijska slozenost je O(k) dok je vremenska O(n * k).
+	
+94. Dinamicko programiranje - podskup elemenata datog zbira (varijanta 0?1 problema ranca):
+
+	Neka nam je dat ranac mase M i niz predmeta odredjenih masa. Treba da ispitamo da li je moguce u potpunosti napuniti ranac tim predmetima. Naivan nacin bio bi da nadjemo sve podskupove masa nasih predmeta i vidimo da li suma tih podskupova daje tacno nosivost ranca. Tada bi slozenost bila O(2^n). 
+	
+	Ako imamo neku masu ranca M i niz elemenata, mozemo da elemente obradjujemo kako dolaze i da napravimo matricu cije kolone su masa ranca a vrste mase elemenata kako se ucitavaju. Matricu popunjavamo sa tacno/netacno i pretragu zaustavljamo cim dodjemo do toga da je u matrici na koloni M tacno jer ce tada za sve sledece vrste te kolone takodje biti tacno.
+	
+	Krecemo od donjeg desnog ugla matrice. Ako se u njemu nalazi tacno, podskup postoji, inace ne postoji. Trazimo prvu vrsu u kojoj se za odredjenu masu na kojoj smo trenutno nalazi tacno. Predmet koji odgovara toj vrsti se nalazi u podskupu. Zatim umanjujemo trenutno trazenu nosivost za masu tog predmeta i nastavljamo dalje za ostalu masu da gledamo prvu vrstu gde ima tacno.
+	
+	Memorijska optimizacija je moguca kada ne zelimo da rekonstruisemo podskup vec samo da ispitamo da li postoji. Elementi trenutne vrste matrice zavise jedino od elemenata prethodne vrste matrice koji su levo od njih. Zato mozemo da odrzavamo jednu tekucu vrstu i azuriramo s desna na levo. Tekuca vrsta kodira skup masa ranaca koje mozemo dobiti sa sve tekucim predmetom. Sve tekucemo mase mogli smo da dobijemo od prethodnh, ili smo mogli da dodamo i tekuci element i dobijemo novu masu za ranac.
+	
+	Slozenost kada za vektor koristimo niz bitiva koji imaju logicne vrednosti:
+		-memorijska: O(M)
+		-vremenska: O(n * M)
+		
+	Slozenost eksponencijalno zavisi od velicine ulaza ali za relativno male vrednosti M ovaj algoritam se dobro ponasa i zove se pseudo-polinomijalni.
+	
+95. Dinamicko programiranje - kusur sa minimalnim brojem novcica:
+	
+	Kusur sa minimalnim brojem novcica je induktivno-rekurzivne prirode. Naime, mozemo posmatrati prefiks novicica sa i bez poslednjeg elementa. Ako izostavimo poslednji element a suma svih novcica pre njega je manja od iznosa onda mozemo da zaustavimo pretragu. Inace, nalazimo minimalan broj novcica iz prefiska kojim moze da se plati dati iznos. Poslednji novcic moze da bude deo nekog placanja akko je njegova vrednost manja ili jednaka poslednjem iznosu. Tada je potrebno svim novcicima sem poslednjeg platiti iznos umanjen za vrednost poslednjeg novcica i to tako da broj novicica bude minimalan.
+	
+	Nadjemo minimalan broj novcica bez poslednjeg kojim mozemo da platimo iznos. Ako je vrednost poslednjeg novcica veca od iznosa onda je resenje bez poslednjeg elementa. Inace, nalazimo minimalan broj novcica koji ukljucuju poslednji element i to tako sto iznos umanjimo za vrednost poslednjeg novcica i dodamo 1. Konacno resenje je manji od resenja koji ukljucuju poslednje i koji ne ukljucuju poslednji element.
+	
+	I - iznos
+	n - vrednosti prvih n novcica
+	
+	M(n, 0) = 0
+	M(0, I) = +inf
+	M(n, I) = M(n - 1, I), m_(n - 1) > I
+	M(n, I) = min(M(n - 1, I), 1 + M(n - 1, I - m_(n - 1))), m_(n - 1) <= I
+	
+	Kreiramo matricu na isti nacin kao kod varijante 0-1 ranca. Krenemo od donjeg desnog ugla i trazimo najvisu vrstu takvu da ima resenja. Zatim novcic koji oznacava tu vrstu oduzmemo od iznosa i prelazimo na kolonu koja je jednaka nasem iznosu.
+	
+	Umesto ispisa resenja, mozemo da modifikujemo algoritam tako da nabraja sva najkraca resenja. Ovo se svodi na problem sa paskalovim trouglom pa onda dva puta moramo da primenimo tehniku dinamickog programiranja.
+	
+	Ako nas ne zanima rekonstrukcija resenja vec samo njegovo postojanje, mozemo da pamtimo sve u jednoj vrsti i da vrsimo odsecanje kada je zbir svih novcica manji od iznosa.
+	
+96. Dinamicko programiranje - maksimalni zbir segmenta (veza sa Kadanovim algoritmom):
+
+	Max zbir segmenta slican je max zbiru sufiksa. Krenemo od nekog intervala [j, i). Bazni slucaj je kada je interval prazan, tj. j == i i tada je max == 0. Inace, max moze da se posmatra kao max od [j, i - 1) i vrednosti na poziciji a_(i - 1).
+	
+	Slozenost ovog algoritma je O(n) i za vreme i za prostor. Medjutim, posto nam je za tekucu vrednost potrebna samo prethodna, mozemo memorijsku slozenost da dovedemo na O(1).
+	
+	Ako preimenujemo promenljive u skladu sa semantikom, mozemo da dobijemo identican Kadanov algoritam bez eksplicitnog pozivanja na dinamicko programiranje.
+	
+97. Dinamicko programiranje - najduzi zajednicki podniz, najduza zajednicka podniska:
+
+	Najduza zajednicka podniz dve niske, ne nuzno uzastopnih karaktera, moze da se odredi induktivno-rekurzivnom konstrukcijom. Bazni slucaj je kada je bilo koja od niski prazna, tada zajednicka podniz ne postoji. Inace, krecemo od kraja obe niske. Ako su poslednja slova ista onda se duzina podniza poveca za jedan. U suprotnom, posmatramo celu prvu nisku i prefiks druge bez poslednjeg slova, i prefiks prve bez poslednjeg slova i celu drugu nisku. Najduzi podniz je veci od ova dva.
+	
+	n, m - duzina niske a, b
+	
+	f(n, 0) = 0
+	f(0, m) = 0
+	f(n, m) = f(n - 1, m - 1) + 1, a_(n-1) == b_(m - 1)
+	f(n, m) = max(f(n - 1, m), f(n, m - 1)), a_(n - 1) != b_(m - 1)
+	
+	Mozemo da napravimo matricu n * m prema karakterima niski gde svako polje (n, m) u matrici zavisi samo od gornjeg-levog, gornjeg i levog polja. Ako dobijemo poklapanje dva karaktera onda max od ova tri polja uvecamo za 1. Resenje mozemo rekonstruisati tako sto krenemo od donjeg desnog polja i gledamo preko cega smo dosli do njega.
+	
+	Ukoliko ne zelimo da rekonstruisemo resenje onda ne moramo da pamtimo celu matricu vec je dovoljno da pamtimo tekucu vrstu i popunjavamo je s leva na desno jer desni element zavisi od levog, ali posto zavisi i od prethodnog elementa prethodne vrste, potrebno je da pamtimo i njega u pomocnoj promenljivoj.
+	
+	Vremenska slozenost je O(n * m) a prostorna O(m) gde ako stavimo da druga niska bude kraca dobijamo bolju prostornu slozenost.
+	
+	
+Najduza zajednicka podniska:
+
+	Razlika u odnosu na podniz je sto karakteri moraju da budu uzastopni. To se rekurentno moze opisati:
+	
+	f(n, 0) = 0
+	f(0, m) = 0
+	f(n, m) = f(n - 1, m - 1) + 1, a_(n - 1) == b_(m - 1)
+	f(n, m) = 0, a_(n - 1) != b_(m - 1)
+	
+	Elementi ovde ne zavise od prethodnog elementa pa se niz moze azurirati s desna na levo. Slozenosti su iste kao i kod najduzeg podniza.
+	
+98. Dinamicko programiranje - edit rastojanje:
+
+	Edit rastojanja dve niske predstavlja cenu koju moramo da platimo da bismo od prve niske dobili drugu. Na raspolaganju su nam 3 operacije: umetanje slova, brisanje slova i izmena slova prve niske. Svaka od ove 3 operacije moze da ima razlicitu cenu.
+	
+	Ako je prva niska prazna, najjednostavniji nacin da dobijemo drugu nisku je da umetnemo sve karaktere druge niske. Cena operacije je cena umetanja * broj karaktera druge niske.
+	
+	Ako je druga niska prazna, najjednostavniji nacin da od prve dobijemo praznu nisku je da izbrisemo sve karaktere iz prve niske. Cena operacije je cena brisanja * broj karaktera prve niske.
+	
+	Ako niske nisu prazne, ako su poslednja slova niski jednaka onda pomeramo prefiks u obe niske za jedno mesto i pokusavamo da nove, krace prefikse transformisemo. Ako nisu ista slova onda mozemo da karakter prve niske izmenimo u karakter druge niske i pomeramo prefiske obe niske, mozemo da izbrisemo karakter prve niske i taj prefiks prve niske da probamo da transofmisemo ili mozemo da transofmisemo prvu nisku u prefiks druge niske bez poslednjeg karaktera i onda da dodamo taj poslednji karakter.
+	
+	Vagner-Fiserov algoritam je dinamicki algoritam koji se koristi za resavanje ovog problema. Ako su niske duzine n i m, pravimo matricu (n + 1) * (m + 1). Polje (n, m) zavisi od gornjeg, levog, i gornjeg-levog. Resenje se cita u donjem desnom. Krenemo od njega i gledamo sledeci min od polja od kojih on zavisi. Na kraju procitamo rezultat od kraja.
+	
+	Ukoliko nas samo zanima cena a ne i rekonstrukcija resenja, mozemo da pamtimo tekucu vrstu i popunjavamo je s leva na desno jer tekuci element zavisi od prethodnog ali zavisi i od gornjeg i gornjeg-levog u prethodnoj vrsti. Zbog toga uvodimo dve pomocne promenljive koje ce pamtiti ove vrednosti.
+	
+99. Dinamicko programiranje - najduzi palindromski podniz:
+
+	Posto se radi o podnizu a ne o podnisci, nije bitno da se ispostuje redosled u pocetnoj nisci.
+
+	Najduzi palindromski podniz moze se resavati induktivno-rekurzivno. Ako je niska prazna najduzi palindrom je 0. Ako ima jedan karakter, on je sam sebi palindrom pa je duzina 1. Ako ima vise karaktera gde je niska s[l, d], definisemo rekurentnu funkciju f(l, d):
+	
+	f(l, d) = 0, l > d
+	f(l, d) = 1, l = d
+	f(l, d) = f(l + 1, d - 1) + 2, l < d i s[l] == s[d]
+	f(l, d) = max(f(l + 1, d), f(l, d - 1)), l < d i s[l] != s[d]
+	
+	Mozemo da konstruisemo matricu velicine |s| * |s|, gde element (l, d) zavisi od elementa ispod sebe, levo od sebe i ispod-levo od sebe. Matricu ne mozemo da popunjavamo ni po kolonama ni po vrstama vec moramo dijagonalu po dijagonalu. Prvo glavnu dijagonalu postavimo na 1, ispod glavne dijagonale su nule a onda popunjavamo dijagonalno sve iznad glavne dijagonale. Ako su dva karaktera ista onda se to polje uveca za dva u odnosu na donje levo, inace se gleda veci od levog i donjeg. Rezultat je u gornjem levom uglu matrice.
+	
+	Posto svaki element tekuce dijagonale zavisi od dve prethodne dijagonale, mozemo da pamtimo tekucu i prethodnu dijagonalu a da donji-levi element koji pripada drugoj dijagonali od tekuce zapamtimo u privremenoj promenljivoj.
+	
+	Vremenski algoritam je O(n^2) a prostorno O(n).
+	
+100. Dinamicko programiranje - najduzi rastuci podniz:
+
+102. Dinamicki programiranj - 0-1 problem ranca:
+
+	Dat je niz n predmeta, cena i masa za svaki od njih. U ranac treba da ubacimo one predmete koji ce da daju najvecu mogucu vrednost u rancu.
+	
+	Induktivno-rekurzivan pristup je pogodan. Kada je n == 0 tada nema predmeta pa je vrednost u rancu jednaka 0. Kada je n > 0 posmatramo dva slucaja:
+		1. kada je poslednji element ubacen u ranac
+		2. kada poslednji element nije ubacen u ranac
+		
+	Poslednji element moze da bude ubacen samo ako je njegova masa manja ili jednaka trenutnoj nosivosti ranca. Tada gledamo vecu cenu od one kada je predmet ubacen i kada nije. Posto ce se rekurzivni pozivi preklapati, moguce je upotrebiti dinamicko programiranje za optimizaciju.
+	
+	Mozemo da napravimo matricu takvu da svakoj vrsti odgovara jedan prefiks niza predmeta a svakoj koloni nosivost ranca. Matricu popunjavamo vrstu po vrstu a zato sto elementi tekuce vrste zavise samo od elemenata prethodne vrste, nema potrebe da pamtimo celu matricu. Azuriranje vrsimo sa desnog kraja.
+	
+	Vremenska slozenost je O(nosivost ranca * broj predmeta) ali ne zavisi samo od velicine ulazi vec i od vrednosti na ulazi. Zato je ovo pseudo-polinomijalni algoritam. Memorijska slozenost je O(nosivost ranca).
+
+103. Pohlepni algoritmi - raspored sa najvise aktivnosti:
+    
+    Favorizujemo aktivnosti koje se prve zavrsavaju. Kada odredimo takvu, onda gledamo sve aktivnosti koje traju kad i ova koja se prva zavrsava i uklanjamo ih.
+    
+104. Pohlepni algoritmi - raspored sa najmanjim brojem ucionica:
+    
+    Prvo sortiramo casove prema vremenu pocetka. Ako X casova pocinje tako vreme pocetka ni jednog nije nakon zavrsetka nekog iz te grupe onda moramo da otvorimo X ucionica. Ako jos neki cas pocne za vreme trajanja svih casova iz grupe onda moramo da otvorimo jos jednu ucionicu za njega i on pripada grupi. Sve casove sortiramo rastuce prema vremenu pocetka. Zatim prodjemo kroz niz i na hip stavljamo vreme zavrsetka casova tako da se na vrhu hipa uvek nalazi prvi cas koji se zavrsava. Ako sledeci cas u nizu ima vreme pocetka pre vremena zavrsetka prvog elementa sa hipa onda mora da se otvori nova ucionica. Inace, skidamo gornji element sa hipa i dodajemo vremen zavrsetka novog casa.
+    
+105. Pohlepni algoritmi - Hafmenov kod:
+    
+    Hafmenov kod se koristi za kodiranje slova tako da su ona koja se najcesce koriste najkraca (imaju najkraci binarni kod). Ovo se postize pravljenjem drveta. Prvo ubacimo u hip sva slova sa njihovim frekvencijama. Hip je uredjen rastuce, tako da u svakom koraku sa hipa uzimamo najredje karaktere. Uzimamo dva po dva slova sve dok ne dodjemo do praznog hipa. Dva slova koja se najredje javljaju ce biti najudaljeniji od korena i nalazice se u listovima i delice cvor. U cvoru se nalazi suma frekvencija ta dva karaktera. Ovo se rekurzivno ponavlja, i na kraju se u korenu nalazi suma dva najcesca karaktera a deca su mu bas najcesci karakteri i kod moze da im bude minimalan jer se radi o prefiksnom drvetu.
+    
+106. Pohlepni algoritmi - plesni parovi:
+
+    
+107. Pohlepni algoritmi - razlomljeni problem ranca:
+
+    Za svaku stavku nadjemo cenu po jedinici mere, zatim uparimo tu cenu sa kolicinom i to sortiramo nerastuce prema ceni po jedinici mere. Idemo od pocetka i dodajemo u ranac sve dok ima mesta.

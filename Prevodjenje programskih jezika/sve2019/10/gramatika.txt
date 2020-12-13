@@ -1,0 +1,61 @@
+nizNaredbi: nizNaredbi naredba '\n'
+	| naredba '\n'
+	;
+naredba: ID = E
+	| print (E)
+	;
+E: E + T
+	| E - T
+	| T
+	;
+T: T * F
+ | F
+ ;
+F : Integral G | BROJ
+ | G operacija
+ ;
+G : ( E )
+ | BROJ
+ | E '
+ | ID
+ ;
+ 
+Ukloniti levu rekurziju					Skupovi izbora
+niznaredbi: naredba '\n' NP				ID, print						
+NP: naredba '\n' NP						ID, print
+	| eps								EOI
+	;
+naredba: ID = E							ID
+	| print (E)							print
+	;
+E: T EP									Integral, (, ID
+ ;
+EP: + T EP								+
+	| - T EP							-
+	| eps								'\n', )
+	;
+T : F TP								Integral, (, ID		
+	;
+TP: * F TP								*
+	| eps								+,-,'\n', )
+	;
+F : Integral G | BROJ					Integral
+ | G operacija							(, ID
+ ;
+G : ( E )								(
+ | ID									ID
+ ;
+operacija: '							'
+	| eps								*, +,-,'\n', )
+	;
+				First				Eps		Follow
+nizNaredbi		ID, print			NE		EOI
+NP				ID, print			Da		EOI
+naredba			ID PRINT			NE		'\n'
+E				Integral, (, ID		NE		'\n', )
+EP				+, -				DA		'\n', )
+T				Integral, (, ID		NE		+,-,'\n', )
+TP				*					DA		+,-,'\n', )
+F				Integral, (, ID		NE		*, +,-,'\n', )
+G				(, ID				NE		|, ', *, +,-,'\n', )
+operacija		'					DA		*, +,-,'\n', )

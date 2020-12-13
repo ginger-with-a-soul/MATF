@@ -1,0 +1,235 @@
+Grammar
+
+    0 $accept: pocetak $end
+
+    1 pocetak: e
+
+    2 e: e '+' e
+    3  | e '-' e
+    4  | e '*' e
+    5  | e '/' e
+    6  | '-' e
+    7  | BROJ
+    8  | '(' e ')'
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 8
+')' (41) 8
+'*' (42) 4
+'+' (43) 2
+'-' (45) 3 6
+'/' (47) 5
+error (256)
+UMINUS (258)
+BROJ (259) 7
+
+
+Nonterminals, with rules where they appear
+
+$accept (11)
+    on left: 0
+pocetak (12)
+    on left: 1, on right: 0
+e (13)
+    on left: 2 3 4 5 6 7 8, on right: 1 2 3 4 5 6 8
+
+
+State 0
+
+    0 $accept: . pocetak $end
+
+    '-'   shift, and go to state 1
+    BROJ  shift, and go to state 2
+    '('   shift, and go to state 3
+
+    pocetak  go to state 4
+    e        go to state 5
+
+
+State 1
+
+    6 e: '-' . e
+
+    '-'   shift, and go to state 1
+    BROJ  shift, and go to state 2
+    '('   shift, and go to state 3
+
+    e  go to state 6
+
+
+State 2
+
+    7 e: BROJ .
+
+    $default  reduce using rule 7 (e)
+
+
+State 3
+
+    8 e: '(' . e ')'
+
+    '-'   shift, and go to state 1
+    BROJ  shift, and go to state 2
+    '('   shift, and go to state 3
+
+    e  go to state 7
+
+
+State 4
+
+    0 $accept: pocetak . $end
+
+    $end  shift, and go to state 8
+
+
+State 5
+
+    1 pocetak: e .
+    2 e: e . '+' e
+    3  | e . '-' e
+    4  | e . '*' e
+    5  | e . '/' e
+
+    '+'  shift, and go to state 9
+    '-'  shift, and go to state 10
+    '*'  shift, and go to state 11
+    '/'  shift, and go to state 12
+
+    $default  reduce using rule 1 (pocetak)
+
+
+State 6
+
+    2 e: e . '+' e
+    3  | e . '-' e
+    4  | e . '*' e
+    5  | e . '/' e
+    6  | '-' e .
+
+    $default  reduce using rule 6 (e)
+
+
+State 7
+
+    2 e: e . '+' e
+    3  | e . '-' e
+    4  | e . '*' e
+    5  | e . '/' e
+    8  | '(' e . ')'
+
+    '+'  shift, and go to state 9
+    '-'  shift, and go to state 10
+    '*'  shift, and go to state 11
+    '/'  shift, and go to state 12
+    ')'  shift, and go to state 13
+
+
+State 8
+
+    0 $accept: pocetak $end .
+
+    $default  accept
+
+
+State 9
+
+    2 e: e '+' . e
+
+    '-'   shift, and go to state 1
+    BROJ  shift, and go to state 2
+    '('   shift, and go to state 3
+
+    e  go to state 14
+
+
+State 10
+
+    3 e: e '-' . e
+
+    '-'   shift, and go to state 1
+    BROJ  shift, and go to state 2
+    '('   shift, and go to state 3
+
+    e  go to state 15
+
+
+State 11
+
+    4 e: e '*' . e
+
+    '-'   shift, and go to state 1
+    BROJ  shift, and go to state 2
+    '('   shift, and go to state 3
+
+    e  go to state 16
+
+
+State 12
+
+    5 e: e '/' . e
+
+    '-'   shift, and go to state 1
+    BROJ  shift, and go to state 2
+    '('   shift, and go to state 3
+
+    e  go to state 17
+
+
+State 13
+
+    8 e: '(' e ')' .
+
+    $default  reduce using rule 8 (e)
+
+
+State 14
+
+    2 e: e . '+' e
+    2  | e '+' e .
+    3  | e . '-' e
+    4  | e . '*' e
+    5  | e . '/' e
+
+    '*'  shift, and go to state 11
+    '/'  shift, and go to state 12
+
+    $default  reduce using rule 2 (e)
+
+
+State 15
+
+    2 e: e . '+' e
+    3  | e . '-' e
+    3  | e '-' e .
+    4  | e . '*' e
+    5  | e . '/' e
+
+    '*'  shift, and go to state 11
+    '/'  shift, and go to state 12
+
+    $default  reduce using rule 3 (e)
+
+
+State 16
+
+    2 e: e . '+' e
+    3  | e . '-' e
+    4  | e . '*' e
+    4  | e '*' e .
+    5  | e . '/' e
+
+    $default  reduce using rule 4 (e)
+
+
+State 17
+
+    2 e: e . '+' e
+    3  | e . '-' e
+    4  | e . '*' e
+    5  | e . '/' e
+    5  | e '/' e .
+
+    $default  reduce using rule 5 (e)

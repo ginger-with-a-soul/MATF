@@ -1,0 +1,209 @@
+Grammar
+
+    0 $accept: pocetak $end
+
+    1 pocetak: pocetak naredba ';'
+    2        | naredba ';'
+
+    3 naredba: e
+
+    4 e: e '+' t
+    5  | t
+
+    6 t: t '*' f
+    7  | f
+
+    8 f: '(' e ')'
+    9  | BROJ
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 8
+')' (41) 8
+'*' (42) 6
+'+' (43) 4
+';' (59) 1 2
+error (256)
+BROJ (258) 9
+
+
+Nonterminals, with rules where they appear
+
+$accept (9)
+    on left: 0
+pocetak (10)
+    on left: 1 2, on right: 0 1
+naredba (11)
+    on left: 3, on right: 1 2
+e (12)
+    on left: 4 5, on right: 3 4 8
+t (13)
+    on left: 6 7, on right: 4 5 6
+f (14)
+    on left: 8 9, on right: 6 7
+
+
+State 0
+
+    0 $accept: . pocetak $end
+
+    BROJ  shift, and go to state 1
+    '('   shift, and go to state 2
+
+    pocetak  go to state 3
+    naredba  go to state 4
+    e        go to state 5
+    t        go to state 6
+    f        go to state 7
+
+
+State 1
+
+    9 f: BROJ .
+
+    $default  reduce using rule 9 (f)
+
+
+State 2
+
+    8 f: '(' . e ')'
+
+    BROJ  shift, and go to state 1
+    '('   shift, and go to state 2
+
+    e  go to state 8
+    t  go to state 6
+    f  go to state 7
+
+
+State 3
+
+    0 $accept: pocetak . $end
+    1 pocetak: pocetak . naredba ';'
+
+    $end  shift, and go to state 9
+    BROJ  shift, and go to state 1
+    '('   shift, and go to state 2
+
+    naredba  go to state 10
+    e        go to state 5
+    t        go to state 6
+    f        go to state 7
+
+
+State 4
+
+    2 pocetak: naredba . ';'
+
+    ';'  shift, and go to state 11
+
+
+State 5
+
+    3 naredba: e .
+    4 e: e . '+' t
+
+    '+'  shift, and go to state 12
+
+    $default  reduce using rule 3 (naredba)
+
+
+State 6
+
+    5 e: t .
+    6 t: t . '*' f
+
+    '*'  shift, and go to state 13
+
+    $default  reduce using rule 5 (e)
+
+
+State 7
+
+    7 t: f .
+
+    $default  reduce using rule 7 (t)
+
+
+State 8
+
+    4 e: e . '+' t
+    8 f: '(' e . ')'
+
+    '+'  shift, and go to state 12
+    ')'  shift, and go to state 14
+
+
+State 9
+
+    0 $accept: pocetak $end .
+
+    $default  accept
+
+
+State 10
+
+    1 pocetak: pocetak naredba . ';'
+
+    ';'  shift, and go to state 15
+
+
+State 11
+
+    2 pocetak: naredba ';' .
+
+    $default  reduce using rule 2 (pocetak)
+
+
+State 12
+
+    4 e: e '+' . t
+
+    BROJ  shift, and go to state 1
+    '('   shift, and go to state 2
+
+    t  go to state 16
+    f  go to state 7
+
+
+State 13
+
+    6 t: t '*' . f
+
+    BROJ  shift, and go to state 1
+    '('   shift, and go to state 2
+
+    f  go to state 17
+
+
+State 14
+
+    8 f: '(' e ')' .
+
+    $default  reduce using rule 8 (f)
+
+
+State 15
+
+    1 pocetak: pocetak naredba ';' .
+
+    $default  reduce using rule 1 (pocetak)
+
+
+State 16
+
+    4 e: e '+' t .
+    6 t: t . '*' f
+
+    '*'  shift, and go to state 13
+
+    $default  reduce using rule 4 (e)
+
+
+State 17
+
+    6 t: t '*' f .
+
+    $default  reduce using rule 6 (t)

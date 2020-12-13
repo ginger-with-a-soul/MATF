@@ -1,0 +1,5 @@
+Ceo broj: 55
+Realan broj: -23.324e-2
+Realan broj: 1344.3434
+Ceo broj: 9850439
+Ceo broj: 0

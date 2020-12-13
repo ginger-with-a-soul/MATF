@@ -1,0 +1,599 @@
+Grammar
+
+    0 $accept: Program $end
+
+    1 Program: Naredba '\n' Program
+    2        | Naredba '\n'
+
+    3 Naredba: Izraz
+    4        | PRINT_T '(' Izraz ')'
+    5        | NOM_T '(' Izraz ')'
+    6        | DEN_T '(' Izraz ')'
+    7        | EQUALS_T '(' Izraz ',' Izraz ')'
+    8        | DOUBLE_T '(' Izraz ')'
+    9        | ID_T '=' Razlomak
+
+   10 Izraz: '(' Izraz ')'
+   11      | Izraz '+' Izraz
+   12      | Izraz '-' Izraz
+   13      | Izraz '*' Izraz
+   14      | Izraz '/' Izraz
+   15      | Razlomak
+
+   16 Razlomak: '[' NUMBER_T ',' NUMBER_T ']'
+   17         | '[' NUMBER_T ']'
+   18         | ID_T
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'\n' (10) 1 2
+'(' (40) 4 5 6 7 8 10
+')' (41) 4 5 6 7 8 10
+'*' (42) 13
+'+' (43) 11
+',' (44) 7 16
+'-' (45) 12
+'/' (47) 14
+'=' (61) 9
+'[' (91) 16 17
+']' (93) 16 17
+error (256)
+PRINT_T (258) 4
+NOM_T (259) 5
+DEN_T (260) 6
+DOUBLE_T (261) 8
+EQUALS_T (262) 7
+NUMBER_T <int_type> (263) 16 17
+ID_T <string_type> (264) 9 18
+
+
+Nonterminals, with rules where they appear
+
+$accept (21)
+    on left: 0
+Program (22)
+    on left: 1 2, on right: 0 1
+Naredba (23)
+    on left: 3 4 5 6 7 8 9, on right: 1 2
+Izraz <r_type> (24)
+    on left: 10 11 12 13 14 15, on right: 3 4 5 6 7 8 10 11 12 13 14
+Razlomak <r_type> (25)
+    on left: 16 17 18, on right: 9 15
+
+
+State 0
+
+    0 $accept: . Program $end
+
+    PRINT_T   shift, and go to state 1
+    NOM_T     shift, and go to state 2
+    DEN_T     shift, and go to state 3
+    DOUBLE_T  shift, and go to state 4
+    EQUALS_T  shift, and go to state 5
+    ID_T      shift, and go to state 6
+    '('       shift, and go to state 7
+    '['       shift, and go to state 8
+
+    Program   go to state 9
+    Naredba   go to state 10
+    Izraz     go to state 11
+    Razlomak  go to state 12
+
+
+State 1
+
+    4 Naredba: PRINT_T . '(' Izraz ')'
+
+    '('  shift, and go to state 13
+
+
+State 2
+
+    5 Naredba: NOM_T . '(' Izraz ')'
+
+    '('  shift, and go to state 14
+
+
+State 3
+
+    6 Naredba: DEN_T . '(' Izraz ')'
+
+    '('  shift, and go to state 15
+
+
+State 4
+
+    8 Naredba: DOUBLE_T . '(' Izraz ')'
+
+    '('  shift, and go to state 16
+
+
+State 5
+
+    7 Naredba: EQUALS_T . '(' Izraz ',' Izraz ')'
+
+    '('  shift, and go to state 17
+
+
+State 6
+
+    9 Naredba: ID_T . '=' Razlomak
+   18 Razlomak: ID_T .
+
+    '='  shift, and go to state 18
+
+    $default  reduce using rule 18 (Razlomak)
+
+
+State 7
+
+   10 Izraz: '(' . Izraz ')'
+
+    ID_T  shift, and go to state 19
+    '('   shift, and go to state 7
+    '['   shift, and go to state 8
+
+    Izraz     go to state 20
+    Razlomak  go to state 12
+
+
+State 8
+
+   16 Razlomak: '[' . NUMBER_T ',' NUMBER_T ']'
+   17         | '[' . NUMBER_T ']'
+
+    NUMBER_T  shift, and go to state 21
+
+
+State 9
+
+    0 $accept: Program . $end
+
+    $end  shift, and go to state 22
+
+
+State 10
+
+    1 Program: Naredba . '\n' Program
+    2        | Naredba . '\n'
+
+    '\n'  shift, and go to state 23
+
+
+State 11
+
+    3 Naredba: Izraz .
+   11 Izraz: Izraz . '+' Izraz
+   12      | Izraz . '-' Izraz
+   13      | Izraz . '*' Izraz
+   14      | Izraz . '/' Izraz
+
+    '+'  shift, and go to state 24
+    '-'  shift, and go to state 25
+    '*'  shift, and go to state 26
+    '/'  shift, and go to state 27
+
+    $default  reduce using rule 3 (Naredba)
+
+
+State 12
+
+   15 Izraz: Razlomak .
+
+    $default  reduce using rule 15 (Izraz)
+
+
+State 13
+
+    4 Naredba: PRINT_T '(' . Izraz ')'
+
+    ID_T  shift, and go to state 19
+    '('   shift, and go to state 7
+    '['   shift, and go to state 8
+
+    Izraz     go to state 28
+    Razlomak  go to state 12
+
+
+State 14
+
+    5 Naredba: NOM_T '(' . Izraz ')'
+
+    ID_T  shift, and go to state 19
+    '('   shift, and go to state 7
+    '['   shift, and go to state 8
+
+    Izraz     go to state 29
+    Razlomak  go to state 12
+
+
+State 15
+
+    6 Naredba: DEN_T '(' . Izraz ')'
+
+    ID_T  shift, and go to state 19
+    '('   shift, and go to state 7
+    '['   shift, and go to state 8
+
+    Izraz     go to state 30
+    Razlomak  go to state 12
+
+
+State 16
+
+    8 Naredba: DOUBLE_T '(' . Izraz ')'
+
+    ID_T  shift, and go to state 19
+    '('   shift, and go to state 7
+    '['   shift, and go to state 8
+
+    Izraz     go to state 31
+    Razlomak  go to state 12
+
+
+State 17
+
+    7 Naredba: EQUALS_T '(' . Izraz ',' Izraz ')'
+
+    ID_T  shift, and go to state 19
+    '('   shift, and go to state 7
+    '['   shift, and go to state 8
+
+    Izraz     go to state 32
+    Razlomak  go to state 12
+
+
+State 18
+
+    9 Naredba: ID_T '=' . Razlomak
+
+    ID_T  shift, and go to state 19
+    '['   shift, and go to state 8
+
+    Razlomak  go to state 33
+
+
+State 19
+
+   18 Razlomak: ID_T .
+
+    $default  reduce using rule 18 (Razlomak)
+
+
+State 20
+
+   10 Izraz: '(' Izraz . ')'
+   11      | Izraz . '+' Izraz
+   12      | Izraz . '-' Izraz
+   13      | Izraz . '*' Izraz
+   14      | Izraz . '/' Izraz
+
+    '+'  shift, and go to state 24
+    '-'  shift, and go to state 25
+    '*'  shift, and go to state 26
+    '/'  shift, and go to state 27
+    ')'  shift, and go to state 34
+
+
+State 21
+
+   16 Razlomak: '[' NUMBER_T . ',' NUMBER_T ']'
+   17         | '[' NUMBER_T . ']'
+
+    ','  shift, and go to state 35
+    ']'  shift, and go to state 36
+
+
+State 22
+
+    0 $accept: Program $end .
+
+    $default  accept
+
+
+State 23
+
+    1 Program: Naredba '\n' . Program
+    2        | Naredba '\n' .
+
+    PRINT_T   shift, and go to state 1
+    NOM_T     shift, and go to state 2
+    DEN_T     shift, and go to state 3
+    DOUBLE_T  shift, and go to state 4
+    EQUALS_T  shift, and go to state 5
+    ID_T      shift, and go to state 6
+    '('       shift, and go to state 7
+    '['       shift, and go to state 8
+
+    $default  reduce using rule 2 (Program)
+
+    Program   go to state 37
+    Naredba   go to state 10
+    Izraz     go to state 11
+    Razlomak  go to state 12
+
+
+State 24
+
+   11 Izraz: Izraz '+' . Izraz
+
+    ID_T  shift, and go to state 19
+    '('   shift, and go to state 7
+    '['   shift, and go to state 8
+
+    Izraz     go to state 38
+    Razlomak  go to state 12
+
+
+State 25
+
+   12 Izraz: Izraz '-' . Izraz
+
+    ID_T  shift, and go to state 19
+    '('   shift, and go to state 7
+    '['   shift, and go to state 8
+
+    Izraz     go to state 39
+    Razlomak  go to state 12
+
+
+State 26
+
+   13 Izraz: Izraz '*' . Izraz
+
+    ID_T  shift, and go to state 19
+    '('   shift, and go to state 7
+    '['   shift, and go to state 8
+
+    Izraz     go to state 40
+    Razlomak  go to state 12
+
+
+State 27
+
+   14 Izraz: Izraz '/' . Izraz
+
+    ID_T  shift, and go to state 19
+    '('   shift, and go to state 7
+    '['   shift, and go to state 8
+
+    Izraz     go to state 41
+    Razlomak  go to state 12
+
+
+State 28
+
+    4 Naredba: PRINT_T '(' Izraz . ')'
+   11 Izraz: Izraz . '+' Izraz
+   12      | Izraz . '-' Izraz
+   13      | Izraz . '*' Izraz
+   14      | Izraz . '/' Izraz
+
+    '+'  shift, and go to state 24
+    '-'  shift, and go to state 25
+    '*'  shift, and go to state 26
+    '/'  shift, and go to state 27
+    ')'  shift, and go to state 42
+
+
+State 29
+
+    5 Naredba: NOM_T '(' Izraz . ')'
+   11 Izraz: Izraz . '+' Izraz
+   12      | Izraz . '-' Izraz
+   13      | Izraz . '*' Izraz
+   14      | Izraz . '/' Izraz
+
+    '+'  shift, and go to state 24
+    '-'  shift, and go to state 25
+    '*'  shift, and go to state 26
+    '/'  shift, and go to state 27
+    ')'  shift, and go to state 43
+
+
+State 30
+
+    6 Naredba: DEN_T '(' Izraz . ')'
+   11 Izraz: Izraz . '+' Izraz
+   12      | Izraz . '-' Izraz
+   13      | Izraz . '*' Izraz
+   14      | Izraz . '/' Izraz
+
+    '+'  shift, and go to state 24
+    '-'  shift, and go to state 25
+    '*'  shift, and go to state 26
+    '/'  shift, and go to state 27
+    ')'  shift, and go to state 44
+
+
+State 31
+
+    8 Naredba: DOUBLE_T '(' Izraz . ')'
+   11 Izraz: Izraz . '+' Izraz
+   12      | Izraz . '-' Izraz
+   13      | Izraz . '*' Izraz
+   14      | Izraz . '/' Izraz
+
+    '+'  shift, and go to state 24
+    '-'  shift, and go to state 25
+    '*'  shift, and go to state 26
+    '/'  shift, and go to state 27
+    ')'  shift, and go to state 45
+
+
+State 32
+
+    7 Naredba: EQUALS_T '(' Izraz . ',' Izraz ')'
+   11 Izraz: Izraz . '+' Izraz
+   12      | Izraz . '-' Izraz
+   13      | Izraz . '*' Izraz
+   14      | Izraz . '/' Izraz
+
+    '+'  shift, and go to state 24
+    '-'  shift, and go to state 25
+    '*'  shift, and go to state 26
+    '/'  shift, and go to state 27
+    ','  shift, and go to state 46
+
+
+State 33
+
+    9 Naredba: ID_T '=' Razlomak .
+
+    $default  reduce using rule 9 (Naredba)
+
+
+State 34
+
+   10 Izraz: '(' Izraz ')' .
+
+    $default  reduce using rule 10 (Izraz)
+
+
+State 35
+
+   16 Razlomak: '[' NUMBER_T ',' . NUMBER_T ']'
+
+    NUMBER_T  shift, and go to state 47
+
+
+State 36
+
+   17 Razlomak: '[' NUMBER_T ']' .
+
+    $default  reduce using rule 17 (Razlomak)
+
+
+State 37
+
+    1 Program: Naredba '\n' Program .
+
+    $default  reduce using rule 1 (Program)
+
+
+State 38
+
+   11 Izraz: Izraz . '+' Izraz
+   11      | Izraz '+' Izraz .
+   12      | Izraz . '-' Izraz
+   13      | Izraz . '*' Izraz
+   14      | Izraz . '/' Izraz
+
+    '*'  shift, and go to state 26
+    '/'  shift, and go to state 27
+
+    $default  reduce using rule 11 (Izraz)
+
+
+State 39
+
+   11 Izraz: Izraz . '+' Izraz
+   12      | Izraz . '-' Izraz
+   12      | Izraz '-' Izraz .
+   13      | Izraz . '*' Izraz
+   14      | Izraz . '/' Izraz
+
+    '*'  shift, and go to state 26
+    '/'  shift, and go to state 27
+
+    $default  reduce using rule 12 (Izraz)
+
+
+State 40
+
+   11 Izraz: Izraz . '+' Izraz
+   12      | Izraz . '-' Izraz
+   13      | Izraz . '*' Izraz
+   13      | Izraz '*' Izraz .
+   14      | Izraz . '/' Izraz
+
+    $default  reduce using rule 13 (Izraz)
+
+
+State 41
+
+   11 Izraz: Izraz . '+' Izraz
+   12      | Izraz . '-' Izraz
+   13      | Izraz . '*' Izraz
+   14      | Izraz . '/' Izraz
+   14      | Izraz '/' Izraz .
+
+    $default  reduce using rule 14 (Izraz)
+
+
+State 42
+
+    4 Naredba: PRINT_T '(' Izraz ')' .
+
+    $default  reduce using rule 4 (Naredba)
+
+
+State 43
+
+    5 Naredba: NOM_T '(' Izraz ')' .
+
+    $default  reduce using rule 5 (Naredba)
+
+
+State 44
+
+    6 Naredba: DEN_T '(' Izraz ')' .
+
+    $default  reduce using rule 6 (Naredba)
+
+
+State 45
+
+    8 Naredba: DOUBLE_T '(' Izraz ')' .
+
+    $default  reduce using rule 8 (Naredba)
+
+
+State 46
+
+    7 Naredba: EQUALS_T '(' Izraz ',' . Izraz ')'
+
+    ID_T  shift, and go to state 19
+    '('   shift, and go to state 7
+    '['   shift, and go to state 8
+
+    Izraz     go to state 48
+    Razlomak  go to state 12
+
+
+State 47
+
+   16 Razlomak: '[' NUMBER_T ',' NUMBER_T . ']'
+
+    ']'  shift, and go to state 49
+
+
+State 48
+
+    7 Naredba: EQUALS_T '(' Izraz ',' Izraz . ')'
+   11 Izraz: Izraz . '+' Izraz
+   12      | Izraz . '-' Izraz
+   13      | Izraz . '*' Izraz
+   14      | Izraz . '/' Izraz
+
+    '+'  shift, and go to state 24
+    '-'  shift, and go to state 25
+    '*'  shift, and go to state 26
+    '/'  shift, and go to state 27
+    ')'  shift, and go to state 50
+
+
+State 49
+
+   16 Razlomak: '[' NUMBER_T ',' NUMBER_T ']' .
+
+    $default  reduce using rule 16 (Razlomak)
+
+
+State 50
+
+    7 Naredba: EQUALS_T '(' Izraz ',' Izraz ')' .
+
+    $default  reduce using rule 7 (Naredba)

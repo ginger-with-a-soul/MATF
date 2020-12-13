@@ -1,0 +1,120 @@
+%{
+#include <iostream>
+#include <cstdlib>
+#include <string>
+#include <map>
+
+#define YYDEBUG 1
+
+extern int yylex();
+void yyerror(std::string s);
+
+/* Mapa koja preslikava ime promenljive u njenu vrednost. */
+std::map<std::string, int> tablica;
+%}
+
+/* Tip atributa simbola ce biti tip nekog od polja ove unije. */
+%union{
+	float vrednost;
+    std::string* id;
+}
+
+/* Definisemo asocijativnost i prioritete operatora. */
+%left '+' '-'
+%left '*' '/' 
+%left UMINUS
+
+/* Pridruzujemo konkretno polje unije tokenu i neterminalu e */
+%type <vrednost> E
+
+/* tokenu dodeljujemo atribut */
+%token <vrednost> broj_token
+%token <id> id_token
+%token print_token
+
+%%
+Niz_naredbi
+    : Niz_naredbi Naredba '\n'
+    | /* ili epsilon */
+    ;
+
+Naredba
+    : print_token '(' E ')' {
+        std::cout << "Vrednost izraza: " << $3 << std::endl;
+    }
+    | id_token '=' E {
+        //  $1 -> std::string*
+        // *$1 -> std::string
+        // -> Upisujemo ime promenljive i vrednost izraza u mapu.
+        tablica[*$1] = $3;
+
+        // Dealociramo string koji je alociran u lekseru.
+        // Pri upisu u mapu je izvrsena kopija tog stringa u samu mapu
+        // pa nam $1 vise nije potreban, odnosno doci ce do curenja
+        // memorije kasnije...
+        delete $1;
+    }
+    ;
+
+E 
+    : E '+' E {
+        $$ = $1 +$3;
+    }
+	| E '*' E {
+        $$ = $1 * $3;
+    }
+	|  E '-' E {
+        $$ = $1 - $3;
+    }
+	|  E '/' E {
+        if ($3 == 0) {
+		    yyerror("Deljenje nulom!");	
+		} 
+		$$ = $1 / $3;
+    }
+	| '-' E %prec UMINUS {
+        /*
+            Dodeljujemo pravilu prioritet. Koristeci debagovanje proveriti redosled primenjivanja
+            pravila kada nije zadat prioritet i kada je prioritet dodeljen.
+        */
+        $$ = -$2;
+    }
+	| '(' E ')' {
+        $$ = $2;
+    }
+	| broj_token {
+        $$ = $1;
+    }
+    | id_token {
+        // Rad sa mapom:
+        // https://en.cppreference.com/w/cpp/container/map
+        // Funkcija find() vraca iterator na rezultat (uredjeni par <std::string, int>)
+        // ili na tablica.end() za slucaj da rezultat nije pronadjen u mapi.
+        auto i = tablica.find(*$1);
+        if (i != tablica.end()) {
+            // Posto je pronadjena vrednost promenljive sa imenom *$1 vracen nam je
+            // uredjeni par <std::string, int> cijim elementima mozemo pristupati
+            // sa 'first' i 'second';
+            // std::cout << i->first << " = " << i->second << std::endl;
+            $$ = i->second;
+        } else {
+            std::cout << "Promenljiva " << *$1 << " nije definisana!" << std::endl;
+            $$ = 0;
+        }
+        delete $1;
+    }
+	; 
+%%
+
+int main()
+{
+	if (yyparse() == 0)
+		std::cout << "Uparen je aritmeticki izraz!" << std::endl;
+	return 0;
+}
+
+void yyerror(std::string s)
+{
+    std::cerr << s << std::endl;
+    exit(EXIT_FAILURE);
+}

@@ -1,0 +1,1 @@
+/usr/bin/cc -g   CMakeFiles/2i_2017.dir/3.c.o  -o 2i_2017 

@@ -1,0 +1,29 @@
+65. Dva pokazivaca - objedinjavanje dva sortirana niza
+66. Dva pokazivaca - par brojeva datog zbira, date razlike, trojka datog zbira
+
+	Par brojeva datog zbira:
+	Niz je rastuci bez elemenata koji se ponavljaju. Ako smo trenutno na elementu vrednosti N
+	onda je trazine broj (X) za trazenu sumu S: X = S - N. Ovo X se pomocu bsearch-a moze dobiti u vremenu
+	O(logn) i to se moze uraditi za svaki element -> O(nlogn). Ali to se pomocu dva pokazivaca
+	moze uraditi u O(n).
+
+	Trojka datog zbira:
+	Koristimo ideju iz prethodnog zadatka. Za prvi clan torke trazimo dva X1 X2: X1 + X2 = S - X0. Tako da
+	za svaki element niza radimo ovo pa je slozenost O(n^2).
+67. Dva pokazivaca - pretraga dvostruko sortirane matrice
+
+	Krecemo od donjeg levog ugla i u svakom korako ispitujemo kakva je vrednost matrice na cijoj smo
+	poziciji u odnosu na trazeni broj. Posle najvise m + n koraka cemo ispasti iz petlje pa je slozenost
+	algoritma O(m + n).
+
+68. Dva pokazivaca - segmenti niza prirodnih brojeva koji imaju dati zbir
+
+	Moze da se u jednom prolazu izracuna tako sto stavimo prvi pokazivac na 0 poziciju a drugi na 1 poziciji
+	i onda iteriramo dok drugi ne dodje do kraja. Ili, tako sto napravimo niz za 1 veci od pocetnog, na 0.
+	mesto stavimo 0 a onda uradimo parcijalne zbirove do kraja. Tada dobijemo rastuci niz kroz koji mozemo
+	da prodjemo i ako je razlika neka dva elementa jednaka trazenom zbiru onda je pozicija koju za desno
+	treba da ispisemo za 1 manja od trenutne a leva je bas ta na kojoj smo.
+
+69. Dva pokazivaca - najkraca podniska koja sadrzi sva data slova
+
+	

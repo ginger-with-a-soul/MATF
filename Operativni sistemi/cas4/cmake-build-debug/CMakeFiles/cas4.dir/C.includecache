@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/dimitrije/Desktop/Operativni sistemi/cas4/filterFilesByExt.c
+stdio.h
+-
+stdlib.h
+-
+sys/stat.h
+-
+sys/types.h
+-
+string.h
+-
+strings.h
+-
+unistd.h
+-
+fcntl.h
+-
+errno.h
+-
+ftw.h
+-
+

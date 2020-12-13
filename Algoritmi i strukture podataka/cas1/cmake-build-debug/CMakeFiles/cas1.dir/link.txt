@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/cas1.dir/dutch_flag.cpp.o CMakeFiles/cas1.dir/binary_search.cpp.o  -o cas1 

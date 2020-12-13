@@ -1,0 +1,66 @@
+/* deklaracije */
+/* navode se tokeni, startni neterminal, asocijativnost i prioritet operatora, deklarisanje tipa atributa simbola date gramatike*/
+%{
+/* C++ kod koji se direktno prepisuje na pocetak datoteke parser.tab.cpp */
+/* zaglavlja koja su nam potrebna zbog leksickog analizatora i funkcije za obradu greske */
+
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <string>
+
+#define YYDEBUG 1
+
+
+/* Leksicki analizator - lex ce nam ga izgraditi */
+extern int yylex();
+/* Funkcija koja ispisuje poruku o gresci i prekida program  */
+void yyerror(std::string s);
+%}
+
+/*
+    Deklarisemo broj_token kao token.
+    Svi ostali sibmoli osim karakterskih bice smatrani neterminalima
+*/
+%token broj_token
+
+/*
+    Deklarisemo aksiomu (startni simbol) gramatike.
+    Ovo najcesce nije neophodno jer ce bison sam da doda pravilo
+    koje predstavlja aksiuomu.
+*/
+%start E
+
+%%
+/*
+   Definicija gramatike.
+*/
+E
+    : E '+' T
+	| T
+	;
+
+T
+    : T '*' F
+	| F
+	;
+
+F
+    : '(' E ')'
+	| broj_token
+	; 
+%%
+int main()
+{
+    // CTRL+D (eof prekida unos)
+	if (yyparse() == 0)
+		std::cout <<"Uparen je aritmeticki izraz!" << std::endl;
+	return 0;
+}
+
+void yyerror(std::string s)
+{
+    std::cerr << s << std::endl;
+    exit(EXIT_FAILURE);
+}
+

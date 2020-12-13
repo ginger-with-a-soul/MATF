@@ -1,0 +1,58 @@
+-----------------------------
+--- Skript jezici -----------
+-----------------------------
+
+-Skript jezici predstavljaju granu programskih jezika koji se koriste za koordinaciju izmedju drugih programskih jezika i povezivanje komponenti ("glue languages"), automatizaciju poslova u racunaru, brzo "sklapanja" manjih programa...
+-Skript jezicima pisu se skripte koje predstavljaju listu instrukcija koje se izvrsavaju jedna za drugom bez ucesca korisnika. Skript jezici su fleksibilni vise nego efikasni. Prvobitno su se razvili kao komandni jezici operativnih sistema ali danas se primenjuju svuda (Python, JavaScript, Bash, Perl, Dart, PHP, Ruby...)
+-Skript jezici ne cine svoju paradigmu jer su izgradjeni od drugih paradigmi - funkcionalne, objektno-orijentisane, proceduralne...
+
+-Osnovne odlike Skript jezika:
+	najcesce se izvrsavaju liniju po liniju (interpretatorski su)
+	forma zapisa je skracena
+	promenljive se obicno ne deklarisu vec postoje strozija pravila dosega (zbog toga su tipovi dinamicki odredjeni)
+	lak pristup funkcijama operativnog sistema
+	dobra podrska u radu sa stringovima (regexi)
+	podrska za vise tipove podataka
+	junk collectors
+	
+-Domeni upotrebe:
+	procesiranje teksta i generisanje izvestaja (Sed, Awk, Perl u ranijim verzijama)
+	matematika (Mathematica, Mathlab, S, R - za statistiku)
+	programiranje weba (PHP, Ruby, PowerShell - skriptovi na strani weba; JavaScript - skriptovi na strani klijenta)
+	
+
+-----------------------------------------
+------- Programiranje ogranicenja -------
+-----------------------------------------
+
+-Programiranje ogranicenja koristi se za resavanje teskih kombinatornih i optimizacionih problema. Do resenja se dolazi kreiranjem stabla resenja cije odredjene grane se seku postavljanjem jasno definisanih ogranicenja. Do resenja se dolazi obilaskom stabla tako sto se ide putevima koji nisu blokirani ogranicenjima. Resenje se nalazi na kraju puta a ako ono ne postoji potrebno je to i dokazati.
+
+-Programiranje ogranicenja predstavlja deklarativno programiranje. Relacije izmedju promenljivih zadaju se u obliku razilicitih ogranicenja. Kod ovog programiranje do resenja se ne dolazi izvrsavanjem koraka koji su dati u programu vec se do resenja dolazi postavljanjem uslova koje promenljive moraju da ispunjavaju
+
+-Resavanje se interno vrsi nekim od resavaca - SAT, SMT...
+
+X < Y  --> imperativna paradigm: tacno ili netacno
+	   --> paradigma ogranicenja: relacija koja mora da vazi
+	   
+-Ogranicenja mogu da budu linearna (x <= 15), nad domenima resenja, ogranicenja iskazne logike...
+
+-Programiranjem ogranicenja mogu se resavati: KRIPTARITMETIKE - igre kod kojih se resavaju jednacine gde su cifre brojeva zamenjene slovima, problem dama, problem topova, definisatnje ponasanje semafora tako da protok saobracaja bude najbolji
+
+-Cesto je raspolozivo u okviru sistema za logicko programiranje (Constraint logic programing) jer je iz njega i nastalo. Logicki programi se sastoje samo od linija koje su logicke forme
+
+-Python-Constraint vrsi ogranicenja na konacnom domenu i sastoji se iz 3 dela:
+	1. generisanje promenljivih i njihovih domena
+	2. generisanje ogranicenja nad promenljivima
+	3. obelezavanje (labeling) - instanciranje promenljivih (u okviru Python-a resenja se daju za sve promenljive pa je instanciranje implicitno)
+	
+-Opsta ogranicenja:
+
+	AllDifferentConstraint() - razlicite vrednosti promenljivih
+	AllEqualConstraint() - iste vrednosti promenljivih
+	MaxSumContraint(s, [, tezine]) - suma vrednosti promenljivih pomnozena sa tezinam nije manja od s
+	ExactSumConstraint(s, [,]) - tacna suma
+	InSetConstraint(x) - vrednosti promenljivih se nalaze u skupu x
+	NotInSetConstraint(x) - vrednosti promenljivih se ne nalaze u skupu x
+	SomeInSetConstraint(x) - neke od vrednosti promenljivih se nalaze u skupu x
+	SomeNotInSetConstraint(x) - neke od vrednosti promenljivih se ne nalaze u skupu x
+	

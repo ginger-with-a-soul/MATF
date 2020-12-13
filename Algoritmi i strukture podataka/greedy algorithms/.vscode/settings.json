@@ -1,0 +1,8 @@
+{
+	"files.associations": {
+		"*.py": "python",
+		"*.lex": "lex",
+		"array": "cpp",
+		"string_view": "cpp"
+	}
+}

@@ -1,0 +1,90 @@
+%{
+#include <iostream>
+#include <cstdlib>
+#include <cstdio>
+#include <map>
+#include <string>
+#include "numbers.hpp"
+
+extern int yylex();
+
+void yyerror(std::string errMsg){
+	std::cerr << "Parser error: " << errMsg << std::endl;
+	exit(EXIT_FAILURE); 
+}
+
+std::map<std::string, Broj*> table;
+
+void deinit(){
+	auto it = table.begin();
+	for(; it != table.end(); it++){
+		delete it->second;
+	}
+}
+
+%}
+
+%union {
+	int num_type;
+	std::string* string_type;
+	Broj* broj_type;
+}
+
+%left '|'
+%left '^'
+%left '&'
+%left EQ_T NEQ_T
+%left SHL_T SHR_T
+%left '+' '-'
+%left '*' '/'
+%right '~'
+
+%token LIST_T INT_T PRINT_T EQ_T NEQ_T SHR_T SHL_T
+%token <num_type> NUMBER_T
+%token <string_type> ID_T
+
+%type <broj_type> izraz lista elementi
+%type <num_type> broj
+
+%start program
+
+%%
+program : naredba ';' program {}
+		| naredba ';' {}
+		;
+
+naredba : PRINT_T '(' izraz ')' {
+			if($3 != nullptr){
+				std::cout << *$3 << std::endl;
+				delete $3;
+			}
+		}
+		| INT_T ID_T {
+			if($2 != nullptr){
+				auto it = table.find(*$2);
+				if(it != table.end()){
+					yyerror("Promenljiva vec deklarisana");
+				}
+				else{
+					table[*$2] = new Broj(0);
+				}
+				delete $2;
+			}
+		}
+		|
+
+%%
+
+int main(int argc, char** argv){
+
+	if(!yyparse()){
+		std::cout << "It's all good!" << std::endl;
+	}
+	else{
+		std::cerr << "Something's wrong :(" << std::endl;
+	}
+
+	deinit();
+
+	exit(EXIT_SUCCESS);
+}

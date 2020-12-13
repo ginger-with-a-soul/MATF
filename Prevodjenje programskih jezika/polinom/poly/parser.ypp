@@ -1,0 +1,72 @@
+%{
+#include <iostream>
+#include <string>
+#include "polinomial.hpp"
+extern int yylex();
+void yyerror(std::string s){
+	std::cerr << s << std::endl;
+	exit(EXIT_FAILURE);
+}
+%}
+
+%union {
+	polinomial* poly_type;
+	std::string* string_type;
+	float float_type;
+}
+
+%token <float_type> broj_token
+%token <string_type> id_token
+%type <poly_type> E Niz_koef
+
+%start Program
+
+%left '+' '-'
+%left '*'
+%left UMINUS
+
+%%
+
+Program
+	: Program Naredba
+	| Naredba
+	;
+Naredba
+	: E '\n' {
+		std::cout << *$1 << std::endl;
+	}
+	;
+E
+	: E '+' E {
+		$$ = new polinomial(*$1 + *$3);
+	}
+	| E '-' E {
+		$$ = new polinomial(*$1 - *$3);
+	}
+	| E '*' E {
+		$$ = new polinomial(*$1 * *$3);
+	}
+	| '-' E %prec UMINUS {
+		$$ = new polinomial($2->uminus());
+	}
+	| '<' Niz_koef '>' {
+		$$ = $2;
+	}
+	;
+Niz_koef
+	: Niz_koef ',' broj_token {
+		$$ = ($1->add_coef($3));
+	}
+	| broj_token {
+		$$ = new polinomial();
+		$$ = add_coef($1);
+	}
+	;
+
+
+%%
+
+int main(){
+	yyparse();
+	exit(EXIT_SUCCESS);
+}

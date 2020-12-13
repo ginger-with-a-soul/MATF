@@ -1,0 +1,103 @@
+~Funkcionalna dekompozicija:~
+Predstavlja pristup kod kojeg se pocetni, veci, problem deli na vise
+manjih potproblema cijim resevanjem, koje je znacanjije lakse, i pravnilnom
+kompozicijom, dolazi do resenja pocetnog problema.
+Problem nastaje jer su ovako projektovana resenja
+neotporna na promene i dodatne zahteve.
+
+-Kohezija -> koliko blisko su povezane operacije koje se vrse u modulu ili rutini
+(zelimo da svaka rutina i svaki modul bodu specijalizovani tako da rade samo
+jednu stvar)
+
+-Kopcanje -> koliko jako su povezane rutine/moduli (nije dobro da jedan modul zavisi
+od interne strukture i rada drugog modula. To je "jako kopcanje" i kod njega, ako
+promenimo neki deo drugog modula onda moramo da pazimo sta se desava sa svim modulima
+koji su "jako ukopcani" sa njim)
+
+Kopcanje i kohezija su komplementarni pojmovi. Slaba kohezija povlaci jako kopcanje
+i obratno. Kod funkcionalne dekompozicije postoji slaba kohezija a jako kopcanje,
+odnosno program radi previse stvari i ima previse povezanosti. Mi tezimo da kohezija
+bude sto snaznija a kopcanje sto slabije.
+
+-Efekat talasanja (ripple effect) - je efekat koji je najizrazeniji kod jakog
+kopcanja i odnosi se na potrebu za refaktorisanjem mnogo koda prilikom cak i manjih
+izmena u modulima koji su jako ukopcani. Izuzetno je nepozeljan jer oduzima mnogo
+vremena i zahteva dubinsko poznavanje celokupne arhitekture programa.
+
+Objetno-orijentisana paradigma se javlja usled softverske krize kada je skuplje
+stvaranje i odrzavanje softvera od proizvodnje samog hardvera. Cilj OOP-a je bio da
+smanji vreme i cenu razvoja softvera, cenu odrzavanja softvera, da podstakne kreiranje 
+ponovno upotrebljivih delova koda (modula).
+Odlike OOP-a: samodovoljni objekti, fokus na kreiranju interfejsa, ocekivanje da objekti
+imaju veci stepen odgovornosti i da svi znaju sta i kako da rade, lakse uvodjenje novih
+i promena starih funkcionalnosti, laske odrzavanje i skalabilnost.
+
+
+~Osnove OOP-a:~
+Istorija jezika: Simula ('60), Smalltalk ('70), Obj-C, C++ ('80), Eiffel ('92),
+Java ('96), C# (2000). Slican nacin programiranja kao kod Imperativne paradigme ali
+razlicit pristup resenju problema. Fokus nije na algoritmima nego na podacima.
+Glavne jedinice apstrakcije su objekti koji enkapsuliraju podatke i ponasanje.
+
+-Apstrakcija razdvaja nacin implementacije od nacina pristupa (interfejsa). Ona daje
+dovoljan opis entiteta bez ulazenja u nacin na koji taj entitet funkcionise.
+-Interfejs govori sta entitet moze da uradi a implementacija kako moze to da uradi.
+-Enkapsulacija je siri pojam od skrivanja podataka. Ona sakriva nacin implementacije
+i sve ostale informacije koje autor objekta zeli a njima se onda moze pristupiti
+preko interejsa na onaj nacin i u onoj meri koliko to autor zeli. Enkapsulacijom su
+podaci zasticeni od nezeljenih spoljnih promena, kao i od drugim delova programa.
+Dobra stvar enkapsulacije je sto daje implementacionu nezavistnost (moguce je promeniti
+nacin implementacije nekih resenja a da pritom ne menjamo sam interfejs)
+
+-Objekat je entitet koji moze da se prepozna (skup odgovornosti, skup metoda i podataka).
+Svaki objekat ima svoje odgovornosti na osnovu kojih im se daju atributi (osobine) i
+ponasanje. Objekti se kreiraju u odnosu na pocetni problem i nacin arhitekture resenja
+tog problema koriscenjem objekata. Objekat moze da sadrzi i drugi objekat a komunikacija
+se vrsi pomocu poruka.
+-Klasa predstvalja sablon za grupu objekata. Ona daje specifikaciju za sve podatke i
+ponasanje objekata. Objekat je instanca klase. Klasa ne zauzima memoriju jer predstavlja
+samo obrazac prema kojem ce objekat biti kreiran u memoriji. Objekat se kreira pomocu
+konstruktora a brise iz memorije pomocu destruktora.
+
+Objektno zasnovan jezik podrzava enkapsulaciju i identitet objekta ali ne i polimorfizam
+i nasledjivanje i komunikaciju porukama, mada oni mogu da budu emulirani.
+Objektno orijetnisani podrzavaja i enkapsulaciju i identitet objekta i komunikaciju
+porukama i polimorfizam i nasledjivanje.
+
+-Nasledjivanje podrazumeva pravljenje novih klasa od baznih klasa. Njime se moze simulirati
+hijerarhija iz stvarnog sveta. Ona omogucava prosirivanje i ponovno koriscenje koda.
+-Polimorfizam predstavlja menjanje ponasanje bazne klase od strane potklase. Potklasa
+odredjuje nacin na koji ce "uraditi" odredjeno ponasanje.
+
+Atribut ili metoda mogu da budu javni, zasticeni ili privatni.
+Javna vidljivost omogucava svima da im pristupe. Zasticena samo potklasama date klase.
+Privatna samo unutar klase. U javi Protected je moguce samo izmedju klasa koji nisu u 
+istom paketu.
+
+Visestruko nasledjivanje je nacin izvodjenja klase od vise osnovnih klasa. Ovo znacajno
+komplikuje stvari i nije podrzano u svim OO jezicima. Postoji u C++-u ali ne i u Javi
+(u javi postoje interfejsi sto radi slicnu stvar).
+
+Overloading (preopterecivanje) - isto ime ili operator pridruzeni razlicitim operacijama
+u zavisnoti od tipa podataka koji mu se prosledi
+Overriding (predefinisanje) - mogucnost odgovora na iste poruke na razliciti nacin. Potklasa
+moze da definisi svoj nacin rukovanja odredjenim informacijama koji se razlikuje od nacina
+na koji to radi nadklasa (metod u baznoj klasi na potklasi ima isti potpis ali ne i isto 
+telo).
+
+Staticko vezivanje je odlucivanje koja metoda ce biti pozvana i vrsi se u toku prevodjenja.
+Ako imamo dve metode sa istim imenom ali razlicitim parametrima, onda se za vreme prevodjenja
+moze doneti odluka o tome koji metod cemo koristiti. Overloading tako funkcionise.
+Dinamicko vezivanje je odlucivanje koja metoda ce biti pozvana u runtime-u. Da bi se
+koristilo dinamicko vezivanje, potrebno je kreirati tebelu virtuelnih funkcija (na osnovu nje
+se odlucuje koja metoda ce biti pozvana).
+
+-Apstraktne klase definisu ponasanja koja su relevantna za sve potklase. One definisu metode
+i podatke koje potklase treba da implementiraju ali ih same ne implementiraju i zato ne mogu
+biti instancirane. Obicno se nalaze na vrhu hijerarhije.
+
+Stroga tipiziranost ima za posledicu da se jednostavne funkcije moraju definisati vise puta
+kako bi radile za razlicite ulazne tipove. Neki jezici ovo prevazilaze koriscenjem templates-a
+(sablona).
+
+Implicitni polimorfizam je uopstenje parametarskog polimorfizma.

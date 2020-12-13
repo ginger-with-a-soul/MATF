@@ -1,0 +1,16 @@
+<xml>
+	<knjiga rbr="1">
+		<naslov>Yacc</naslov>
+		<autor>Filip Maric</autor>
+		<godina_izdanja>2004</godina_izdanja>
+		<izdavac>Matematicki fakultet</izdavac>
+		<cena valuta="rsd">1000</cena>
+	</knjiga>
+	<knjiga rbr="2">
+		<izdavac>O'Reilly & Associates</izdavac>
+		<godina_izdanja>2001</godina_izdanja>
+		<cena valuta="eur">50</cena>
+		<naslov>Python Standard Library</naslov>
+		<autor>Fridrih Lundh</autor>
+	</knjiga>
+</xml>

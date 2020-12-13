@@ -1,0 +1,533 @@
+Grammar
+
+    0 $accept: program $end
+
+    1 program: naredba '\n' program
+    2        | %empty
+
+    3 naredba: izraz
+    4        | ID DODELA izraz
+    5        | izraz EQ izraz
+    6        | izraz NEQ izraz
+    7        | izraz '[' BROJ ']'
+
+    8 izraz: izraz '+' izraz
+    9      | izraz '-' izraz
+   10      | izraz '*' izraz
+   11      | '-' izraz
+   12      | '(' izraz ')'
+   13      | izraz '\''
+   14      | '$' izraz '|' BROJ
+   15      | ID
+   16      | polinom
+
+   17 polinom: '<' lista '>'
+
+   18 lista: lista ',' BROJ
+   19      | BROJ
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'\n' (10) 1
+'$' (36) 14
+'\'' (39) 13
+'(' (40) 12
+')' (41) 12
+'*' (42) 10
+'+' (43) 8
+',' (44) 18
+'-' (45) 9 11
+'<' (60) 17
+'>' (62) 17
+'[' (91) 7
+']' (93) 7
+'|' (124) 14
+error (256)
+EQ (258) 5
+NEQ (259) 6
+UMINUS (260)
+DODELA (261) 4
+BROJ (262) 7 14 18 19
+ID (263) 4 15
+
+
+Nonterminals, with rules where they appear
+
+$accept (23)
+    on left: 0
+program (24)
+    on left: 1 2, on right: 0 1
+naredba (25)
+    on left: 3 4 5 6 7, on right: 1
+izraz (26)
+    on left: 8 9 10 11 12 13 14 15 16, on right: 3 4 5 6 7 8 9 10 11
+    12 13 14
+polinom (27)
+    on left: 17, on right: 16
+lista (28)
+    on left: 18 19, on right: 17 18
+
+
+State 0
+
+    0 $accept: . program $end
+
+    '-'  shift, and go to state 1
+    ID   shift, and go to state 2
+    '('  shift, and go to state 3
+    '$'  shift, and go to state 4
+    '<'  shift, and go to state 5
+
+    $default  reduce using rule 2 (program)
+
+    program  go to state 6
+    naredba  go to state 7
+    izraz    go to state 8
+    polinom  go to state 9
+
+
+State 1
+
+   11 izraz: '-' . izraz
+
+    '-'  shift, and go to state 1
+    ID   shift, and go to state 10
+    '('  shift, and go to state 3
+    '$'  shift, and go to state 4
+    '<'  shift, and go to state 5
+
+    izraz    go to state 11
+    polinom  go to state 9
+
+
+State 2
+
+    4 naredba: ID . DODELA izraz
+   15 izraz: ID .
+
+    DODELA  shift, and go to state 12
+
+    $default  reduce using rule 15 (izraz)
+
+
+State 3
+
+   12 izraz: '(' . izraz ')'
+
+    '-'  shift, and go to state 1
+    ID   shift, and go to state 10
+    '('  shift, and go to state 3
+    '$'  shift, and go to state 4
+    '<'  shift, and go to state 5
+
+    izraz    go to state 13
+    polinom  go to state 9
+
+
+State 4
+
+   14 izraz: '$' . izraz '|' BROJ
+
+    '-'  shift, and go to state 1
+    ID   shift, and go to state 10
+    '('  shift, and go to state 3
+    '$'  shift, and go to state 4
+    '<'  shift, and go to state 5
+
+    izraz    go to state 14
+    polinom  go to state 9
+
+
+State 5
+
+   17 polinom: '<' . lista '>'
+
+    BROJ  shift, and go to state 15
+
+    lista  go to state 16
+
+
+State 6
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 17
+
+
+State 7
+
+    1 program: naredba . '\n' program
+
+    '\n'  shift, and go to state 18
+
+
+State 8
+
+    3 naredba: izraz .
+    5        | izraz . EQ izraz
+    6        | izraz . NEQ izraz
+    7        | izraz . '[' BROJ ']'
+    8 izraz: izraz . '+' izraz
+    9      | izraz . '-' izraz
+   10      | izraz . '*' izraz
+   13      | izraz . '\''
+
+    EQ    shift, and go to state 19
+    NEQ   shift, and go to state 20
+    '+'   shift, and go to state 21
+    '-'   shift, and go to state 22
+    '*'   shift, and go to state 23
+    '\''  shift, and go to state 24
+    '['   shift, and go to state 25
+
+    $default  reduce using rule 3 (naredba)
+
+
+State 9
+
+   16 izraz: polinom .
+
+    $default  reduce using rule 16 (izraz)
+
+
+State 10
+
+   15 izraz: ID .
+
+    $default  reduce using rule 15 (izraz)
+
+
+State 11
+
+    8 izraz: izraz . '+' izraz
+    9      | izraz . '-' izraz
+   10      | izraz . '*' izraz
+   11      | '-' izraz .
+   13      | izraz . '\''
+
+    '\''  shift, and go to state 24
+
+    $default  reduce using rule 11 (izraz)
+
+
+State 12
+
+    4 naredba: ID DODELA . izraz
+
+    '-'  shift, and go to state 1
+    ID   shift, and go to state 10
+    '('  shift, and go to state 3
+    '$'  shift, and go to state 4
+    '<'  shift, and go to state 5
+
+    izraz    go to state 26
+    polinom  go to state 9
+
+
+State 13
+
+    8 izraz: izraz . '+' izraz
+    9      | izraz . '-' izraz
+   10      | izraz . '*' izraz
+   12      | '(' izraz . ')'
+   13      | izraz . '\''
+
+    '+'   shift, and go to state 21
+    '-'   shift, and go to state 22
+    '*'   shift, and go to state 23
+    '\''  shift, and go to state 24
+    ')'   shift, and go to state 27
+
+
+State 14
+
+    8 izraz: izraz . '+' izraz
+    9      | izraz . '-' izraz
+   10      | izraz . '*' izraz
+   13      | izraz . '\''
+   14      | '$' izraz . '|' BROJ
+
+    '+'   shift, and go to state 21
+    '-'   shift, and go to state 22
+    '*'   shift, and go to state 23
+    '\''  shift, and go to state 24
+    '|'   shift, and go to state 28
+
+
+State 15
+
+   19 lista: BROJ .
+
+    $default  reduce using rule 19 (lista)
+
+
+State 16
+
+   17 polinom: '<' lista . '>'
+   18 lista: lista . ',' BROJ
+
+    '>'  shift, and go to state 29
+    ','  shift, and go to state 30
+
+
+State 17
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 18
+
+    1 program: naredba '\n' . program
+
+    '-'  shift, and go to state 1
+    ID   shift, and go to state 2
+    '('  shift, and go to state 3
+    '$'  shift, and go to state 4
+    '<'  shift, and go to state 5
+
+    $default  reduce using rule 2 (program)
+
+    program  go to state 31
+    naredba  go to state 7
+    izraz    go to state 8
+    polinom  go to state 9
+
+
+State 19
+
+    5 naredba: izraz EQ . izraz
+
+    '-'  shift, and go to state 1
+    ID   shift, and go to state 10
+    '('  shift, and go to state 3
+    '$'  shift, and go to state 4
+    '<'  shift, and go to state 5
+
+    izraz    go to state 32
+    polinom  go to state 9
+
+
+State 20
+
+    6 naredba: izraz NEQ . izraz
+
+    '-'  shift, and go to state 1
+    ID   shift, and go to state 10
+    '('  shift, and go to state 3
+    '$'  shift, and go to state 4
+    '<'  shift, and go to state 5
+
+    izraz    go to state 33
+    polinom  go to state 9
+
+
+State 21
+
+    8 izraz: izraz '+' . izraz
+
+    '-'  shift, and go to state 1
+    ID   shift, and go to state 10
+    '('  shift, and go to state 3
+    '$'  shift, and go to state 4
+    '<'  shift, and go to state 5
+
+    izraz    go to state 34
+    polinom  go to state 9
+
+
+State 22
+
+    9 izraz: izraz '-' . izraz
+
+    '-'  shift, and go to state 1
+    ID   shift, and go to state 10
+    '('  shift, and go to state 3
+    '$'  shift, and go to state 4
+    '<'  shift, and go to state 5
+
+    izraz    go to state 35
+    polinom  go to state 9
+
+
+State 23
+
+   10 izraz: izraz '*' . izraz
+
+    '-'  shift, and go to state 1
+    ID   shift, and go to state 10
+    '('  shift, and go to state 3
+    '$'  shift, and go to state 4
+    '<'  shift, and go to state 5
+
+    izraz    go to state 36
+    polinom  go to state 9
+
+
+State 24
+
+   13 izraz: izraz '\'' .
+
+    $default  reduce using rule 13 (izraz)
+
+
+State 25
+
+    7 naredba: izraz '[' . BROJ ']'
+
+    BROJ  shift, and go to state 37
+
+
+State 26
+
+    4 naredba: ID DODELA izraz .
+    8 izraz: izraz . '+' izraz
+    9      | izraz . '-' izraz
+   10      | izraz . '*' izraz
+   13      | izraz . '\''
+
+    '+'   shift, and go to state 21
+    '-'   shift, and go to state 22
+    '*'   shift, and go to state 23
+    '\''  shift, and go to state 24
+
+    $default  reduce using rule 4 (naredba)
+
+
+State 27
+
+   12 izraz: '(' izraz ')' .
+
+    $default  reduce using rule 12 (izraz)
+
+
+State 28
+
+   14 izraz: '$' izraz '|' . BROJ
+
+    BROJ  shift, and go to state 38
+
+
+State 29
+
+   17 polinom: '<' lista '>' .
+
+    $default  reduce using rule 17 (polinom)
+
+
+State 30
+
+   18 lista: lista ',' . BROJ
+
+    BROJ  shift, and go to state 39
+
+
+State 31
+
+    1 program: naredba '\n' program .
+
+    $default  reduce using rule 1 (program)
+
+
+State 32
+
+    5 naredba: izraz EQ izraz .
+    8 izraz: izraz . '+' izraz
+    9      | izraz . '-' izraz
+   10      | izraz . '*' izraz
+   13      | izraz . '\''
+
+    '+'   shift, and go to state 21
+    '-'   shift, and go to state 22
+    '*'   shift, and go to state 23
+    '\''  shift, and go to state 24
+
+    $default  reduce using rule 5 (naredba)
+
+
+State 33
+
+    6 naredba: izraz NEQ izraz .
+    8 izraz: izraz . '+' izraz
+    9      | izraz . '-' izraz
+   10      | izraz . '*' izraz
+   13      | izraz . '\''
+
+    '+'   shift, and go to state 21
+    '-'   shift, and go to state 22
+    '*'   shift, and go to state 23
+    '\''  shift, and go to state 24
+
+    $default  reduce using rule 6 (naredba)
+
+
+State 34
+
+    8 izraz: izraz . '+' izraz
+    8      | izraz '+' izraz .
+    9      | izraz . '-' izraz
+   10      | izraz . '*' izraz
+   13      | izraz . '\''
+
+    '*'   shift, and go to state 23
+    '\''  shift, and go to state 24
+
+    $default  reduce using rule 8 (izraz)
+
+
+State 35
+
+    8 izraz: izraz . '+' izraz
+    9      | izraz . '-' izraz
+    9      | izraz '-' izraz .
+   10      | izraz . '*' izraz
+   13      | izraz . '\''
+
+    '*'   shift, and go to state 23
+    '\''  shift, and go to state 24
+
+    $default  reduce using rule 9 (izraz)
+
+
+State 36
+
+    8 izraz: izraz . '+' izraz
+    9      | izraz . '-' izraz
+   10      | izraz . '*' izraz
+   10      | izraz '*' izraz .
+   13      | izraz . '\''
+
+    '\''  shift, and go to state 24
+
+    $default  reduce using rule 10 (izraz)
+
+
+State 37
+
+    7 naredba: izraz '[' BROJ . ']'
+
+    ']'  shift, and go to state 40
+
+
+State 38
+
+   14 izraz: '$' izraz '|' BROJ .
+
+    $default  reduce using rule 14 (izraz)
+
+
+State 39
+
+   18 lista: lista ',' BROJ .
+
+    $default  reduce using rule 18 (lista)
+
+
+State 40
+
+    7 naredba: izraz '[' BROJ ']' .
+
+    $default  reduce using rule 7 (naredba)

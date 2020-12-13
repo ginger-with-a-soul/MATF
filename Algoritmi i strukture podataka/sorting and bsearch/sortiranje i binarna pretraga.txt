@@ -1,0 +1,56 @@
+equal_range - vraca par iteratora koji pokazuju gde pocinje a gde se zavrsava segment u
+			  sortiranom nizu koji sadrzi odredjeni element
+
+lower_bound - vraca iterator na prvi element koji je jednak ili veci od trazenog
+
+upper_bound - vraca iterator na prvi element strogo veci od trazenog
+
+Stabilno sortiranje garantuje da ce nakon sortiranja, poredak istih elemenata biti isti kao u nizu
+pre sortiranja. Quick-sort, Selection sort, Hip sort nisu stabilni ali Merge sort i Insertion sort
+jesu. Svako sortiranje moze da se ucini stabilnim ako zelimo da zrtvujemo dadatnu memoriju (za n
+elemenata potrebno nam je jos O(n) mesta jer za svaki element pamtimo i poziciju u originalnom nizu).
+Ako je niz stabilno sortiran onda mozemo da izvrsimo preciznije sortiranje dodavanjem jos nekog
+uslova. Sort u c++ je kombinacija Qsorta, Hip-sorta i Insertion sorta, ako zelimo stabilno sortiranje
+onda mozemo da koristimo stable_sort koji je zasnovan na Merge sort-u.
+
+58. Sortiranje - donja granica slozenosti:
+
+	Kod algoritama zasnovanim samo na medjusobnim uporedjivanjem elemenata donja granica slozenosti
+	je uvek O(nlogn).
+
+	Insertion sort and Bubble sort: O(n) O(n^2) O(n^2)
+	Heap sort and Merge sort: O(nlogn) O(nlogn) O(nlogn)
+	Quick sort: O(nlogn) O(nlogn) O(n^2)
+
+59. Sortiranje - sortiranje prebrojavanjem:
+
+	Sortiranje prebrojavanjem (Counting sort) korisno je kada je skup vrednost koje nas kljuc moze
+	da ima ogranicen. Tada umesto da uporedjujemo elemente jedne sa drugim, mi vrsimo prebrojavanje
+	pojavljivanja elemenata i to pamtimo u nizu/mapi. Tada je za n elemenata iz skupa [0, m]
+	slozenost prebrojavanja O(n) a slozenost rekonstruisanja niza O(m) pa je ukupna slozenost O(n + m)
+
+60. Sortiranje - sortiranje razvrstavanjem:
+
+	Sortiranje razvrstavanjem je korisno kada vec znamo mesta u nizu gde treba da smestimo nase
+	elemente. Tada je potrebno samo proci kroz taj niz i smestiti elemente. Ukoliko ima vise istih
+	onda ih samo smestimo jedne do drugih.
+
+61. Sortiranje - sortiranje visestrukim razvrstavanjem:
+
+	Kada zelimo da niz sortiramo stabilno prema razlicitim krititerijumima onda mozemo koristiti 
+	sortiranje visesutrkim razvrstavanjem. Na primer, zelimo da stabilno sortiramo ljude na 
+	osnovu inicijala. Prvo bismo ih sortirali leksikografski prema prezimenu a potom po imenu.
+	Sortiranje visetrukim razvrstavanjem se jos naziva i Radix sort.
+
+62. Binarna pretraga - realizacija, primena (niz nepoznate duzine, ciklicki uredjeni niz,
+					   interpolaciona pretraga)
+
+	Binarna pretraga predstavlja nacin da u O(logn) vremenu pronadjemo odredjeni element.
+	Za n elemenata to bi bilo O(nlogn). C++ ima svoju biblioticku funckiju, a pored nje ima i
+	lower i upper bound. Primenjuje se na sortirane nizove u kojima zelimo da najdemo poziciju
+	na cijoj vrednosti se nalazi trazena vrednost.
+
+63. Optimizacija koriscenjem binarne pretrage (mucajuci podniz):
+
+	Prvo moramo da napravimo funckiju koja ispituje da li je neka niska hiccuping string. Posle toga
+	radimo klasicnu binarnu pretragu (videti kod).

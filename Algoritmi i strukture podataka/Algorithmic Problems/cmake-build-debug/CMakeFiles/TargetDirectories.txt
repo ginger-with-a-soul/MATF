@@ -1,0 +1,3 @@
+/home/dimitrije/Desktop/Algoritmi i strukture podataka/Algorithmic Problems/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/dimitrije/Desktop/Algoritmi i strukture podataka/Algorithmic Problems/cmake-build-debug/CMakeFiles/Algorithmic_Problems.dir
+/home/dimitrije/Desktop/Algoritmi i strukture podataka/Algorithmic Problems/cmake-build-debug/CMakeFiles/edit_cache.dir

@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/Algorithmic_Problems.dir/el_that_divide_segment.cpp.o  -o Algorithmic_Problems 

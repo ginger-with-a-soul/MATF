@@ -1,0 +1,7 @@
+Bektreking je tehnika optimizacije brute force algoritama kojom se smanjuje vreme izrvrsavanja tako
+sto prilikom DFS obilaska pri pronalasku resenja, odseca one delevo drveta za koje se sigurno zna
+da ne mogu ucestvovati u torki resenja. Vazno je da funkcija odsecanja bite apsolutno precizna jer u
+suprotnom rizikujemo da izgubimo neko od resenja. Umesto da se provera vrsi kada se stigne do lista
+drvera, provera se vrsi u svakom koraku i vrsi se provera delimicno popunjenih torki resenja. Bez
+funkcije odsecanja bektreking je samo brute force.
+

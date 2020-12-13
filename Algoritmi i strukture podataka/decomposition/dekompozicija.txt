@@ -1,0 +1,69 @@
+Dekompozicija (divide and conquer) je tehnika kojom se polazni problem deli na 2 priblizno duplo
+manja problema istog tipa. Tada se dva potproblema nezavisno resavaju a onda se rezultati
+objedinjuju. Ukoliko je podela tacno na dve polovine iste velicini onda slozenost resenja moze biti:
+
+	T(n) = 2T(n / 2) + O(1) --> O(n)
+	T(n) = 2T(n / 2) + O(logn) --> O(n)
+	T(n) = 2T(n / 2) + O(n) --> O(nlogn)
+
+Ukoliko se podproblemi ne dele na jednake delove onda slozenost moze da bude:
+
+	T(n) = T(n - 1) + O(n) --> O(n^2)
+
+Primeri divide-and-conquer algoritama su Merge sort i Quick sort. Kako ne bismo dobili kvadratnu
+slozenost bitno je da izbor pivota bude pametan.
+
+Nekada nije potrebno resiti oba potproblema - kod Binarne pretrage na primer, i tada je slozeno:
+
+	T(n) = T(n / 2) + O(1) --> O(logn)
+	T(n) = T(n / 2) + O(logn) --> O(n)
+
+Kod Merge sort algoritma potreban nam je dodatni privemeni niz u koji cemo smestati rezultate pa 
+je je zato Merge sort memorijski znatno slozeniji od drugih algoritama sortiranja.
+
+69. Razlaganje - sortiranje objedinjavanjem:
+
+	Kod Merge sort-a u prvo napravimo pomocni niz, zatim napravimo funkciju koja prima originalni
+	niz, l i r granicu i pomocni niz. Nadjemo sredino orignilanog i pozovemo ovu funkciju za obe 
+	polovine. Onda odradimo merge ova dva dela i to u pomocni niz a zatim prepisemo to u originalni
+	niz u prvoj funkciji.
+
+70. Razlaganje - brojanje inverzija
+
+	Brojanje inverzija je modifikacija Merge sort algoritma koja kao ceo broj vraca broj inverizija.
+	Ukoliko je trenutni broj u desnom delu strogo manji od trenutnog broja u levom delu, onda ce
+	biti manji i od svih brojeva od tog u levom delu do kraja levog dela pa za taj broj elemenata
+	treba uvecati broj inverzija.
+
+71. Razlaganje - Quick sort
+
+	Quick sort je divide-and-conquer algoritam za sortiranje kod koje se elementi menjaju u zavisnosti
+	od pivota. Ukoliko se pivot u svakom koraku nadje u sredini niza onda je slozenost:
+
+	T(n) = T(n / 2) + O(n) --> O(n)
+
+	Medjutim, ukoliko bi pivot stalno dolazio pred kraj neke od strana onda bi slozenost bila:
+
+	T(n) = T(n - 1) + O(n) --> O(n^2)
+
+	Prosecna slozenost je: O(nlogn)
+
+72. Razlaganje - k-ti najmanji element (Quick Select)
+
+	Quick select je modifikacija Quick sort algoritma kojom mozemo da nadjemo poziciju k-tog najmanjeg
+	elementa u nizu. Prvi deo algoritma je isti kao kod Quick Sort algoritma ali se umesto dva
+	rekurzivna poziva vrsi jedan. Slozenost je O(n).
+
+73. Razlaganje - maksimalni zbir segmenta
+
+	U svetlu divide-and-conquer algoritama, podelicemo niz na dva dela i racunati max segment levog
+	i desnog dela. Postoje 3 slucaja: kada je ceo segment u levom delu, desnom delu ili kada sadrzi 
+	srediste podele i potencijalno neki element u drugom delu. Zbog toga moramo da znamo max sufiks
+	levog i max prefiks desnog dela. Kako njih ne bismo racunali u linearnom vremenu u petlji,
+	racunacemo ih prilikom svakog rekurzivnog poziva. Max suma prefiksa celog niza jeste max prefiks
+	levog dela, ili levi deo + max prefiks desnog dela. Slicno, max suma sifiksa celog niza jeste
+	max sufiks desnog dela, ili desni deo + max sifiks levog dela.
+
+74. Razlaganje - silueta zgrada
+
+	

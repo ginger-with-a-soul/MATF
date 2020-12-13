@@ -1,0 +1,14 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/dimitrije/Desktop/Algoritmi i strukture podataka/Algorithmic Problems/el_that_divide_segment.cpp
+iostream
+-
+cmath
+-
+

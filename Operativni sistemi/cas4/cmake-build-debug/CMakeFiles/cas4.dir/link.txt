@@ -1,0 +1,1 @@
+/usr/bin/cc -g   CMakeFiles/cas4.dir/filterFilesByExt.c.o  -o cas4 

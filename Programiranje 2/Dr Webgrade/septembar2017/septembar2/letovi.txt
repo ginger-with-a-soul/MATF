@@ -1,0 +1,3 @@
+Beograd Larnaka 1569.11 140
+Tivat Beograd 300.95 45
+Beograd Dubai 3799.66 200

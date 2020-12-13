@@ -1,0 +1,76 @@
+-Konkurentnost - izvrsavanje vise procesa koji imaju zajednicki cilj u istom vremenskom periodu.
+
+-Paralelno programiranje se najcesce odnosi na viseprocesorsku masinu (komunikacija preko deljenje memorije ili slanjem poruka), a moze da se odnosi i na vise procesora u razlicitim masinama (komunikacija slanjem poruka). Dobijanje na brzini moze da se ostvari i kod jednoprocesorskih masina konkurentnim programiranjem.
+
+-Distribuirano programiranje se odnosi na aplikacije koje rade koriscenjem razlicitih masina koje mogu biti lokalno povezane, a i preko interneta (vrsta paralelnog izracunavanja kod koje mora da se koristi drugaciji nacin slanja poruka).
+
+-Vrste konkurentnosti:
+	1. fizicka - postojanje vise procesora
+	2. logicka (sa stanovista programera i programskog jezika ista kao i fizicka a zadatak implementacije jezika je da logicku konkurentnost preslika u hardver)
+	
+-Hijerarhijski:
+	1. Konkurentna paradigma podrazumeva izvrsavanje vise procesa u istom vremenskom periodu
+	2. Paralelna paradigma je specijalizacija konkurentne i podrazumeva postojanje vise procesora i istovremeno izvrsavanje
+	3. Distribuirana paradigma je specijalizacija paralelne paradigma i podrazuma fizicku razdvojenost procesora i istovremeno izvrsavanje na njima
+Semanticki, ova 3 su nemaju razliku ali bitno je zbog implementacije i performansi
+
+-Osnovna 4 nivoa konkurentnosti:
+	1. nivo instrukcije - izvrsavanje 2 ili vise instrukcije istovremeno
+	2. nivo narebne - izvrsavanje 2 ili vise naredbe jezika viseg nivoa istovremeno
+	3. nivo jedinice - izvrsavanje 2 ili vise potprograma istovremeno
+	4. nivo programa - izvrsavanje 2 ili vise programa istovremeno
+	
+1. i 4. nivo ne uticu na dizajn programskog jezika
+
+-Konkurentni programi treba da budu skalabilni i portabilni. Skalabilnost se odnosi na stepen ubrzanja izvrsavanja konkurentnog programa sa povecanjem broja procesora. Idealna bi bila linearna skalabilnost (sa svakim dodavanjem dodatnih procesora, brzina raste odredjeni stepen). Medjutim, moze se dogoditi i da se brzina izvrsavanja smanji dodavanjem dodatnih procesora. Faktor ubrzanja paralelizacijom je broj koji pokazuje koliko puta se program brze izvrsava kada se izvrsava na vise procesora nego kada se izvrsava na jednom: S = Ts / Tp (S -> faktor ubrzanja paralelizacijom, Ts -> vreme izvrsavanja na 1 procesoru, Tp -> vreme izvrsavanja na vise procesora).
+
+-Amdalov zakon: deo koda koji ne moze da se paralelizuje ce ograniciti mogucnost ukupnog ubrzanja paralelizacijom. Ako je alfa = 10% (deo koda koji se ne moze paralelizovati), onda ce maksimalno ubrzanje paralelizacijom biti 1/alfa (10 procesora ce dati maskimalno ubrzanje).
+Iz Amdalovog zakona => formula ubrzanja:
+	S = 1/(alfa + (1 - alfa)/N) 
+	alfa -> deo koda koji se ne moze paralelizovati
+	(1 - alfa) -> deo koda koji se moze paralelizovati
+	N -> broj procesorskih jedinica
+	
+-Portabilnost se odnosi na stepen zavisnosti programa od same arhitekture masine na kojoj se izvrsava. Treba teziti da algoritamska resenja problema ne budu zavisna od same arhitekture. Medjutim, poznavanje arhitekture cesto moze da pomogne u konstrukciji efikasnijih resenja.
+Glavna razlika je u distribuiranim sistemima (Network of Worksations, internet..) u odnosu na sisteme koji komuniciraju pomocu deljene memorije (simetricni multiprocesori, visejezgarni procesori i GPU).
+
+-Konkurentno programiranje mora da bude podrzano u okviru samog programskog jezika ili moraju da postoje biblioteke za njega.
+
+-Zadatak (task) je jedinica programa, slicna potprogramu, koja moze konkurentno da se izvrsi sa drugim jedinicama istog programa. Razlika izmedju zadatka i potprograma je sto zadaci mogu da pocinju implicitno (ne moraju eksplicitno da budu pozvani), kada program pokrene neki zadatak on ne mora da ceka da se izvrsi pre nego sto nastavi sa svojim, pri zavrsetku zadatka kontrola toka ne mora da se vrati na mesto odakle je zadatak poceo. Svaki zadatak moze da bude podrzan od strane jedne niti ili procesa. Zadaci mogu biti lightweight (niti) i heavyweight (procesi). Teski imaju svoj sopstveni adresni prostor a laki deli isti.
+
+-Procesima upravlja operativni sistem. On se stara o politici koji proces ce kada dobiti procesorsko vreme, upravlja adresnim prostorom i svim odlukama o resursima koje moze da dodeli procesu. OS se stara i o tome kada ce proces biti prekinut i zamenjen drugim procesom (promena konteksta). Promena konteksta je izuzetno skupa operacija koja podrazumeva smenjivanje procesa na procesoru sa nekim drugim procesom koji se nalazi u redu spremnih procesa. Prilikom smenjivanje konteksta neophodno je da OS zapamti sve relevantne informacije za proces koji se skida sa procesora (dokle je proces stigao, koji resursi su mu potrebni, gde ce proces biti smesten u memoriji..). Ove informacije zauzimaju znatnu kolicinu memorije i vazno je da budu skladistene na pogodan nacin kako bi bilo sto manje promasaja kesa jer je promena konteksta izuzetno cesta (od nekoliko puta do nekoliko stotina, hiljada puta u sekundi) operacija i vazno je da bude sto efikasnija.
+
+-Niti su uvedene kako bi promena konteksta bila efikasnija. One predstavljaju deo teskog zadatka (tezak zadatak je podeljen na vise lakih). Podaci se vode na nivou procesa pa su za sve lake zadatke zajednicki. Zbog toga, oni ne zahtevaju dodatne resurse vec je za svaki lak zadatak potrebno samo imati dodatni registar, brojac instrukcija i mesto za pamcenje stanja zadatka. Promena konteksta u okviru lakih zadataka znaci samo menjanje ove 3 stvari.
+
+-Paralelizam zadataka se koristi na manjim masinama, kada imamo relativno mali broj procesora (na primer, u tekst editoru jedna nit zaduzena za prelamanje redova, druga za proveru pravopisa, treca za ispis na ekranu...). Podrazumeva dodeljivanje razlicitih zadataka (funkcija) svakoj niti. Losa strana paralelizma zadataka je sto ne skalira dobro kada imamo veliki broj procesora.
+
+-Paralelizam podataka je tehnika neophodna za dobro skaliranje na velikom broju procesora. Podrazumeva podelu podataka nad kojima ce biti primenjene iste operacije. Na primer, program za obradu slike moze da podeli sliku na manje delove i da svaka nit vrsi izracunavanja na svom delu slike. Kod paralelizma podataka cesto postoji paralelizam petlji, tj. svaka nit izvrsava isti kod ali samo sa drugim podacima. Za ovo se cesto koristi paralelizam na nivou naredbi. Neophodno je da programer zna da li su pozivi funkcije u nitima medjusobno nezavisni. Ako nisu, potrebno je sinhronizovati ih.
+
+-Komunikacija je bitan faktor kod paralelizacije. Moguca je slanjem poruka (uvek; preko soketa, signala, pajpova..) ili deljenom memorijom kod viseprocesorskih masina. Bitan je redosled kada ce nit upisati nesto u deljenu memoriju i kada ce druga nit procitati. Slanje poruka u okviru iste masine se smatra pouzdanim, a u distribuiranim sistemima podaci putuju kroz mrezu gde mogu da se zagube pa je potrebno obezbediti dodatne mehanizme koji ce anulirati ovu pretnju.
+
+-Sinhronizacija dozvoljava programeru da kontrolise redosled u kom ce se operacije desavati u nitima. U okviru komunikacije slanjem poruka, sinhronizacija je implicitna (mora da se saceka da se poruka posalje da bi mogla da se primi), ali kod deljenje memorije nije.
+Kod deljenje memorije postoje dve vrste sinhronizacije:
+	1. saradnja (zadatak A mora da saceka da B zavrsi nesto da bi A mogao da nastavi -> proizvodjac i potrosac)
+	2. takmicenje (i zadatak A i zadatak B zele pristup nekom resursu a samo jedan moze da mu pristupi -> A zeli pristup stampacu a B ga vec koristi; nit A i nit B menjaju istu promenljivu)
+		x = 3;
+		A: x = x + 1		B: x = 2 * x
+		moguce vrednosti x: 8, 7, 6, 4 (race condition - ponasanje programa zavisi od toga ko pobedi na takmicenju)
+Osnovna uloga sinhronizacije je da obezbedi da se kriticna sekcija izvrsi atomicno (bez prekidanja).
+
+-Semafori predstavljaju prvi mehanizam za zastitu kriticne sekcije i najnizeg su nivoa. Prvi put su se javili u Algol-u 68 a danas se jos koriste u Javi. Rade po principu uzajamnog iskljucivanja. Kada nit zavrsi sa kriticnom sekcijom ona budi (V) prvu nit koja ceka da udje u nju (P) a ova ulazi kada brojac procesa u kriticnoj sekciji postane nenegativan. Semafori su losi jer mogu da dovedu do uzajamnog blokiranja i sa njima treba rukovati vrlo pazljivo ako vec moraju da se koriste (ne moraju).
+
+-Monitori su drugi mehanizam zastite kriticne sekcije niskog nivoa. Monitori enkapsuliraju deljene podatke, namecu im ogranicenja i daju im pristup preko svog interfejsa, gde je svaka operacija atomicna. Ima ih u Javi, C#..
+
+-Mutex (postoji u C++-u ali ne u Javi) imaju semantiku katanca. Samo jedna nit moze da ga zakljuca. Ako je zakljucan, nit koja zeli opet da ga zakljuca mora da saceka da postane otkljucan. Samo nit koja ga je zakljucala moze da pise i dok se to desava ni jedna nit ne moze da cita. Ako niko ne pise, vise niti moze da cita. U jednom trenutku samo jedna nit moze da pise.
+
+-I kod slanja poruka i kod deljenje memorije sinhronizacija moze da se implementira na dva nacina:
+	1. busy-waiting - zadatak ceka u petlji da neki uslov bude ispunjen (nema smisla na jednom procesoru)
+	2. blokirajuca sinhronizacija - zadatak umesto da ceka na uslov, ostavlja poruku u nekoj strukturi da ga pozovu kad uslov bude ispunjen, i onda oslobadja procesor
+	
+-Koncept napredovanja - ako neki dogadjaj treba da se dogodi, on ce se u nekom trenutku dogoditi, tj. pravi se napredak do njega. U konkurentnom okruzenju napredovanje moze da bude prekinuto. Ukoliko procesu A i B treba resurs X i Y, i A ima X a B ima Y, onda ce oba procesa drzati svoj resurs cekajuci da se drugi koji im je potreban oslobodi. Na taj nacin se procesi uzajamno blokiraju (deadlock)
+Livelock - oba procesa nesto rade ali nema progresa
+Lockout (starvation) - rad jednog procesa onemogucava rad nekog drugog
+
+-Jedinstveno pozivanje - ne sme se istovremeno koristiti u razlicitim nitima (koriscenje globalnih resursa na nebezbedan nacin)
+-Ulazne (reentrant) - mogu se koristiti na razlicitim nitima ali uz dodatan uslov (ne sa istim podacima)
+-Bezbedne po niti (thread-safe) - smeju se koristiti gde god zelimo

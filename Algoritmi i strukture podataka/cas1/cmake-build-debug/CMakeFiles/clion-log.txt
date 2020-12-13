@@ -1,0 +1,4 @@
+/home/dimitrije/Downloads/clion-2019.2.3/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" "/home/dimitrije/Desktop/Algoritmi i strukture podataka/cas1"
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/dimitrije/Desktop/Algoritmi i strukture podataka/cas1/cmake-build-debug

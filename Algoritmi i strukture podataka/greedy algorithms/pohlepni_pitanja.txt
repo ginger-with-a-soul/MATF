@@ -1,0 +1,57 @@
+Za razliku od dinamickih algoritama i algoritama pretrage, pohlepni algoritmi ne vrse dodatna
+ispitivanja vec u svakom koraku uzimaju lokalno optimalno resenje i garantuju da ce ono dovesti
+do globalnog optimalnog resenja. Jednostavno se implementiraju ali im se tesko dokazuje korektnost.
+Gramzivi algoritmi odmah znaku koja mogucnost vodi do optimanlnog resenja i onda resavaju samo
+jedan potproblem. Za gramzive algoritme je vazno da vazi svojstvo optimalne podstrukture, odnosno da
+se resavanjem lokalnih optimalnih potproblema dolazi do globalnog optimalnog resenja.
+
+Jedan tehnika za dokazivanje korektnosti gramzivih algoritama je EXCHANGE kod koje se proverava da li
+opetimalno resenje moze da se dobije tako sto korak po korak primenimo gramzivi algoritam.
+
+Druga tehnika je GREEDY STAYS AHEAD prema kojoj je greedy resenja uvek prema nekom kriterijumo ispred
+optimalnog koje nije dobijeno greedy algoritmom.
+
+Treca tehnika je STRUCTURAL BOUND prema kojoj se odredjuje teorijska granica vrednosti optimuma i
+onda se dokazuje da greedy daje resenje koje je jednako optimumu.
+
+103. Pohlepni algoritmi - raspored sa najvise aktivnosti:
+
+	Cilj zadatka je sto veci broj razlicitih aktivnosti u toku radnog dana. Resenje ne bi bilo dobro
+	kada bismo aktivnosti pakovali tako da prvo bude prva aktivnost ili tako da favorizujemo one 
+	najkrace prvo. Umesto toga gledamo koja aktivnost se prva zavrsava, proveravamo u skupu sve
+	aktivnosti cije vreme izvrsavanja se sudara sa tom aktivnoscu i uklanjamo ih iz skupa. Rekurzivno
+	nastavljamo.
+
+104. Pohlepni algoritmi - raspored sa najmanjim brojem ucionica:
+
+	Casove cemo sortirati rastuce prema vremenu pocetka. Ukoliko imamo X casova koji se istovremeno
+	izvrsavaju u neko trenutku, sigurno smo da ce nam biti potrebno minimalno X ucionica. Ukoliko
+	postoji jos neki cas koji se izvrsava u ustom trenutku kad i ta grupa casova X, onda cemo morati
+	da otvorimo jos jednu ucionionu. Cas pripada istoj grupi ako svi u toj grupi pocinju pre tog casa 
+	a zavrsavaju se posle pocetka tog casa. Pravimo vektor casova i sortiramo ih po pocetnom vremenu.
+	Zatim napravimo red sa prioritetom u koji stavimo trenutno otvorene ucionice sortiran prema onom 
+	casu koji se najranije zavrsava. Ovde dominira vreme sortiranja i upotreba hip-a O(nlogn). Da smo
+	koristili vektor umesto hip-a bilo bi O(n^2) u najgorem slucaju.
+
+105. Pohlepni algoritmi - Hafmenov kod:
+
+	Hafmenov kod koristi binarna prefiksna drveta za sto krace kodiranje svih karaktera u teksu.
+	Svaki karakter ima jedinstven binarni kod koji treba da bude najkraci kod karaktera koji se
+	najvise ponavljaju. Dva karakteri koji se najmanje ponavljaju treba da budu susedni listovi
+	najudaljeniji od korena drveta. Drvo se konstruise tako sto pronalazimo dva najredja karaktera,
+	njih zamenjujemo jednim karakterom cija je frekvencija zbir frekvencija ova dva karaktera koja
+	menja, pronalazimo mesto tom cvoru prilikom same kontrukcije a onda taj cvor granamo na dva
+	koja odgovaraju karakterima koje je zamenio. Izraz iz rekurzije je kada nam ostanu samo dva
+	karaktera, i to ona koja se najcesce javljaju, i tada su oni listovi korena drveta. Mozemo da
+	koristimo hip sortiran rastuce kako bismo uvek sa kraja vadili dva najcesca karaktera.
+
+
+106. Pohlepni algoritmi - plesni parovi:
+
+	self explanatory
+
+107. Pohlepni algoritmi - razlomljeni problem ranca
+
+	Prvo od tezine i cene celokupne tezine nadjeno cenu za jednu jedinicu tezine. Napravimo parove
+	cena po jedinici i ukupno tezine u vektoru pa ih sortiramo nerastuce i onda sve dok imamo
+	kapaciteta u rancu i nismo prosli sve slatkise, dodajemo kolicunu i vrednost za nju.

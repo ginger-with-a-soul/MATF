@@ -1,0 +1,8 @@
+Google Chrome,   4020  , 30
+Win Def  ,   10, 1, sys
+Steam  , 121,  5
+VLC    , 912, 10
+exp.exe , 32 , 2, sys
+Avast , 123  , 5
+Wind Upd, 92 , 21 , sys
+Steam Update, 9    ,   11

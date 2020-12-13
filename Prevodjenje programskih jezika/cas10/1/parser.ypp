@@ -1,0 +1,42 @@
+%{
+#include <iostream>
+#include <string>
+#include <cstdio>
+#include <cstdlib>
+#define YYDEBUG 1
+extern int yylex();
+void yyerror(std::string s);
+%}
+
+%token broj_token
+%start E
+
+%%
+E	
+	: E '+' T
+	| T
+	;
+
+T
+	: T '*' F
+	| F
+	;
+
+F
+	: '(' E ')'
+	| broj_token
+	;
+%%
+
+int main(){
+	if(yyparse() == 0){
+		std::cout << "Uparen je aritmeticki izraz!" << std::endl;
+	}
+	exit(EXIT_SUCCESS);
+}
+
+void yyerror(std::string s)
+{
+    std::cerr << s << std::endl;
+    exit(EXIT_FAILURE);
+}

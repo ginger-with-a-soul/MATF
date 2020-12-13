@@ -1,0 +1,146 @@
+%{
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include <map>
+#include "razlomak.hpp"
+
+extern int yylex();
+
+void yyerror(std::string err_msg) {
+     std::cerr << "Greska: " << err_msg << std::endl;
+     exit(EXIT_FAILURE);
+}
+
+/* Tablica simbola: string -> Razlomak */
+std::map <std::string, Razlomak> tablica;
+
+%}
+
+%union {
+    int int_type;
+    std::string* string_type;
+    Razlomak* r_type; 
+}
+
+%token print_token nom_token den_token double_token equals_token
+%token <string_type> id_token
+%token <int_type> broj_token
+%type <r_type> Izraz Razlomak
+
+%left '+' '-'
+%left '*' '/'
+
+%%
+
+Program : Naredba '\n' Program { }
+        | Naredba '\n' { }
+        ;
+
+/* Ako smo primili NULL pointer, znaci da je doslo do greske
+ * i tada ignorisemo naredbu (tj. ne izvrsavamo nista */
+Naredba : Izraz /* Ne radimo nista */ { delete $1; }
+        | print_token '(' Izraz ')' { if ($3 != nullptr) { std::cout << *$3 << std::endl; delete $3; } }
+        | id_token '=' Razlomak { if ($3 != nullptr) { tablica[*$1] = *$3; delete $3; } delete $1; }
+        | nom_token '(' Izraz ')' { if ($3 != nullptr) { std::cout << $3->brojilac << std::endl; delete $3; } }
+        | den_token '(' Izraz ')' { if ($3 != nullptr) { std::cout << $3->imenilac << std::endl; delete $3; } }
+        | double_token '(' Izraz ')' { if ($3 != nullptr) { std::cout << (double) *$3 << std::endl; delete $3; } }
+        | equals_token '(' Izraz ',' Izraz ')' {
+            if ($3 != nullptr && $5 != nullptr) {
+                if (*$3 == *$5)
+                    std::cout << "True" << std::endl;
+                else
+                    std::cout << "False" << std::endl;
+                delete $3; delete $5;
+            } else {
+                if ($3 != nullptr) delete $3;
+                if ($5 != nullptr) delete $5;
+            }
+
+        }
+        ;
+
+/* U slucaju greske prosledjujemo 
+ * nullptr kao znak da nesto nije u redu */
+
+Izraz : '(' Izraz ')' { $$ = $2; }
+      | Izraz '+' Izraz { 
+          if ($1 != nullptr && $3 != nullptr) {
+            $$ = new Razlomak(*$1 + *$3);
+            delete $1; delete $3; 
+          } else {
+            if ($1 != nullptr) delete $1;
+            if ($3 != nullptr) delete $1;
+            $$ = nullptr;
+          } 
+      }
+      | Izraz '-' Izraz {
+         if ($1 != nullptr && $3 != nullptr) {
+            $$ = new Razlomak(*$1 - *$3);
+            delete $1; delete $3; 
+          } else {
+            if ($1 != nullptr) delete $1;
+            if ($3 != nullptr) delete $3;
+            $$ = nullptr;
+          } 
+      }
+      | Izraz '*' Izraz {
+        if ($1 != nullptr && $3 != nullptr) {
+            $$ = new Razlomak(*$1 * *$3);
+            delete $1; delete $3; 
+          } else {
+            if ($1 != nullptr) delete $1;
+            if ($3 != nullptr) delete $3;
+            $$ = nullptr;
+          } 
+      }
+      | Izraz '/' Izraz { 
+        if ($1 != nullptr && $3 != nullptr) {
+            $$ = new Razlomak(*$1 * *$3);
+         try {
+            $$ = new Razlomak(*$1 / *$3);
+         } catch (const std::string &err_msg) {
+            std::cerr << err_msg << std::endl;
+            /* U slucaju greske, ispisujemo je
+             * i dalje prosledjujem NULL pointer */
+            $$ = nullptr;
+         }
+         delete $1; delete $3; 
+        } else {
+            if ($1 != nullptr) delete $1;
+            if ($3 != nullptr) delete $3;
+            $$ = nullptr;
+        }
+      }
+      | Razlomak { $$ = $1; }
+      ;
+
+Razlomak : '[' broj_token ',' broj_token ']' { 
+            try {
+                $$ = new Razlomak($2, $4); 
+            } catch (std::string err_msg) {
+                std::cerr << err_msg << std::endl;
+                $$ = nullptr;
+            }
+         }
+         | '[' broj_token ']' { $$ = new Razlomak($2); }
+         | id_token { 
+              auto it = tablica.find(*$1); 
+              if (it == tablica.end()) {
+                std::cerr << "Promenljiva " << *$1 << " nije definisana!" << std::endl;
+                $$ = nullptr;
+              } else {
+                $$ = new Razlomak(it->second);
+              }
+           delete $1;
+         }
+         ;
+
+%%
+
+int main() {
+
+    yyparse();
+
+    return 0;
+}

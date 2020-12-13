@@ -1,0 +1,3 @@
+/home/dimitrije/Desktop/Operativni sistemi/cas4/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/dimitrije/Desktop/Operativni sistemi/cas4/cmake-build-debug/CMakeFiles/cas4.dir
+/home/dimitrije/Desktop/Operativni sistemi/cas4/cmake-build-debug/CMakeFiles/edit_cache.dir

@@ -1,0 +1,554 @@
+Grammar
+
+    0 $accept: program $end
+
+    1 program: naredba ';' program
+    2        | %empty
+
+    3 naredba: ID '=' izraz
+    4        | ID '=' BROJ TT BROJ
+    5        | PRINT_T izraz
+    6        | CARD_T izraz
+    7        | CHECK_T BROJ ':' izraz
+    8        | CHECK_T izraz '<' izraz
+    9        | UNI_T '=' BROJ TT BROJ
+
+   10 izraz: izraz UNIJA_T izraz
+   11      | izraz PRESEK_T izraz
+   12      | izraz RAZLIKA_T izraz
+   13      | '~' izraz
+   14      | '(' izraz ')'
+   15      | ID
+   16      | skup
+
+   17 skup: '{' lista '}'
+
+   18 lista: lista ',' BROJ
+   19      | BROJ
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 14
+')' (41) 14
+',' (44) 18
+':' (58) 7
+';' (59) 1
+'<' (60) 8
+'=' (61) 3 4 9
+'{' (123) 17
+'}' (125) 17
+'~' (126) 13
+error (256)
+UNIJA_T (258) 10
+PRESEK_T (259) 11
+RAZLIKA_T (260) 12
+PRINT_T (261) 5
+CHECK_T (262) 7 8
+CARD_T (263) 6
+UNI_T (264) 9
+TT (265) 4 9
+BROJ (266) 4 7 9 18 19
+ID (267) 3 4 15
+
+
+Nonterminals, with rules where they appear
+
+$accept (23)
+    on left: 0
+program (24)
+    on left: 1 2, on right: 0 1
+naredba (25)
+    on left: 3 4 5 6 7 8 9, on right: 1
+izraz (26)
+    on left: 10 11 12 13 14 15 16, on right: 3 5 6 7 8 10 11 12 13
+    14
+skup (27)
+    on left: 17, on right: 16
+lista (28)
+    on left: 18 19, on right: 17 18
+
+
+State 0
+
+    0 $accept: . program $end
+
+    PRINT_T  shift, and go to state 1
+    CHECK_T  shift, and go to state 2
+    CARD_T   shift, and go to state 3
+    UNI_T    shift, and go to state 4
+    ID       shift, and go to state 5
+
+    $default  reduce using rule 2 (program)
+
+    program  go to state 6
+    naredba  go to state 7
+
+
+State 1
+
+    5 naredba: PRINT_T . izraz
+
+    '~'  shift, and go to state 8
+    ID   shift, and go to state 9
+    '('  shift, and go to state 10
+    '{'  shift, and go to state 11
+
+    izraz  go to state 12
+    skup   go to state 13
+
+
+State 2
+
+    7 naredba: CHECK_T . BROJ ':' izraz
+    8        | CHECK_T . izraz '<' izraz
+
+    '~'   shift, and go to state 8
+    BROJ  shift, and go to state 14
+    ID    shift, and go to state 9
+    '('   shift, and go to state 10
+    '{'   shift, and go to state 11
+
+    izraz  go to state 15
+    skup   go to state 13
+
+
+State 3
+
+    6 naredba: CARD_T . izraz
+
+    '~'  shift, and go to state 8
+    ID   shift, and go to state 9
+    '('  shift, and go to state 10
+    '{'  shift, and go to state 11
+
+    izraz  go to state 16
+    skup   go to state 13
+
+
+State 4
+
+    9 naredba: UNI_T . '=' BROJ TT BROJ
+
+    '='  shift, and go to state 17
+
+
+State 5
+
+    3 naredba: ID . '=' izraz
+    4        | ID . '=' BROJ TT BROJ
+
+    '='  shift, and go to state 18
+
+
+State 6
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 19
+
+
+State 7
+
+    1 program: naredba . ';' program
+
+    ';'  shift, and go to state 20
+
+
+State 8
+
+   13 izraz: '~' . izraz
+
+    '~'  shift, and go to state 8
+    ID   shift, and go to state 9
+    '('  shift, and go to state 10
+    '{'  shift, and go to state 11
+
+    izraz  go to state 21
+    skup   go to state 13
+
+
+State 9
+
+   15 izraz: ID .
+
+    $default  reduce using rule 15 (izraz)
+
+
+State 10
+
+   14 izraz: '(' . izraz ')'
+
+    '~'  shift, and go to state 8
+    ID   shift, and go to state 9
+    '('  shift, and go to state 10
+    '{'  shift, and go to state 11
+
+    izraz  go to state 22
+    skup   go to state 13
+
+
+State 11
+
+   17 skup: '{' . lista '}'
+
+    BROJ  shift, and go to state 23
+
+    lista  go to state 24
+
+
+State 12
+
+    5 naredba: PRINT_T izraz .
+   10 izraz: izraz . UNIJA_T izraz
+   11      | izraz . PRESEK_T izraz
+   12      | izraz . RAZLIKA_T izraz
+
+    UNIJA_T    shift, and go to state 25
+    PRESEK_T   shift, and go to state 26
+    RAZLIKA_T  shift, and go to state 27
+
+    $default  reduce using rule 5 (naredba)
+
+
+State 13
+
+   16 izraz: skup .
+
+    $default  reduce using rule 16 (izraz)
+
+
+State 14
+
+    7 naredba: CHECK_T BROJ . ':' izraz
+
+    ':'  shift, and go to state 28
+
+
+State 15
+
+    8 naredba: CHECK_T izraz . '<' izraz
+   10 izraz: izraz . UNIJA_T izraz
+   11      | izraz . PRESEK_T izraz
+   12      | izraz . RAZLIKA_T izraz
+
+    UNIJA_T    shift, and go to state 25
+    PRESEK_T   shift, and go to state 26
+    RAZLIKA_T  shift, and go to state 27
+    '<'        shift, and go to state 29
+
+
+State 16
+
+    6 naredba: CARD_T izraz .
+   10 izraz: izraz . UNIJA_T izraz
+   11      | izraz . PRESEK_T izraz
+   12      | izraz . RAZLIKA_T izraz
+
+    UNIJA_T    shift, and go to state 25
+    PRESEK_T   shift, and go to state 26
+    RAZLIKA_T  shift, and go to state 27
+
+    $default  reduce using rule 6 (naredba)
+
+
+State 17
+
+    9 naredba: UNI_T '=' . BROJ TT BROJ
+
+    BROJ  shift, and go to state 30
+
+
+State 18
+
+    3 naredba: ID '=' . izraz
+    4        | ID '=' . BROJ TT BROJ
+
+    '~'   shift, and go to state 8
+    BROJ  shift, and go to state 31
+    ID    shift, and go to state 9
+    '('   shift, and go to state 10
+    '{'   shift, and go to state 11
+
+    izraz  go to state 32
+    skup   go to state 13
+
+
+State 19
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 20
+
+    1 program: naredba ';' . program
+
+    PRINT_T  shift, and go to state 1
+    CHECK_T  shift, and go to state 2
+    CARD_T   shift, and go to state 3
+    UNI_T    shift, and go to state 4
+    ID       shift, and go to state 5
+
+    $default  reduce using rule 2 (program)
+
+    program  go to state 33
+    naredba  go to state 7
+
+
+State 21
+
+   10 izraz: izraz . UNIJA_T izraz
+   11      | izraz . PRESEK_T izraz
+   12      | izraz . RAZLIKA_T izraz
+   13      | '~' izraz .
+
+    $default  reduce using rule 13 (izraz)
+
+
+State 22
+
+   10 izraz: izraz . UNIJA_T izraz
+   11      | izraz . PRESEK_T izraz
+   12      | izraz . RAZLIKA_T izraz
+   14      | '(' izraz . ')'
+
+    UNIJA_T    shift, and go to state 25
+    PRESEK_T   shift, and go to state 26
+    RAZLIKA_T  shift, and go to state 27
+    ')'        shift, and go to state 34
+
+
+State 23
+
+   19 lista: BROJ .
+
+    $default  reduce using rule 19 (lista)
+
+
+State 24
+
+   17 skup: '{' lista . '}'
+   18 lista: lista . ',' BROJ
+
+    '}'  shift, and go to state 35
+    ','  shift, and go to state 36
+
+
+State 25
+
+   10 izraz: izraz UNIJA_T . izraz
+
+    '~'  shift, and go to state 8
+    ID   shift, and go to state 9
+    '('  shift, and go to state 10
+    '{'  shift, and go to state 11
+
+    izraz  go to state 37
+    skup   go to state 13
+
+
+State 26
+
+   11 izraz: izraz PRESEK_T . izraz
+
+    '~'  shift, and go to state 8
+    ID   shift, and go to state 9
+    '('  shift, and go to state 10
+    '{'  shift, and go to state 11
+
+    izraz  go to state 38
+    skup   go to state 13
+
+
+State 27
+
+   12 izraz: izraz RAZLIKA_T . izraz
+
+    '~'  shift, and go to state 8
+    ID   shift, and go to state 9
+    '('  shift, and go to state 10
+    '{'  shift, and go to state 11
+
+    izraz  go to state 39
+    skup   go to state 13
+
+
+State 28
+
+    7 naredba: CHECK_T BROJ ':' . izraz
+
+    '~'  shift, and go to state 8
+    ID   shift, and go to state 9
+    '('  shift, and go to state 10
+    '{'  shift, and go to state 11
+
+    izraz  go to state 40
+    skup   go to state 13
+
+
+State 29
+
+    8 naredba: CHECK_T izraz '<' . izraz
+
+    '~'  shift, and go to state 8
+    ID   shift, and go to state 9
+    '('  shift, and go to state 10
+    '{'  shift, and go to state 11
+
+    izraz  go to state 41
+    skup   go to state 13
+
+
+State 30
+
+    9 naredba: UNI_T '=' BROJ . TT BROJ
+
+    TT  shift, and go to state 42
+
+
+State 31
+
+    4 naredba: ID '=' BROJ . TT BROJ
+
+    TT  shift, and go to state 43
+
+
+State 32
+
+    3 naredba: ID '=' izraz .
+   10 izraz: izraz . UNIJA_T izraz
+   11      | izraz . PRESEK_T izraz
+   12      | izraz . RAZLIKA_T izraz
+
+    UNIJA_T    shift, and go to state 25
+    PRESEK_T   shift, and go to state 26
+    RAZLIKA_T  shift, and go to state 27
+
+    $default  reduce using rule 3 (naredba)
+
+
+State 33
+
+    1 program: naredba ';' program .
+
+    $default  reduce using rule 1 (program)
+
+
+State 34
+
+   14 izraz: '(' izraz ')' .
+
+    $default  reduce using rule 14 (izraz)
+
+
+State 35
+
+   17 skup: '{' lista '}' .
+
+    $default  reduce using rule 17 (skup)
+
+
+State 36
+
+   18 lista: lista ',' . BROJ
+
+    BROJ  shift, and go to state 44
+
+
+State 37
+
+   10 izraz: izraz . UNIJA_T izraz
+   10      | izraz UNIJA_T izraz .
+   11      | izraz . PRESEK_T izraz
+   12      | izraz . RAZLIKA_T izraz
+
+    PRESEK_T   shift, and go to state 26
+    RAZLIKA_T  shift, and go to state 27
+
+    $default  reduce using rule 10 (izraz)
+
+
+State 38
+
+   10 izraz: izraz . UNIJA_T izraz
+   11      | izraz . PRESEK_T izraz
+   11      | izraz PRESEK_T izraz .
+   12      | izraz . RAZLIKA_T izraz
+
+    $default  reduce using rule 11 (izraz)
+
+
+State 39
+
+   10 izraz: izraz . UNIJA_T izraz
+   11      | izraz . PRESEK_T izraz
+   12      | izraz . RAZLIKA_T izraz
+   12      | izraz RAZLIKA_T izraz .
+
+    $default  reduce using rule 12 (izraz)
+
+
+State 40
+
+    7 naredba: CHECK_T BROJ ':' izraz .
+   10 izraz: izraz . UNIJA_T izraz
+   11      | izraz . PRESEK_T izraz
+   12      | izraz . RAZLIKA_T izraz
+
+    UNIJA_T    shift, and go to state 25
+    PRESEK_T   shift, and go to state 26
+    RAZLIKA_T  shift, and go to state 27
+
+    $default  reduce using rule 7 (naredba)
+
+
+State 41
+
+    8 naredba: CHECK_T izraz '<' izraz .
+   10 izraz: izraz . UNIJA_T izraz
+   11      | izraz . PRESEK_T izraz
+   12      | izraz . RAZLIKA_T izraz
+
+    UNIJA_T    shift, and go to state 25
+    PRESEK_T   shift, and go to state 26
+    RAZLIKA_T  shift, and go to state 27
+
+    $default  reduce using rule 8 (naredba)
+
+
+State 42
+
+    9 naredba: UNI_T '=' BROJ TT . BROJ
+
+    BROJ  shift, and go to state 45
+
+
+State 43
+
+    4 naredba: ID '=' BROJ TT . BROJ
+
+    BROJ  shift, and go to state 46
+
+
+State 44
+
+   18 lista: lista ',' BROJ .
+
+    $default  reduce using rule 18 (lista)
+
+
+State 45
+
+    9 naredba: UNI_T '=' BROJ TT BROJ .
+
+    $default  reduce using rule 9 (naredba)
+
+
+State 46
+
+    4 naredba: ID '=' BROJ TT BROJ .
+
+    $default  reduce using rule 4 (naredba)

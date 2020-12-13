@@ -1,0 +1,29 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define P (0)
+#define N (1)
+
+int main(int argc, char** argv){
+
+	char c;
+	int stanje = P;
+	int prelazi[2][2] = {{N,P}, {P,N}};
+	
+	while ((c = getchar()) != EOF && c != '\n') {
+	
+		if (c != '0' && c != '1') {
+			printf("Greska: %c\n", c);
+			return -1;
+		}
+		
+		stanje = prelazi[stanje][c-'0'];
+	}
+	
+	if (stanje == P)
+		printf("Automat prepoznaje rec\n");
+	else 
+		printf("Automat ne prepoznaje rec\n");
+		
+	return 0;
+}

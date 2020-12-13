@@ -1,0 +1,335 @@
+Grammar
+
+    0 $accept: niz_naredbni $end
+
+    1 niz_naredbni: niz_naredbni naredba '\n'
+    2             | %empty
+
+    3 naredba: print_token '(' E ')'
+    4        | id_token '=' E
+
+    5 E: E '+' E
+    6  | E '-' E
+    7  | E '*' E
+    8  | E '/' E
+    9  | '-' E
+   10  | '(' E ')'
+   11  | broj_token
+   12  | id_token
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'\n' (10) 1
+'(' (40) 3 10
+')' (41) 3 10
+'*' (42) 7
+'+' (43) 5
+'-' (45) 6 9
+'/' (47) 8
+'=' (61) 4
+error (256)
+UMINUS (258)
+print_token (259) 3
+id_token <id> (260) 4 12
+broj_token <vrednost> (261) 11
+
+
+Nonterminals, with rules where they appear
+
+$accept (15)
+    on left: 0
+niz_naredbni (16)
+    on left: 1 2, on right: 0 1
+naredba (17)
+    on left: 3 4, on right: 1
+E <vrednost> (18)
+    on left: 5 6 7 8 9 10 11 12, on right: 3 4 5 6 7 8 9 10
+
+
+State 0
+
+    0 $accept: . niz_naredbni $end
+
+    $default  reduce using rule 2 (niz_naredbni)
+
+    niz_naredbni  go to state 1
+
+
+State 1
+
+    0 $accept: niz_naredbni . $end
+    1 niz_naredbni: niz_naredbni . naredba '\n'
+
+    $end         shift, and go to state 2
+    print_token  shift, and go to state 3
+    id_token     shift, and go to state 4
+
+    naredba  go to state 5
+
+
+State 2
+
+    0 $accept: niz_naredbni $end .
+
+    $default  accept
+
+
+State 3
+
+    3 naredba: print_token . '(' E ')'
+
+    '('  shift, and go to state 6
+
+
+State 4
+
+    4 naredba: id_token . '=' E
+
+    '='  shift, and go to state 7
+
+
+State 5
+
+    1 niz_naredbni: niz_naredbni naredba . '\n'
+
+    '\n'  shift, and go to state 8
+
+
+State 6
+
+    3 naredba: print_token '(' . E ')'
+
+    '-'         shift, and go to state 9
+    id_token    shift, and go to state 10
+    broj_token  shift, and go to state 11
+    '('         shift, and go to state 12
+
+    E  go to state 13
+
+
+State 7
+
+    4 naredba: id_token '=' . E
+
+    '-'         shift, and go to state 9
+    id_token    shift, and go to state 10
+    broj_token  shift, and go to state 11
+    '('         shift, and go to state 12
+
+    E  go to state 14
+
+
+State 8
+
+    1 niz_naredbni: niz_naredbni naredba '\n' .
+
+    $default  reduce using rule 1 (niz_naredbni)
+
+
+State 9
+
+    9 E: '-' . E
+
+    '-'         shift, and go to state 9
+    id_token    shift, and go to state 10
+    broj_token  shift, and go to state 11
+    '('         shift, and go to state 12
+
+    E  go to state 15
+
+
+State 10
+
+   12 E: id_token .
+
+    $default  reduce using rule 12 (E)
+
+
+State 11
+
+   11 E: broj_token .
+
+    $default  reduce using rule 11 (E)
+
+
+State 12
+
+   10 E: '(' . E ')'
+
+    '-'         shift, and go to state 9
+    id_token    shift, and go to state 10
+    broj_token  shift, and go to state 11
+    '('         shift, and go to state 12
+
+    E  go to state 16
+
+
+State 13
+
+    3 naredba: print_token '(' E . ')'
+    5 E: E . '+' E
+    6  | E . '-' E
+    7  | E . '*' E
+    8  | E . '/' E
+
+    '+'  shift, and go to state 17
+    '-'  shift, and go to state 18
+    '*'  shift, and go to state 19
+    '/'  shift, and go to state 20
+    ')'  shift, and go to state 21
+
+
+State 14
+
+    4 naredba: id_token '=' E .
+    5 E: E . '+' E
+    6  | E . '-' E
+    7  | E . '*' E
+    8  | E . '/' E
+
+    '+'  shift, and go to state 17
+    '-'  shift, and go to state 18
+    '*'  shift, and go to state 19
+    '/'  shift, and go to state 20
+
+    $default  reduce using rule 4 (naredba)
+
+
+State 15
+
+    5 E: E . '+' E
+    6  | E . '-' E
+    7  | E . '*' E
+    8  | E . '/' E
+    9  | '-' E .
+
+    $default  reduce using rule 9 (E)
+
+
+State 16
+
+    5 E: E . '+' E
+    6  | E . '-' E
+    7  | E . '*' E
+    8  | E . '/' E
+   10  | '(' E . ')'
+
+    '+'  shift, and go to state 17
+    '-'  shift, and go to state 18
+    '*'  shift, and go to state 19
+    '/'  shift, and go to state 20
+    ')'  shift, and go to state 22
+
+
+State 17
+
+    5 E: E '+' . E
+
+    '-'         shift, and go to state 9
+    id_token    shift, and go to state 10
+    broj_token  shift, and go to state 11
+    '('         shift, and go to state 12
+
+    E  go to state 23
+
+
+State 18
+
+    6 E: E '-' . E
+
+    '-'         shift, and go to state 9
+    id_token    shift, and go to state 10
+    broj_token  shift, and go to state 11
+    '('         shift, and go to state 12
+
+    E  go to state 24
+
+
+State 19
+
+    7 E: E '*' . E
+
+    '-'         shift, and go to state 9
+    id_token    shift, and go to state 10
+    broj_token  shift, and go to state 11
+    '('         shift, and go to state 12
+
+    E  go to state 25
+
+
+State 20
+
+    8 E: E '/' . E
+
+    '-'         shift, and go to state 9
+    id_token    shift, and go to state 10
+    broj_token  shift, and go to state 11
+    '('         shift, and go to state 12
+
+    E  go to state 26
+
+
+State 21
+
+    3 naredba: print_token '(' E ')' .
+
+    $default  reduce using rule 3 (naredba)
+
+
+State 22
+
+   10 E: '(' E ')' .
+
+    $default  reduce using rule 10 (E)
+
+
+State 23
+
+    5 E: E . '+' E
+    5  | E '+' E .
+    6  | E . '-' E
+    7  | E . '*' E
+    8  | E . '/' E
+
+    '*'  shift, and go to state 19
+    '/'  shift, and go to state 20
+
+    $default  reduce using rule 5 (E)
+
+
+State 24
+
+    5 E: E . '+' E
+    6  | E . '-' E
+    6  | E '-' E .
+    7  | E . '*' E
+    8  | E . '/' E
+
+    '*'  shift, and go to state 19
+    '/'  shift, and go to state 20
+
+    $default  reduce using rule 6 (E)
+
+
+State 25
+
+    5 E: E . '+' E
+    6  | E . '-' E
+    7  | E . '*' E
+    7  | E '*' E .
+    8  | E . '/' E
+
+    $default  reduce using rule 7 (E)
+
+
+State 26
+
+    5 E: E . '+' E
+    6  | E . '-' E
+    7  | E . '*' E
+    8  | E . '/' E
+    8  | E '/' E .
+
+    $default  reduce using rule 8 (E)

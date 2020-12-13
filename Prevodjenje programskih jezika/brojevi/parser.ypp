@@ -1,0 +1,51 @@
+%{
+#include <iostream>
+#include <cstdlib>
+#include <string>
+#include <map>
+
+extern int yylex();
+
+void yyerror(std::string errMsg){
+	std::cerr << "Parsing error: " << errMsg << std::endl;
+	exit(EXIT_FAILURE); 
+}
+
+std::map<std::string, int> table;
+%}
+
+%union {
+	int int_type;
+	std::string* string_type;
+}
+
+%token PRINT_T INT_T LIST_T
+%token <int_type> NUMBER_T
+%token <string_type> ID_T
+
+%left '|'
+%left '^'
+%left '&'
+%left '=='
+%left '<<' '>>'
+%left '+' '-'
+%left '*' '/'
+%right '~'
+
+%%
+
+Program : Naredba ';' Program {}
+		| Naredba ';' {}
+		;
+	
+Naredba : PRINT_T '(' Izraz ')' {if ($3 != nullptr) {std::cout << *$3 << std::endl; delete $3;}}
+		| 
+
+%%
+
+int main(){
+
+	yyparse();
+
+	exit(EXIT_SUCCESS);
+}

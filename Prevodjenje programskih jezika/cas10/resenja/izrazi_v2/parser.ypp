@@ -1,0 +1,83 @@
+%{
+#include <iostream>
+#include <cstdlib>
+#include <string>
+
+#define YYDEBUG 1
+
+extern int yylex();
+void yyerror(std::string s)
+{
+    std::cerr << s << std::endl;
+    exit(EXIT_FAILURE);
+}
+%}
+
+/*
+    Sa %union redefinisemo tip vrednosti koje atributi simbola gramatike mogu imati.
+    Podrazumevani tip je int. Ako zelimo neki drugi tip,
+    potrebno je jos da navedemo polja odgovarajucih tipova unutar unije.
+ */
+%union{
+    int vrednost;
+}
+
+/*
+    Unutar definicije tokena broj_token navodimo i u kom polju unije ce biti sacuvana vrednost njegovog atributa.
+    Pridruzivanjem polja unije simbolu se zapravo zadaje i tip atributa.
+*/
+%token <vrednost> broj_token
+
+/*
+    Navodimo tip za neterminale.
+    Neterminali koji imaju atribut istog tipa navode se u istom redu.
+*/
+%type <vrednost> E T F
+
+/* Aksioma gramatike. */
+%start pocetak
+
+
+%%
+pocetak
+    : E {
+        std::cout << "Vrednost izraza je " << $1 << std::endl;
+    }
+    ;
+
+E
+    : E '+' T {
+        $$  = $1 +$3;
+    } | T {
+        /*
+           Ukoliko se ne napise akcija za pravilo, bison sam
+           generise podrazumevanu akciju koja je $$ = $1.
+         */
+        $$ = $1;
+    }
+    ;
+
+T
+    : T '*' F {
+        $$ = $1 * $3;
+    } | F {
+        $$ = $1;
+    }
+    ;
+
+F
+    : '(' E ')' {
+        $$ = $2;
+    }
+    | broj_token {
+        $$ = $1;
+    }
+    ;
+%%
+
+int main()
+{
+    if (yyparse() == 0)
+        std::cout << "Uparen je aritmeticki izraz!" << std::endl;
+    return 0;
+}

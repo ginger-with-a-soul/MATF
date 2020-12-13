@@ -1,0 +1,166 @@
+Grammar
+
+    0 $accept: pocetak $end
+
+    1 pocetak: e
+
+    2 e: e '+' t
+    3  | t
+
+    4 t: t '*' f
+    5  | f
+
+    6 f: '(' e ')'
+    7  | BROJ
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 6
+')' (41) 6
+'*' (42) 4
+'+' (43) 2
+error (256)
+BROJ (258) 7
+
+
+Nonterminals, with rules where they appear
+
+$accept (8)
+    on left: 0
+pocetak (9)
+    on left: 1, on right: 0
+e (10)
+    on left: 2 3, on right: 1 2 6
+t (11)
+    on left: 4 5, on right: 2 3 4
+f (12)
+    on left: 6 7, on right: 4 5
+
+
+State 0
+
+    0 $accept: . pocetak $end
+
+    BROJ  shift, and go to state 1
+    '('   shift, and go to state 2
+
+    pocetak  go to state 3
+    e        go to state 4
+    t        go to state 5
+    f        go to state 6
+
+
+State 1
+
+    7 f: BROJ .
+
+    $default  reduce using rule 7 (f)
+
+
+State 2
+
+    6 f: '(' . e ')'
+
+    BROJ  shift, and go to state 1
+    '('   shift, and go to state 2
+
+    e  go to state 7
+    t  go to state 5
+    f  go to state 6
+
+
+State 3
+
+    0 $accept: pocetak . $end
+
+    $end  shift, and go to state 8
+
+
+State 4
+
+    1 pocetak: e .
+    2 e: e . '+' t
+
+    '+'  shift, and go to state 9
+
+    $default  reduce using rule 1 (pocetak)
+
+
+State 5
+
+    3 e: t .
+    4 t: t . '*' f
+
+    '*'  shift, and go to state 10
+
+    $default  reduce using rule 3 (e)
+
+
+State 6
+
+    5 t: f .
+
+    $default  reduce using rule 5 (t)
+
+
+State 7
+
+    2 e: e . '+' t
+    6 f: '(' e . ')'
+
+    '+'  shift, and go to state 9
+    ')'  shift, and go to state 11
+
+
+State 8
+
+    0 $accept: pocetak $end .
+
+    $default  accept
+
+
+State 9
+
+    2 e: e '+' . t
+
+    BROJ  shift, and go to state 1
+    '('   shift, and go to state 2
+
+    t  go to state 12
+    f  go to state 6
+
+
+State 10
+
+    4 t: t '*' . f
+
+    BROJ  shift, and go to state 1
+    '('   shift, and go to state 2
+
+    f  go to state 13
+
+
+State 11
+
+    6 f: '(' e ')' .
+
+    $default  reduce using rule 6 (f)
+
+
+State 12
+
+    2 e: e '+' t .
+    4 t: t . '*' f
+
+    '*'  shift, and go to state 10
+
+    $default  reduce using rule 2 (e)
+
+
+State 13
+
+    4 t: t '*' f .
+
+    $default  reduce using rule 4 (t)

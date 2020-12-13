@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/dimitrije/Desktop/Algoritmi i strukture podataka/cas1/binary_search.cpp
+iostream
+-
+vector
+-
+
+/home/dimitrije/Desktop/Algoritmi i strukture podataka/cas1/dutch_flag.cpp
+iostream
+-
+vector
+-
+

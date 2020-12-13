@@ -1,0 +1,2 @@
+Konstruisati i implementirati automat koji prihvata reci
+koje sadrzi cifre 0 1 tako da se zavrsavaju sa 00 ili 11.

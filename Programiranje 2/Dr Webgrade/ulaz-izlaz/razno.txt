@@ -1,0 +1,5 @@
+Ana i melem su primeri palindroma.
+Broj 12321 je takodje palindrom.
+KaJak je jos jedna takva rec.
+baAb BAab
+ana Ana ANa melem ana

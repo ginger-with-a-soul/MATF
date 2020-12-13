@@ -1,0 +1,3 @@
+/home/dimitrije/Desktop/Operativni sistemi/cas5/2i_2017/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/dimitrije/Desktop/Operativni sistemi/cas5/2i_2017/cmake-build-debug/CMakeFiles/2i_2017.dir
+/home/dimitrije/Desktop/Operativni sistemi/cas5/2i_2017/cmake-build-debug/CMakeFiles/edit_cache.dir
