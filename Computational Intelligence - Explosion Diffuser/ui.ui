@@ -1,0 +1,585 @@
+<?xml version='1.0' encoding='utf-8'?>
+<interface version="1.0">
+  <object class="tk.Toplevel" id="mainwindow">
+    <property name="height">600</property>
+    <property name="resizable">both</property>
+    <property name="title" translatable="yes">eXplosion Diffuser</property>
+    <property name="width">850</property>
+    <child>
+      <object class="ttk.Frame" id="main_window">
+        <property name="borderwidth">5</property>
+        <property name="cursor">arrow</property>
+        <property name="height">600</property>
+        <property name="padding">10</property>
+        <property name="relief">flat</property>
+        <property name="takefocus">true</property>
+        <property name="width">850</property>
+        <layout manager="place">
+          <property name="relheight">1.0</property>
+          <property name="relwidth">1.0</property>
+          <property name="relx">0.0</property>
+          <property name="rely">0.0</property>
+          <property name="x">0</property>
+          <property name="y">0</property>
+        </layout>
+        <child>
+          <object class="ttk.Label" id="label_TITLE">
+            <property name="anchor">center</property>
+            <property name="borderwidth">10</property>
+            <property name="compound">top</property>
+            <property name="cursor">arrow</property>
+            <property name="font">{Rasa} 24 {bold}</property>
+            <property name="foreground">#0850ab</property>
+            <property name="justify">center</property>
+            <property name="padding">10</property>
+            <property name="takefocus">false</property>
+            <property name="text" translatable="yes">eXplosion Diffuser</property>
+            <property name="width">55</property>
+            <layout manager="place">
+              <property name="anchor">center</property>
+              <property name="relheight">0.23</property>
+              <property name="relwidth">0.45</property>
+              <property name="relx">0.5</property>
+              <property name="rely">0.05</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="frame_INPUT">
+            <property name="height">80</property>
+            <property name="takefocus">true</property>
+            <property name="width">600</property>
+            <layout manager="place">
+              <property name="relheight">0.15</property>
+              <property name="relwidth">0.9</property>
+              <property name="relx">0.05</property>
+              <property name="rely">0.15</property>
+              <property name="x">0</property>
+              <property name="y">0</property>
+            </layout>
+            <child>
+              <object class="ttk.Label" id="label_input_size">
+                <property name="font">{DejaVu Sans} 13 {}</property>
+                <property name="justify">left</property>
+                <property name="relief">flat</property>
+                <property name="text" translatable="yes">Input size:</property>
+                <property name="textvariable">string:dsa</property>
+                <property name="width">10</property>
+                <layout manager="place">
+                  <property name="relheight">0.45</property>
+                  <property name="relwidth">0.4</property>
+                  <property name="relx">0.0</property>
+                  <property name="rely">0.0</property>
+                  <property name="x">0</property>
+                  <property name="y">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="label_input_number_of_symbols">
+                <property name="anchor">w</property>
+                <property name="font">{DejaVu Sans} 13 {}</property>
+                <property name="justify">left</property>
+                <property name="text" translatable="yes">Input number of symbols:</property>
+                <property name="width">28</property>
+                <layout manager="place">
+                  <property name="relheight">0.45</property>
+                  <property name="relwidth">0.7</property>
+                  <property name="relx">0.22</property>
+                  <property name="rely">0.0</property>
+                  <property name="x">0</property>
+                  <property name="y">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="entry_input_size">
+                <property name="cursor">xterm</property>
+                <property name="font">{C059} 14 {}</property>
+                <property name="justify">center</property>
+                <property name="takefocus">true</property>
+                <property name="text" translatable="yes">5</property>
+                <property name="textvariable">string:input_size</property>
+                <property name="validate">focusout</property>
+                <property name="validatecommand">input_size_validate_callback</property>
+                <property name="width">10</property>
+                <layout manager="place">
+                  <property name="anchor">nw</property>
+                  <property name="rely">0.50</property>
+                  <property name="x">0</property>
+                  <property name="y">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="entry_input_num_of_symbols">
+                <property name="cursor">xterm</property>
+                <property name="font">{C059} 14 {}</property>
+                <property name="justify">center</property>
+                <property name="takefocus">true</property>
+                <property name="text" translatable="yes">5</property>
+                <property name="textvariable">string:input_number</property>
+                <property name="validate">focusout</property>
+                <property name="validatecommand">input_number_validate_callback</property>
+                <property name="width">10</property>
+                <layout manager="place">
+                  <property name="anchor">nw</property>
+                  <property name="relx">0.22</property>
+                  <property name="rely">0.5</property>
+                  <property name="x">0</property>
+                  <property name="y">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="label_cpu_sage">
+                <property name="font">{DejaVu Sans} 13 {}</property>
+                <property name="justify">left</property>
+                <property name="takefocus">false</property>
+                <property name="text" translatable="yes">CPU usage:</property>
+                <layout manager="place">
+                  <property name="anchor">nw</property>
+                  <property name="relx">0.66</property>
+                  <property name="x">0</property>
+                  <property name="y">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="label_memory_usage">
+                <property name="font">{DejaVu Sans} 13 {}</property>
+                <property name="justify">left</property>
+                <property name="takefocus">false</property>
+                <property name="text" translatable="yes">Memory usage:</property>
+                <layout manager="place">
+                  <property name="anchor">nw</property>
+                  <property name="relx">0.66</property>
+                  <property name="rely">0.4</property>
+                  <property name="x">0</property>
+                  <property name="y">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="label_cpu_percent">
+                <property name="font">{DejaVu Sans} 13 {}</property>
+                <property name="justify">right</property>
+                <property name="takefocus">false</property>
+                <property name="text" translatable="yes">%</property>
+                <layout manager="place">
+                  <property name="anchor">nw</property>
+                  <property name="relwidth">0.04</property>
+                  <property name="relx">0.97</property>
+                  <property name="x">0</property>
+                  <property name="y">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="label_memory_percent">
+                <property name="font">{DejaVu Sans} 13 {}</property>
+                <property name="justify">right</property>
+                <property name="takefocus">false</property>
+                <property name="text" translatable="yes">%</property>
+                <layout manager="place">
+                  <property name="anchor">nw</property>
+                  <property name="relx">0.97</property>
+                  <property name="rely">0.4</property>
+                  <property name="x">0</property>
+                  <property name="y">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="label_cpu_usage">
+                <property name="font">{DejaVu Sans} 13 {}</property>
+                <property name="justify">right</property>
+                <property name="takefocus">false</property>
+                <property name="textvariable">string:cpu_usage</property>
+                <layout manager="place">
+                  <property name="anchor">nw</property>
+                  <property name="relwidth">.08</property>
+                  <property name="relx">0.89</property>
+                  <property name="x">0</property>
+                  <property name="y">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="label_memory_usage">
+                <property name="font">{DejaVu Sans} 13 {}</property>
+                <property name="justify">right</property>
+                <property name="takefocus">false</property>
+                <property name="textvariable">string:memory_usage</property>
+                <layout manager="place">
+                  <property name="anchor">nw</property>
+                  <property name="relwidth">.08</property>
+                  <property name="relx">.89</property>
+                  <property name="rely">.4</property>
+                  <property name="x">0</property>
+                  <property name="y">0</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="frame_ALGORITHMS">
+            <property name="borderwidth">4</property>
+            <property name="height">400</property>
+            <property name="padding">5</property>
+            <property name="takefocus">true</property>
+            <property name="width">340</property>
+            <layout manager="place">
+              <property name="relheight">0.52</property>
+              <property name="relwidth">0.45</property>
+              <property name="relx">0.0</property>
+              <property name="rely">0.3</property>
+              <property name="x">0</property>
+              <property name="y">0</property>
+            </layout>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton_bruteforce">
+                <property name="command">brute_force_callback</property>
+                <property name="idtocommand">false</property>
+                <property name="takefocus">true</property>
+                <property name="text" translatable="yes">Brute-force</property>
+                <property name="textvariable">string:brute_force</property>
+                <property name="value">1</property>
+                <property name="width">35</property>
+                <layout manager="place">
+                  <property name="relheight">0.14</property>
+                  <property name="relwidth">0.6</property>
+                  <property name="relx">0.1</property>
+                  <property name="x">0</property>
+                  <property name="y">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton_monte_carlo">
+                <property name="command">monte_carlo_callback</property>
+                <property name="idtocommand">false</property>
+                <property name="takefocus">true</property>
+                <property name="text" translatable="yes">Monte Carlo</property>
+                <property name="textvariable">string:monte_carlo</property>
+                <property name="value">2</property>
+                <layout manager="place">
+                  <property name="relheight">0.14</property>
+                  <property name="relwidth">0.6</property>
+                  <property name="relx">0.1</property>
+                  <property name="rely">0.1</property>
+                  <property name="x">0</property>
+                  <property name="y">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Radiobutton" id="radiobutton_genetic">
+                <property name="command">genetic_algorithm_callback</property>
+                <property name="idtocommand">false</property>
+                <property name="takefocus">true</property>
+                <property name="text" translatable="yes">Genetic Algorithm</property>
+                <property name="textvariable">string:genetic_algorithm</property>
+                <property name="value">3</property>
+                <layout manager="place">
+                  <property name="relheight">0.14</property>
+                  <property name="relwidth">0.6</property>
+                  <property name="relx">0.1</property>
+                  <property name="rely">0.2</property>
+                  <property name="x">0</property>
+                  <property name="y">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Frame" id="frame_genetic_params">
+                <property name="height">200</property>
+                <property name="takefocus">true</property>
+                <property name="width">200</property>
+                <layout manager="place">
+                  <property name="anchor">nw</property>
+                  <property name="relheight">0.5</property>
+                  <property name="relwidth">0.9</property>
+                  <property name="relx">0.07</property>
+                  <property name="rely">0.4</property>
+                  <property name="x">0</property>
+                  <property name="y">0</property>
+                </layout>
+                <child>
+                  <object class="ttk.Label" id="label_genetic_params">
+                    <property name="font">{DejaVu Sans} 11 {italic}</property>
+                    <property name="takefocus">false</property>
+                    <property name="text" translatable="yes">Genetic Algorithm Parameters</property>
+                    <layout manager="pack">
+                      <property name="propagate">True</property>
+                      <property name="side">top</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Radiobutton" id="radiobutton_tournament_selection">
+                    <property name="command">tournament_selection_callback</property>
+                    <property name="idtocommand">false</property>
+                    <property name="takefocus">true</property>
+                    <property name="text" translatable="yes">Tournament Selection</property>
+                    <property name="textvariable">string:tournament_selection</property>
+                    <property name="value">1</property>
+                    <layout manager="place">
+                      <property name="anchor">nw</property>
+                      <property name="relx">0.1</property>
+                      <property name="rely">0.2</property>
+                      <property name="x">0</property>
+                      <property name="y">0</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Radiobutton" id="radiobutton_roulette_selection">
+                    <property name="command">roulette_selection_callback</property>
+                    <property name="idtocommand">false</property>
+                    <property name="takefocus">true</property>
+                    <property name="text" translatable="yes">Roulette Selection</property>
+                    <property name="textvariable">string:roulette_selection</property>
+                    <property name="value">2</property>
+                    <layout manager="place">
+                      <property name="anchor">nw</property>
+                      <property name="relx">0.1</property>
+                      <property name="rely">0.4</property>
+                      <property name="x">0</property>
+                      <property name="y">0</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="label_mutation_rate">
+                    <property name="justify">left</property>
+                    <property name="takefocus">false</property>
+                    <property name="text" translatable="yes">Mutation rate:</property>
+                    <layout manager="place">
+                      <property name="anchor">nw</property>
+                      <property name="relx">0.2</property>
+                      <property name="rely">0.65</property>
+                      <property name="x">0</property>
+                      <property name="y">0</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Entry" id="entry_mutation_rate">
+                    <property name="justify">right</property>
+                    <property name="takefocus">true</property>
+                    <property name="textvariable">string:mutation_rate</property>
+                    <property name="validate">focusout</property>
+                    <property name="validatecommand">mutation_rate_validate_callback</property>
+                    <layout manager="place">
+                      <property name="anchor">nw</property>
+                      <property name="relwidth">0.15</property>
+                      <property name="relx">0.6</property>
+                      <property name="rely">0.65</property>
+                      <property name="x">0</property>
+                      <property name="y">0</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Label" id="label_percentage_mutation_rate">
+                    <property name="takefocus">false</property>
+                    <property name="text" translatable="yes">%</property>
+                    <layout manager="place">
+                      <property name="anchor">nw</property>
+                      <property name="relx">0.77</property>
+                      <property name="rely">0.65</property>
+                      <property name="x">0</property>
+                      <property name="y">0</property>
+                    </layout>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="frame_PROBLEM">
+            <property name="borderwidth">4</property>
+            <property name="height">400</property>
+            <property name="padding">5</property>
+            <property name="takefocus">true</property>
+            <property name="width">340</property>
+            <layout manager="place">
+              <property name="relheight">0.52</property>
+              <property name="relwidth">0.45</property>
+              <property name="relx">0.5</property>
+              <property name="rely">0.30</property>
+              <property name="x">0</property>
+              <property name="y">0</property>
+            </layout>
+            <child>
+              <object class="ttk.Button" id="button_generate_problem">
+                <property name="command">generate_problem_callback</property>
+                <property name="idtocommand">false</property>
+                <property name="takefocus">true</property>
+                <property name="text" translatable="yes">Generate random problem or input it</property>
+                <property name="textvariable">string:generate_problem</property>
+                <layout manager="place">
+                  <property name="anchor">nw</property>
+                  <property name="relheight">0.14</property>
+                  <property name="relwidth">1.0</property>
+                  <property name="relx">0.0</property>
+                  <property name="x">0</property>
+                  <property name="y">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Entry" id="entry_problem">
+                <property name="cursor">xterm</property>
+                <property name="font">{Dingbats} 16 {}</property>
+                <property name="justify">center</property>
+                <property name="takefocus">true</property>
+                <property name="textvariable">string:random_problem</property>
+                <property name="validate">focusout</property>
+                <property name="validatecommand">random_problem_validate_callback</property>
+                <layout manager="place">
+                  <property name="anchor">nw</property>
+                  <property name="relheight">0.12</property>
+                  <property name="relwidth">0.85</property>
+                  <property name="rely">0.18</property>
+                  <property name="x">0</property>
+                  <property name="y">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="label_current_best_solution">
+                <property name="font">{DejaVu Sans} 13 {}</property>
+                <property name="justify">left</property>
+                <property name="text" translatable="yes">Current (best) solution:</property>
+                <layout manager="place">
+                  <property name="anchor">nw</property>
+                  <property name="relx">0.0</property>
+                  <property name="rely">0.36</property>
+                  <property name="x">0</property>
+                  <property name="y">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Button" id="button_start">
+                <property name="command">start_callback</property>
+                <property name="idtocommand">false</property>
+                <property name="takefocus">true</property>
+                <property name="text" translatable="yes">START</property>
+                <property name="textvariable">string:start</property>
+                <layout manager="place">
+                  <property name="anchor">nw</property>
+                  <property name="relheight">.22</property>
+                  <property name="relwidth">.45</property>
+                  <property name="relx">0.2</property>
+                  <property name="rely">.7</property>
+                  <property name="x">0</property>
+                  <property name="y">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="label_current_best_solution">
+                <property name="font">{Dingbats} 16 {}</property>
+                <property name="justify">center</property>
+                <property name="takefocus">false</property>
+                <property name="textvariable">string:current_best</property>
+                <layout manager="place">
+                  <property name="anchor">nw</property>
+                  <property name="relheight">.12</property>
+                  <property name="relwidth">.85</property>
+                  <property name="rely">0.5</property>
+                  <property name="x">0</property>
+                  <property name="y">0</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Progressbar" id="progressbar">
+            <property name="cursor">watch</property>
+            <property name="mode">determinate</property>
+            <property name="orient">horizontal</property>
+            <property name="takefocus">false</property>
+            <layout manager="place">
+              <property name="anchor">nw</property>
+              <property name="relheight">0.06</property>
+              <property name="relwidth">0.8</property>
+              <property name="relx">0.1</property>
+              <property name="rely">0.88</property>
+              <property name="x">0</property>
+              <property name="y">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="label_progress">
+            <property name="font">{DejaVu Sans} 13 {bold}</property>
+            <property name="justify">left</property>
+            <property name="takefocus">false</property>
+            <property name="text" translatable="yes">Progress:</property>
+            <layout manager="place">
+              <property name="anchor">nw</property>
+              <property name="relx">0.33</property>
+              <property name="rely">0.8</property>
+              <property name="x">0</property>
+              <property name="y">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="label_percentage">
+            <property name="font">{DejaVu Sans} 13 {bold}</property>
+            <property name="justify">left</property>
+            <property name="takefocus">false</property>
+            <property name="text" translatable="yes">%</property>
+            <layout manager="place">
+              <property name="anchor">nw</property>
+              <property name="relx">0.55</property>
+              <property name="rely">0.8</property>
+              <property name="x">0</property>
+              <property name="y">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="button_theme">
+            <property name="command">change_theme_callback</property>
+            <property name="idtocommand">false</property>
+            <property name="takefocus">true</property>
+            <property name="text" translatable="yes">change theme</property>
+            <property name="textvariable">string:theme</property>
+            <layout manager="place">
+              <property name="anchor">nw</property>
+              <property name="relx">0.05</property>
+              <property name="rely">0.03</property>
+              <property name="x">0</property>
+              <property name="y">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="label_percentage_tracker">
+            <property name="font">{DejaVu Sans} 13 {bold}</property>
+            <property name="justify">right</property>
+            <property name="takefocus">false</property>
+            <property name="textvariable">string:percentage_tracker</property>
+            <layout manager="place">
+              <property name="anchor">nw</property>
+              <property name="relwidth">.06</property>
+              <property name="relx">.48</property>
+              <property name="rely">.8</property>
+              <property name="x">0</property>
+              <property name="y">0</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

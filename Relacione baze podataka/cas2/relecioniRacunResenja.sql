@@ -62,7 +62,7 @@ range of dx is dosije
 range of ix is ispit
 
 dx.ime, dx.prezime
-where not exists ix(ix.indeks = dx.indeks and and ix.id_predmeta = 1021)
+where not exists ix(ix.indeks = dx.indeks and ix.id_predmeta = 1021)
 
 -- 10
 range of ix is ispit

@@ -1,0 +1,11 @@
+1.1. Navesti barem pet op?tih elemenata svakog problema pretrage:
+	-skup mogucih stanja - skup svih cvorova grafa
+	-polazno stanje - cvor u grafu iz koga pokrecemo pretragu
+	-test cilja - funkcija koja ispituje da li je trenutno stanje u kom se nalazimo bas ono do kog 				  zelimo da dodjemo
+	-skup mogucih akcija - skup akcija koje mozemo da izvedemo kako bismo iz tekuceg stanja dosli u 					   neko raspolozivo
+	-funkcija prelaska - preslikava par (stanje, akcija) u stanje koje se dobija primenom akcije
+	-funkcija cene - preslikava par (stanje, akcija) u cenu koja se dobija primenom akcije
+1.2. Kako se, prema dostupnosti informacija koje mogu pomo?i u pronala?enju ciljnog stanja u toku pretrage, dele problemi pretrage?
+	Prema dostupnosti informacija, algoritmi pretrage koji resavaju probleme pretrage se dele na informisane i neinformisane. Informisani algoritmi su oni koji koriste odredjene informacije, koje su dosputne za sva stanja iz skupa mogucih stanja, kako bi navodili pretragu (najkraci put izmedju gradova). Neinformisani algoritmi pretrage nemaju na raspolaganju te informacije i moraju da koriste neke sistematicne pristupe za pronalazak resenja (BFS/DFS itd.) (Lojdova slagalica...).
+
+

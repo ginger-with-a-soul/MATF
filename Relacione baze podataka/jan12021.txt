@@ -1,0 +1,148 @@
+7. a) Описати алгоритам за декомпозициjу релациjе R са скупом F ФЗ у BCNF
+б) Нека jе дата релациона променљива R = {A, B, C, D, E, F} и скуп F ФЗ:
+1) AB −→ C
+2) C −→ A
+3) BC −→ D
+4) ACD −→ B
+5) D −→ EF
+6) BE −→ C
+7) CF −→ BD
+8) CE −→ AF
+a) Одредити нередуцибилни покривач скупа функционалних зависности F.
+b) Одредити све кандидате за кључ релациjе R.
+в) Одредити скуп ФЗ коjе важе у релациjи R1 = {A, B, C, E} коjа jе проjекциjа релациjе R.
+
+b)
+1. Dekompozicija:
+9) D->E
+10) D->F
+11) CF->B
+12) CF->D
+13) CE->A
+14) CE->F
+
+2. Eliminacija viska FZ:
+1) AB->C
+2) C −→ A
+3) BC −→ D
+4) ACD −→ B
+6) BE −→ C
+9) D->E
+10) D->F
+11) CF->B
+12) CF->D
+13) CE->A
+14) CE->F
+-----------------
+15) CF->BC (prosirenje 11 + C)
+16) CF->BC ^ BC->D => CD->D (tranzitivnost 15 i 3; mozemo da eliminisemo 12)
+
+
+
+1) AB −→ C
+2) C −→ A
+3) BC −→ D
+4) ACD −→ B
+5) D −→ EF
+6) BE −→ C
+7) CF −→ BD
+8) CE −→ AF
+
+b)
+1. Inicijalno:
+{A}+ = {A}
+{B}+ = {B}
+{C}+ = {C}
+{D}+ = {D}
+{E}+ = {E}
+{F}+ = {F}
+
+2. Dekompozicija:
+AB->C	C->A	BC->D	ACD->B	 D->E	 D->F
+BE->C	CF->B	CF->D	CE->A	 CE->F
+
+3. 
+{A}+: sa leve strane se nigde ne nalazi samo A tako da
+	  ni jedan drugi atribut ne zavisi SAMO od njega => {A}+ = {A}
+{B}+: isto kao za A => {B}+ = {B}
+{C}+: C->A (C se vec nalazi u njegovom zatvorenju a A ne) => dodajemo A
+	  {C}+ = {CA}
+	  nema vise levih strana tako da desne zavise samo od AC => {C}+ = {CA}
+{D}+: D->E ^ D->F (sa leve strane D a ono se vec nalazi u svom zatvorenju a 
+				   sa desne strane E, F koji nisu vec u skupu pa ih dodajemo) {D}+ = {DEF}
+	  nema vise levih strana tako da desne zavise samo od {DEF} => {D}+ = {DEF}
+{E}+: isto kao za A => {E}+ = {E}
+{F}+: isto kao za A => {F}+ = {F}
+-------------------------------------------------------------------------------------------
+{AB}+: AB->C => {AB}+ = {ABC} (A i B se inicijalno dodaju u skup a C se dodaje jer nije
+							   prethodno u skupu a zavisi samo od onih koji jesu u skupu)
+	   BC->D => {AB}+ = {ABCD} (objasnjenje analogno onom odmah iznad)
+	   D->E => {AB}+ = {ABCDE}
+	   D->F => {AB}+ = {ABCDE} ---------> JESTE KANDIDAT ZA KLJUC JER JE NAJMANJE MOGUCE DUZINE
+	   									  I IZVODI CEO SKUP ATRIBUTA => razmatramo samo jos one
+											 							koji su duzine 2 je je to
+																		najmanja duzina
+{AC}+: inicijalno {AC}+ = {AC} i nema atributa koji zavise SAMO od atributa iz ovog skupa
+{AD}+: {AD}+ = {AD} inicijalno
+	   posto D samo od sebe ima skup atributa {DEF} to znaci da se oni odmah mogu dodati u skup {AD}
+	   => {AD}+ = {ADEF}
+	   nema vise onih relacija gde je zavisnost samo od atributa is skupa => {AD}+ = {ADEF}
+{AE}+: inicijalno {AE}+ = {AE} i ni jedna desna strana ne zavisi samo od njih => {AE}+ = {AE}
+{AF}+: inicijalno {AF}+ = {AF} i ni jedna desna strana ne zavisi samo od njih => {AF}+ = {AF}
+{BC}+: inicijalno {BC}+ = {BC} i mozemo odmah da ga prosirimo sa A jer se nalazi u skupu {C}+
+	   => {BC}+ = {ABC} a kako {AB}+ jeste kljuc i oba se vec nalaze u {BC}+ => {BC}+ = {ABCDEF}
+	   {BC} JOS JEDAN KLJUC
+{BD}+: {BD}+ = {BD} a posto su EF jos u skupu {D}+ => {BD}+ = {BDEF}
+	   BE->C => {BD}+ = {BCDEF}, kako se u skupu nalaze BC a to jeste kljuc => {BD}+ = {ABCDEF}
+	   {BD} JOS JEDAN KLJUC
+{BE}+: {BE}+ = {BE}, BE->C pa je {BE}+ = {BCE} a kako BC jeste kljuc => {BE}+ = {ABCDEF}
+	   {BE} JOS JEDAN KLJUC
+{BF}+: {BF}+ = {BF} i nema vise atributa koji zavise samo od BF
+{CD}+: {CD}+ = {CD} inicijalno, C ima u svom skupu A a D ima EF pa => {CD}+ = {ACDEF}
+	   CF->B => {CD}+ = {ABCDEF} JOS JEDAN KLJUC
+{CE}+: {CE}+ = {ACE} jer CE su inicijalno tu a A dolazi iz skupa za samo C
+	   CE->F => {CE}+ = {ACEF}, CF->D => {CE}+ = {ACDEF}, CF->B => {CE}+ = {ABCDEF} JOS JEDAN KLJUC
+{CF}+: {CF}+ = {ACF} jer A dolazi iz samog skupa za C, CF->B => {CF}+ = {ABCF} a kako BC jeste kljuc
+       => {CF}+ = {ABCDEF} JOS JEDAN KLJUC
+{DE}+: {DE}+ = {DEF} jer samo D ima u skupuF, nema vise atributa tako da zavise samo od ova 3 => 
+	   {DE}+ = {DEF}
+{DF}+: {DF}+ = {DEF} jer samo D ima u skupu E, kao i gore => {DF}+ = {DEF}
+{EF}+: {EF}+ = {EF} i ni jedan vise atribut ne zavisi samo od njih => {EF}+ = {EF}
+
+Kandidati za kljuc su: AB, BC, BD, BE, CD, CE i CF
+
+в) Одредити скуп ФЗ коjе важе у релациjи R1 = {A, B, C, E} коjа jе проjекциjа релациjе R
+Neka je Pi projekcija R na R1. U R1 ce biti one FZ koje mogu da se izvedu od relacija iz R i atributa iz R1
+AB->C; C->A; BE->C; CE->A
+
+
+II Grupa
+
+б) Нека jе дата релациона променљива R = {A, B, C, D, E, F} и скуп F ФЗ:
+1) AB −→ C
+2) ACE −→ B
+3) BC −→ E
+4) BF −→ C
+5) C −→ A
+6) CD −→ BE
+7) CF −→ AD
+8) E −→ F D
+a) Одредити нередуцибилни покривач скупа функционалних зависности F.
+b) Одредити све кандидате за кључ релациjе R.
+в) Одредити скуп ФЗ коjе важе у релациjи R1 = {A, B, C, F} коjа jе проjекциjа релациjе R.
+
+a)
+1. Dekompozicija:
+1) AB->C
+2) ACE->B
+3) BC->E
+4) BF->C
+5) C->A
+6) CD->B (primenjujemo dekompoziciju 6 - E)
+7) CD->E (primenjujemo dekompoziciju 6 - B)
+8) CF->A (primenjujemo dekompoziciju 7 - D)
+9) CF->D (dekompozicija 7 - A)
+10) E->F (dekompozicija 8 - D)
+11) E->D (dekompozicija 8 - F)
+
+2. Eliminacija viska FZ:

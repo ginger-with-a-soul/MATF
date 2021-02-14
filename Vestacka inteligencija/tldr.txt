@@ -1,0 +1,185 @@
+# ~PRETRAGA:~
+
+Lojdova slagalica -> sastoji se od 4x4 polja koja su popunjena brojevima od [1, 15] a poslednje polje je prazno. To se moze predstaviti listom [1, 2, ... , 15, _] ako su svi brojevi na mestu. Cilj igre je dovesti sve brojeve u tu konfiguraciju. Brute force pristup bio bi da za svako stanje razmatramo sva moguca sledeca, pa za to sledece sva moguca sledeca i tako do kraja gde je garantovano pronalazenje resenja. Pokazalo se da je za neke pocetne konfiguracije slagalicu moguce sloziti u najvise 80 koraka pa bi to bilo neko gornje ogranicenje. Odatle sledi da je potrebno ispitati 2^80 mogucnosti sto je prakticno neizvodivo.
+Jedno od resenje jeste da se nekako "navodi" pretraga. Moguce navodjenje bilo bi da se igraju samo potezi koji vode do stanja koje je blize resenju. Da je sledece stanje koje razmatramo blize od trenutnog mozemo da izracunamo kao sumu udaljenosti svih polja od mesta na kom treba da budu. Pakazace se da ovo ne vodi do resenja jer neka stanja nikada nemaju sledece stanje koje je blize resenju.
+
+Problemi pretrage najpogodnije se predstavljaju grafovima gde su cvorovi stanja a grance akcije. Mogu biti usmereni (sah) ili neusmereni (Lojdova slagalica, putanje izmedju gradova...). Graf je neusmeren ako se akcijom koja ima istu cenu moze iz cvora A doci u B i iz cvora B doci u A. Obilaskom grafa formira se stablo pretrage. S obzirom da se neki cvor u grafu moze vise puta obici, u stablu se isti cvor moze vise puta javiti. Zbog toga mogu postojati beskonacna stabla pretrage za konacne grafove.
+
+Algoritmi pretrage:
+Resenje problema pretrage je niz koraka (akcija) koje treba izvesti da bi se iz ciljnog doslo u zavrsno stanje. U zavisnosti od samog tipa problema, koriste se razliciti algoritmi pretrage ali svi treba da zadovoljavaju sledece:
+	1. Potpunost - garantuje da ce algoritam naci resenje ako resenje postoji. Ova osobina je pozeljna ali nekad nije neophodna. Naime, neki veoma teski problemi se mogu resiti koriscenjem heuristika koje nisu potpune ali ce u prosecnom slucaju mnogo pre dati resenje od algoritama koji su potpuni.
+	2. Optimalnost - nadjeno resenje uvek ima najmanju cenu. Cena se racuna kao zbir cena akcija koje se preduzimaju. Nekad cena moze da se posmatra kao vremenska i prostorna slozenost algoritma pri cemu optimalan ima najmanju cenu. Optimalnost, kao i potpunost, nekad nije neophodna jer odredjeni neoptimalni algoritmi u prosecnom slucaju daju resenja koja su bliska optimalnim ali ih nalaze mnogo pre.
+	3, 4. Vremenska i prostorna slozenot - razmatraju se kao i kod svih drugih algoritama i vazne su i najgora i prosecna slozenost.
+	
+Algoritmi pretrage mogu biti informisani ili neinformisani.
+Ukoliko postoje informacije o kvalitetu pojedinacnih stanja onda se te informacije mogu koristiti za navodjenje pretrage i tada se radi o informisanim algoritmima. Jedan od tih algoritama je i A*.
+Ukoliko te informacije nisu poznate onda se pretraga ne moze navoditi vec je potrebno smisliti neko sistematicno pretrazivanje (u sirinu/dubinu npr.).
+Lojdova slagalica mora se resiti neinformisanim algoritmom jer pored cene svake akcije i neposredno dostupnih stanja, ni jedna druga informacije nije dostupna.
+Sa druge strane, rastojanje izmedju gradova moze se naci informisanim algoritmom koje bi koristilo vazdusno rastojanje koje lako moze da se izracuna kao euklidosko rastojanje izmedju dva cvora u grafu.
+
+
+~NEINFORMISANI ALGORITMI PRETRAGE:~
+
+Neinformisani algoritmi pretrage nemaju dodatne informacije koje bi navodile pretragu i tako je znacajno skratile. Umesto toga, koristi se sistematicno ispitivanje svih mogucih stanja. Neki od tih algoritama su DFS i BFS (ili bektreking kao modifikacija DFS-a).
+Lavirint je klasican problem koji se resava ovim algoritmima.
+Depth first search algoritam ispituje sto dalje cvorove od polaznog. Nerekurzivna implementacija koristi stek, odnosto LIFO strukturu, i kada dodje do cvora odakle ne moze dalje, onda skida poslednji element sa steka i od njega nastavlja pretragu ali pre toga svako poseceno polje oznaci tako da ne bismo upali u beskonacnu petlju. Kada dodjemo do ciljnog polja onda samo procitamo u obrnutom redu stek i dobili smo putanju. Algoritam staje kada je stek prazan. DFS prestavlja "pracenje desne strane" za pronalazak izlaza iz lavirinta.
+
+Problem n dama: kako na sahovskoj tabli dimenzije n * n postaviti n dama tako da se nikoje dve dame ne napadaju. Ovo je tipican primer neinformisane pretrage pomocu modifikovanog DFS-a koji koristi bektreking.
+Bektreking se sastoji od nadogradjivanja parcijalnog resenja. U problemu n dama, pocetno parcijalno resenje je prazna tabla. Ovo parcijalno resenje se u svakom koraku nadogradjuje dodavanjem dame na neko od slobodnih polja. Posto dve dame ne mogu da se nalaze u istoj vrsti, razmatramo kolonu po kolonu. Glavna osobina bektrekinga je da ce prekinuti pretragu stabla cim se dogodi da parcijalno resenje ne moze da bude validno. U ovom slucaju to ce biti cim se neke dve dame napadaju. Tada se algoritam vraca na prvo stanje u kojem se ove dve dame nisu napadale (kada je parcijalno resenje moglo da vodi do resenja) i pritom odseca deo stabla u kom je prethodno bio (onaj gde je parcijalno resenje postalo nevalidno).
+
+Breadth-first search je neinformisani algoritam pretrage koji uvek daje ciljni cvor koji je na najmanjem rastojanju od polaznog. BFS u red, FIFI strukturu, dodaje sve cvorove susedne trenutnom, zatim uzima prvi iz reda i dodaje na kraj sve njemu susedne i sve tako dok se ne dodje do ciljnog cvora ili praznog reda. DFS algoritam pogodniji je kada je usmeravanje pretrage moguce.
+
+Vremenska slozenost i DFS-a i BFS-a je O(broj cvorova + broj grana)
+Prostorna O(broj cvorova)
+
+Dajkstrin algoritam koristi se za pronalazak najkracih puteva u grafu koji nema negativne cene grana. Po zavrsetku algoritma dobija se najkrace rastojanje do ciljnog cvora ali se algoritam lako moze modifikovati da se dobije najkrace rastojanje do svih cvorova.
+1. Na pocetku, svi cvorovi grafa se ubace u skup Q i pritom se cena puta od pocetnog cvora do svakog stavi na +beskonacno, sem za pocetni cvor gde se postavi na 0. Roditelj svakog cvora na pocetku je takodje nepoznat.
+2. Zatim se iz skupa Q uzima cvor n koji ima najmanje rastojanje od pocetnog (u prvom koraku to je pocetni cvor). Ako je taj cvor ciljni onda se prekida algoritam i rekonstruise putanja preko roditelja. Ako to nije ciljni cvor, onda se ispituje svaki svaki njegov sused m. Ako je prethodno rastojanje od pocetnog cvora do m vece od rastojanja od pocetnog cvora preko n pa do m onda se postavlja novo rastojanje od pocetnog cvora do m i ono je jednako rastojanju od pocetnog preko n do m.
+Invarijanta petlje je da se za sve cvorove koji nisu u Q zna najkrace rastojanje od pocetnog.
+Slozenost Dajkstrinog algoritma, gde je skup Q implementiran preko povezane liste, je O(broj cvorova^2). Ako graf ima mnogo manje grana od |V|^2 onda se skup moze implementirati preko Min-Heap-a i tada je slozenost O((broj cvorova + broj grana)log(broj cvorova)).
+
+~INFORMISANI ALGORITMI PRETRAGE:~
+
+Informisana pretraga naziva se jos i heuristicka pretraga, i ona u svakom stanju, pored informacija o sledecim mogucim akcijama, ima informacije i o tome koja akcija moze da dovede do 	stanja koja vise obecavaju. Ta informacija moze da bude neka mera "kvaliteta" stanja, koja ne mora da bude konstantna (moze da bude drugacija za isto stanje u zavisnosti o toga u kom smo stanju trenutno ili u kom je stanju celokupna pretraga). Heuristika "navodi" nas algoritam ka brzem pronalasku resenja. Taj "kvalitet" stanja cesto nije egzaktan vec prestavlja neku procenu.
+Funkcija evaluacije ocenjuje kvalitet stanja. Kazemo da je f(n) - funkcija evaluacije za stanje n.
+
+Pohlepni algoritmi u svakom koraku, pri izboru, uzimaju najbolje lokalno resenje u nadi da ce tako doci do najboljeg globalnog resenja. Pokazace se da vrlo cesto ovo nije slucaj i da se cak u nekim sutiacijama nece ni doci do resenje iako ono postoji. U primeru sa pronalaskom najkraceg puta izmedju gradova, dodatna informacija koju bi pohlepni algoritam koristio bila bi vazdusno rastojanje izmedju gradova. Pretpostavljamo da znamo vazudusna rastojanja iz svakog do svakog grada, tada bi pohlepni algoritam iz grada n za sledeci grad birao onaj sa najmanjim vazdusnim rastojanjem a cena bi bila jednaka pravoj kopnenoj ceni od pocetnog grada do grada n i najmanjoj vadusnoj ceni od grada n do sledeceg grada. Ni u ovom primeru iz knjige ne dobija se optimalno resenje.
+Pohlepni algoritmi cestu su veoma efikasni i laki za implementaciju ali ne garantuju optimalnost pa ni potpunost.
+Lojdovu slagalicu nije moguce resiti pohlepnim algoritmom jer oni kao kvalitet stanja najcesce uzimaju Menhetn rastojanje svakog polja od ciljnog, a cesto se desava da slagalica ima takvu konfiguraciju da pohlepni algoritam ne moze da pomeri ni jedno polje jer se kvalitet tog stanja smanjuje tj. on se odaljava od ciljnog (odnosno stiglo se do lokalnog maksimuma). Tada se pohlepni algoritam glavi jer on nikad ne sme da uzima lokalni minimum koji pogorsava trenutni minimum do kog se doslo.
+
+Pohlepni algoritmi se mogu koristiti u matematickoj optimizaciji i tada se nazivaju algoritmi penjanja uzbrdo. Oni u svakom koraku biraju susedna dopustiva resenje koja imaju najvise vrednosti funkcije cilja. Oni imaju neke slabosti:
+	1. Opasnost od lokalnih maksimuma - postoji kada svi dopustivi susedi imaju manju vrednost funkcije cilja od trenutne, tj. stiglo se u tacku odakle se ne moze dalje ali vrednost funkcije cilja u toj tacki nije max globalna vec je samo max lokalna. Odavde pohlepni algoritam nema kuda pa staje i vraca pogresno resenje.
+	
+	2. Neefikasnot u slucaju grebena - greben prestavlja usku stazu koja opada ili raste duz nekog pravca. Tada ce algoritam penjanja uzbrdo biti neefikasan jer umesto da se pravolinijske penje on ce ici u cik-cak i tako biti mnogo sporiji.
+	
+	3. Opasnost od platoa - nastaje kada oblast prostora pretrage ima konstantu vrednost funkcije cilja. Tada pohlepni algoritam ne zna sta dalje da radi.
+	
+Ovi problemi mogu se resiti nekim varijacijama penjanja. Tako stohasticko penjanje ne bira uvek suseda sa najboljom vrednoscu funkcije cilje vec ce verovatnoca da on bude izabran biti proporcionalna toj vrednosti. Druga varijacija je penjanje uzbrdo sa slucajnim resetovanjem kod koga se nakon pronalaska nekog maksimuma algoritam ponovo pokrece iz slucajno izabrane tacke. Verovatnoca da ce se tako doci do globalnog maksimuma se priblizava 1 sto vise puta pokrenemo penjanje.
+
+Najstrmiju spust (gradijentni spust) je samo -funkcija cilja.
+
+Minimalna/maksimalna tacka ne mora da bude bas egzaktna vec je to ona iz koje bi pomeraj bio manji od nekog definisanog epsilon.
+Kada se spustamo moramo da pazimo da duzina koraka za koji se spustamo bude optimalna, tj. moramo da pazimo da korak nije predugacak jer ce doci do divergencije (proci cemo trazenu vrednost) i moramo da pazimo da korak nije prekratak jer cemo se mnogo sporo spustati. To mozemo da obezbedimo tako sto uzmemo da je taj korak Lambda_n = 1 / (n + 1). Sledeci korak:
+a_(n+1) = a_n - Lambda_n * Delta * f(a_n)
+
+Ni gradijentni spust ne daje garanciju da ce doci do globalnog minimuma vec to zavisi od izbora tacke odakle se krece. Losa strana ovog pristupa je sto sporo konvergira. --> VIDETI PRIMER 3.3
+
+
+Pretraga Prvo najbolji:
+je osnova za razlicite algoritme pretrage grafa gde je svaki cvor stanje a svaka grana akcija. Kod ove pretrage za svaki cvor pamti se njegov roditelj (kao kod Dajkstre). Kako bi se izbegle beskonace petlje (da se nizu ista stanja) pamte se dve liste stanja/cvorova:
+	1. lista zatvorenih stanja - sva stanja za koja su vec ispitani svi susedi
+	2. lista otvorenih stanja - sva stanja koja su posecena ali jos nisu ispitani svi susedi nekog stanja
+	
+Na pocetku lista zatvorenih stanja je prazna a u listi otvorenih stanja nalazi se pocetni cvor. U svakom koraku iz liste otvorenih stanja uzima se cvor za najboljom ocenom f(n) (pa zbog toga treba paziti preko koje strukture podataka se ovakva lista implementira) i ispituju se svi njegovi susedi. Ako se sused ne nalazi ni na jednoj listi, dodaj ga u otvorenu listu. Kad prodjes sve susede izbaci trenutni cvor iz otvorene u zatvorenu listu. Ako se naidje na ciljni cvor, algoritam se zaustavlja. Ako smo na primer iz liste otvorenih stanja uzeli cvor n i naidjemo na sused m koji se vec nalazi na bilo kojoj od dve liste, treba da ispitamo da li je postojeci put od pocetka do tog cvora m manji kada bismo isli od pocetnog cvora preko n do m, ako jeste onda kazemo da je novi roditelj cvora m cvor n.
+Pretraga Prvo najbolji ne garantuje optimalno resenje ali prethodna provera povecava tu sansu. Ako je broj stanja i akcija konacan, algoritam ce se zaustaviti.
+
+Ako za f(n) uzmemo da vraca dubinu cvora n onda se Prvo najbolji ponasa kao BFS, ako f(n) vraca zbir cena od polaznog cvora do njega, onda se ponasa kao Dajkstrin algoritam. Ono sto razlikuje Prvo najbolji od pohlepnog algoritma je sto je zahvaljujuci otvorenoj listi Prvo najbolji razmatra i alternative koje kod pohlepnog algoritma ne bi bile ispitane. Tamo gde bi pohlepni naisao na lokalni optimum ili plato, Prvo najbolji nece.
+
+
+Algoritam A*:
+Algoritam A* predstavlja specijalan slucaj algoritma Prvo najbolji i uopstenje Dajkstrinog algoritma. I potpun je i optimalan je. Funkcija evaluacije algoritma A* ima sledeci oblik:
+f(n) = g(n) + h(n)
+f(n) - funkcija evaluacije za cvor n
+g(n) - cena puta od polaznog cvora do cvora n
+h(n) - procenanjena cena najkraceg puta od cvora n do ciljnog cvora
+
+Ponasanje i efikasnost algoritma A* zavisi upravo od kvaliteta heuristike odnosno procene. Tu procenu je cesto vrlo tesko naci, zna se uvek samo da je procena za ciljni cvor jednaka 0 a nema opsteg postupka kojim bi se pronasla heuristika. Posto je algoritam optimalan, kad god naidjemo na cvor cija cena puta preko nekog drugog cvora je veca od cene puta od trenutnog cvora, tu cenu putu azuriramo tako da je jednaka ovoj preko trenutnog cvora.
+Razlika izmedju A* i Dajkstrinog algoritma je sto Dajkstrin algoritam uzima u obzir samo g(n), tj. cenu od pocetnog do n-tog cvora a nema procena tj. h(n).
+
+Postupak A* je slican kao Dajkstrin. Ako naidjemo na cvor m koji je vec u otvorenoj ili zatvorenoj listi a nalazimo se u cvoru n. Onda pitamo da je put preko n do m kraci od vec postojeceg puta do m. Ako jeste, onda kazemo da je novi roditelj cvora m cvor n i azuriramo funkciju g(m) i prebacimo cvor m u otvorenu listu kako bismo mogli da azuriramo i njegove susede sa novom g(m) vrednoscu.
+
+Svojstva algoritma A*:
+
+	1. Potpunost: ako je skup cvorova i akcija konacan, i put izmedju dva cvora postoji, algoritam A* ce ga pronaci u konacnom broju koraka ma koliko losa heuristika bila.
+	
+	2. Optimalnost: algoritam A* je vratiti najkraci put od pocetnog do ciljnog cvora ukoliko je funkcija heuristike h(n) dopustiva.
+	h(n) je dopustiva funkcija heuristike ako nikada ne precenjuje stvarno rastojanje od trenutnog do ciljnog cvora, tj. ako za svaki cvor vazi: h(n) <= h*(n)
+	h*(n) - idealna heuristika (cena najkraceg puta od n do ciljnog cvora)
+	
+	Funkcija h(n) je konzistentna ako za ciljni cvor vazi h(n) = 0 i za svaka dva susedna cvora n, m vazi: c(n, m) + h(m) >= h(n)
+	c(n, m) - cena grane (moguce usmerene) izmedju n i m
+	Ako je h(n) konzistentna onda je i dopustiva ali obrnutno ne mora da vazi! VIDETI DOKAZ STRANA 33.
+	
+	Lema: Ako je h(n) konzistentna onda duz svakog puta kroz stablo pretrage f(n) nije opadajuce.
+	Dokaz:
+	m - tekuci cvor, n - roditelj m
+	f(m) = g(m) + h(m) = g(n) + c(n, m) + h(m) >= (zbog konz.) g(n) + h(n) = f(n)
+	
+	Lema: Ako je h(n) konzistentna heuristika za niz cvorova redom proglasenim tekucim, f(n) daje neopadajuci niz.
+	Dokas: U svakoj iteraciji biramo cvor iz liste otvorenih cvorova tako da f(n) ima najmanju vrednost, to znaci da cemo svaki sledeci put izabrati cvor cija je f(n) veca ili jednaka f(n) proslom cvoru.
+	
+	Lema: do svakog cvora koji postane tekuci, nadjen je optimalan put
+	
+
+Slozenost algoritma A*:
+Slozenost je direktno zavisna od dobre procene funkcije heuristike. U najgorem slucaju slozenost A* eksponencijalna je broju cvorova na najkracem putu, tj. ista je kao BFS. Zato je vazno da f-ja heuristike bude blizu idealnoj ali da je nikada ne premasuje, tj. da za svaki cvor n vazi:
+f(n) <= f*(n)
+
+Kada funkcija h(n) nije konzistentna, potrebno je proveravati i zatvorene cvorove.
+
+Kada se radi o velikim mrezama, kao funkcija heuristike moze da se koristi euklidosko rastojanje ali da ne bismo racunali koren, mozemo da koristimo Menhetn rastojanje (|x1 - x2| + |y1 - y2|), ova heuristika je dopustiva jer nikada ne precenjuje rastojanje i garantuje optimalnost. S druge strane, ako su dozvoljeni i dijagonalni potezi, Menhetn rastojanje nije dopustiva heuristike jer moze da preceni rastojanje. Za dijagonalne poteze, mozemo da koristimo Cebisevljevo rastojanje
+max(|x2 - x1|, |y2 - y2|)
+
+Algoritam A* najcesce je implementiran tako da je otvorena lista binarni min-heap kako bi u svakom koraju lako pronalazili onaj sa najmanjom vredoscu f(n), tada je slozenost O(log|V|). Zatvorena lista implementirana je kao hes tabela pa je provera da li je cvor tu i dodavanje O(1). Treba obezbediti da sva aritmetika bude celobrojna. Najgori slucaj za A* je kada nema puta izmedju pocetnog i ciljnog cvora, pa pre pokretanja algoritma treba proveriti da li pripadaju istoj komponenti povezanosti.
+
+
+
+~GENETSKI ALGORITMI:~
+
+Genetski algoritmi koriste metaheuristike za resenje problema. Metaheuristke predstavljaju heuristike koje nisu specijalizovane za resavanje konkretnog problema vec se njima moze resavati skup problema koji na prvi pogled ne moraju da budu slicni. To se postize prilagodjavanjem odredjenih parametara. Losa strana metaheuristika je sto ne garantuju pronalazak svih resenja a odatle sledi da pronadjeno resenje ne mora da bude optimalno (dobijeno resenje moze biti lokalni maksimum a ne globalni). Oni mogu dati skup resenja sto je cesto dovoljno dobro. Genetski algoritmi koriste se za resavanje problema optmizacije ili pretrage (za NP-teske probleme...). Vrlo su vremenski i memorijski zahtevni ali su pogodni za paralelizaciju.
+
+Hromozom/genotip -> reprezentacija jedinke
+
+Cilj genetskog algoritma je naci vrednost za koju funkcija cilja dostize maksimum. Funkcija cilja ne mora da bude zadata eksplicitno vec implicitno kroz veci broj kriterijuma; ne mora da bude diferencijabilna ni neprekidna. Pored funkcije cilja postoji i funkcija prilagodjenosti i ona oznacava kvalitet jedinke. Funkcija cilja i funkcija prilagodjenosti cesto se poklapaju ali i ne moraju. Na primer, funkcija prilagodjenosti moze jedinkama koje prelaze odredjenu vrednost funkcije cilja dodetljivati vrednost 1 a onima koje ne 0. Treba biti obazriv jer tako moze doci do prebrze konvergencije.
+
+Opsti genetski algoritam:
+	ulaz: podaci koji odredjuju funckiju cilja i parametre algoritma
+	izlaz: najkvalitetnija jedinka
+	
+	1. kreiraj pocetnu generaciju
+	2. izracunaj funkciju prilagodjenosti svake jedinke
+	3. petlja:
+		izaberi iz generacije skup jedinki za reprodukciju
+		ukrstanjem i mutacijom napravi nove jedinke
+		on novih i starih jedinki kreiraj novu generaciju
+	kraj petlje kada je neki od uslova ispunjen (funkcija cilja dostigla maksimum - pronadjeno resenje, doslo se do odredjenog broja generacija, funkcija priladjenosti pozvana odredjen broj puta, vrednost prilagodjenosti najbolje jedinke nije se popravila kroz nekoliko generacija, kombinacija nekih od ovih uslova)
+	4. izaberi najkvalitetniju jedinku u najnovijoj generaciji
+	
+Jedinke se mogu predstaviti na razlicite nacije: nizom bitova, matricama, stringovima... Bitno je da nad tom reprezentacijom mozemo da upotrebimo operatore ukrstanja i mutacije. Nasi operatori treba da zadovoljavaju uslov da nove jedinke koje stvaraju budu samo one koje mogu da budu nase resenje. Ili, ako to ne ispunjavaju onda treba da postoje mehanizmi kojima se takve jedinke ispravljaju.
+
+Ako je jedinka predstavljena nizom n bitova onda je potrebno uspostaviti vezu preslikavanja (koja nije bijektivna) izmedju reprezentacije i realnog intervala [a, b] gde se resenje moze naci:
+
+Broju X sa binarnom reprezentacijom a = 00...0, b = 11...1 odgovara realna reprezentacija:
+
+	X = a + (x * (b - a)) / 2^n - 1
+
+Realnom broju X odgovara binarna reprezentacija:
+
+	floor((X - a) * (2^n - 1) / b - a)
+	
+Funkcija prilagodjenosti daje ocenu kvaliteta jedinke. Treba da bude definisana za sve jedinke, da bude brza za izracuvanje i da daje dobru sliku kvaliteta jedinke. Sto je funkcija prilagodjenosti veca to je veca sansa da ce ta jedinka biti izabrana za reprodukciju. Vrednost funkcije raste sa porastom broja generacija.
+
+-Inicijalizacija: broj jedinku u generaciji je najcesce fiksan i definise sa kao parametar algoritma. Pocetna generacija dobija se najcesce slucajnim izborom a ponekad se eksplicitno u nju ubacuju jedinke za koje se veruje da ce biti blizu u prostoru pretrage gde se resenje nalazi -> one navode nove generacije.
+
+-Selekcija: predstavlja izbor jedinki iz tekuce generacije koje ce ucestovati u kreiranju nove generacije. Najcesce se oslanja na funkciju prilagodjenosti gde se mogu birati samo najbolje jedinke ili gde se vrednost funkcije prilagodjenosti oslikava u verovatnocu da jedinka bude izabrana. Na taj nacin losije jedinke imaju sansu da ucestvuju u pravljenju nove generacije i tako se cuva genetska raznolikost i sprecava prerana konvergencija ka, najcesce, lokalnom ekstremumu. Postoje dva tipa selekcija:
+	1. ruletska -> vrednosti funkcije prilagodjenosti odredjuje sansu da jedinka bude izabrana. Ista jedinka moze vise puta biti izabrana cime se znacajno smanjuje efikasnost algoritma.
+	
+	2. turnirska -> od skupa svih jedinki bira se skup k jedinki. Iz novog skupa moze se birati jedinka sa najvecom prilagodjenosti ili se skup moze sortirati i i-ta jedinka u sortiranom skupu bira se sa verovatnocom p(1 - p)^(i - 1); p -> verovatnoca (drugi parametar turnirske selekcije). Prethodno izabranim jedinkama moze biti zabranjeno da opet budu izabrane. Ako je velicina novog skupa k = 1 onda se turnirska selekcija zasniva na random izboru jedinki iz cele generacije; ako je  p = 1 onda se u novom skupu bira najprilagodjenija jedinka.
+	
+-Reprodukcija: od selektovanih jedinki biraju se dve koje ce se sa nekom sansom (najcesce od 0.6 do 0.9) ukrstiti i dati jedno ili dva nova deteta. Ukrstanje se moze realizovati na razlicite nacine. Ako jedinke reprezentujemo nizom bitova onda mozemo koristiti visepoziciono ukrstanje kod kojeg moze nastati jedno ili dva deteta i kod kojeg se oba roditelja na istom mestu/mestima dele i onda unakrsnim kombinovanjem nastaje dete. Pored visepozicionog ukrstanja postoji i uniformno ukrstanje kod kojeg uvek nastaju dva deteta. Dete nastaje tako sto se ide bit po bit kroz roditelje i za svaku poziciju sa odredjenom sansom (najcesce pola-pola) se iz jednog roditelja bit daje detetu a drugom detetu ide bit od drugog roditelja.
+
+-Mutacija: nakon ukrstanja sledi mutacija kod koje se definise sansa (najcesce ispod 1% da se odredjeni bit (ako je takva reprezentacija jedinke) promeni). Mutacija omogucava da se pobegne od lokalnih ekstremuma. Ako je, na primer, u jednoj generaciji odredjeni gen svih jedinki isti onda ne postoji sansa da se istrazi prostor pretrage gde taj gen nije takav. Time potencijalni globalni maksimum nikada nece biti ispitan. Koriscenjem mutacije ova pojava moze da se potencijalno izbegne. Ako je sansa mutacije prevelika onda je usmravanje pretrage preslabo pa ona lici na slucajnu pretragu. Ako ne postoji onda se lako upada u lokalni ekstremum.
+
+-Politika zamene generacije: predstavlja nacin formiranja nove generacije jedinki. Postoje dva osnovna pristupa:
+	1. generacijski genetski algoritmi -> biraju dovoljno predstavnika iz tekuce generacije da se njihovim ukrstanjem i mutiranjem kreira cela nova generacija koja ce zameniti staru.
+	
+	2. algoritmi stabilnog stanja -> cim se izaberi par roditelja vrsi se ukrstanje i mutaciji i nova/e jedinke se ubacuju u zavisnosti od politike zamene koja moze da bude:
+		-zamena najgorih -> nove jedinke zamenjuju najmanje prilagodjene u generaciji
+		-nasumicna zamena -> random se biraju predstavnici iz stare generacije koji ce biti zamenjeni
+		-inverzna turnirska selekcija -> umesto najprilagodjenijih biraju se najneprilagodjeniji
+		
+	Elitizam se moze koristiti u obe ove politike i oznacava pojavu kada se odredjene jedinke (ili jedna) koje su po necemu najbolje uvek stite od nestajanja. Time se obezbedjuje da se neke kvalitetne osobine ne izgube u toku evolucije
+	
+Ponekad se genetskim algoritmom biraju paremetri drugih genetskih algoritama. Od parametara u velikoj meri zavisi koliko ce sam algoritam biti dobar. Oni ne moraju da budu staticki odredjeni vec se mogu menjati za vreme izvrsavanja algoritma.
+
+TODO: Zavrsiti probleme od Skakaca do kraja
